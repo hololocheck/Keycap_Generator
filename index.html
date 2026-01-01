@@ -1,0 +1,2352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keycap Generator V63</title>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --panel-bg: rgba(30, 30, 30, 0.98);
+            --text-main: #e0f7fa;
+            --text-muted: #80deea;
+            --accent: #00e5ff;
+            --accent-hover: #84ffff;
+            --border: #444;
+            --input-bg: #263238;
+            --danger: #ff5252;
+            --sub-bg: rgba(0, 229, 255, 0.05); 
+            --import-bg: rgba(255, 152, 0, 0.05);
+            --texture-bg: rgba(233, 30, 99, 0.05);
+            --highlight: rgba(255, 235, 59, 0.3);
+        }
+
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', sans-serif; background: var(--bg-color); color: var(--text-main); }
+        
+        #canvas-container { position: absolute; left: 400px; width: calc(100% - 400px); height: 100%; top: 0; z-index: 1; }
+        
+        /* Flex Container for UI */
+        #ui-panel {
+            position: absolute; left: 0; top: 0; width: 400px; height: 100%;
+            background: var(--panel-bg); border-right: 1px solid var(--border);
+            box-sizing: border-box; 
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 4px 0 15px rgba(0,0,0,0.6); z-index: 2;
+            padding: 0;
+        }
+
+        /* Fixed Header Area */
+        #ui-header-area {
+            flex: 0 0 auto; 
+            padding: 15px 15px 5px 15px;
+            background: var(--panel-bg);
+            border-bottom: 1px solid #333;
+            z-index: 10;
+        }
+
+        /* Scrollable Content Area */
+        #ui-scroll-area {
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 10px 15px 30px 15px;
+            scroll-behavior: smooth;
+        }
+        #ui-scroll-area::-webkit-scrollbar { width: 6px; }
+        #ui-scroll-area::-webkit-scrollbar-thumb { background: #006064; border-radius: 3px; }
+
+        /* Top-Right Filament Panel */
+        #top-right-panel {
+            position: absolute; top: 10px; right: 10px; width: 260px;
+            background: rgba(20, 20, 20, 0.95); border: 1px solid var(--accent);
+            padding: 12px; border-radius: 6px; z-index: 10;
+            box-shadow: -4px 4px 15px rgba(0,0,0,0.5);
+            font-family: monospace; transition: 0.3s;
+        }
+        #top-right-panel:hover { background: rgba(30, 30, 30, 0.98); box-shadow: -4px 4px 20px rgba(0,229,255,0.2); }
+        
+        .cost-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 1.0rem; border-bottom: 1px solid #333; padding-bottom: 4px; }
+        .cost-val { color: var(--accent); font-weight: bold; }
+        .cost-sub { font-size: 0.75rem; color: #aaa; text-align: right; margin-bottom: 10px; }
+        
+        .fil-control { margin-top: 8px; }
+        .fil-control label { color: #b2ff59; font-size: 0.75rem; margin-bottom: 2px; display: block; }
+        .fil-control select { width: 100%; padding: 5px; font-size: 0.85rem; background: #111; border: 1px solid #555; color: #fff; margin-bottom: 5px; border-radius: 4px; cursor: pointer; }
+        .fil-control select:hover { border-color: var(--accent); }
+
+        .fil-details { display: none; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #444; background: rgba(255,255,255,0.02); padding: 5px; border-radius: 4px; }
+        .fil-details.open { display: block; animation: fadeIn 0.2s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .fil-input-row { display: flex; gap: 5px; margin-bottom: 5px; align-items: center; }
+        .fil-input-row label { width: 45px; color: #aaa; font-size: 0.7rem; margin: 0; }
+        .fil-input-row input { flex: 1; min-width: 0; background: #222; border: 1px solid #444; color: #fff; padding: 4px; font-size: 0.8rem; text-align: right; border-radius: 2px; }
+        
+        #btn-toggle-fil { width: 100%; padding: 4px; font-size: 0.75rem; background: transparent; border: 1px solid #333; color: #aaa; cursor: pointer; border-radius: 4px; transition: 0.2s; margin-top: 5px; }
+        #btn-toggle-fil:hover { color: #fff; border-color: #777; background: rgba(255,255,255,0.05); }
+
+        /* Header & Logo */
+        .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+        .title-block { display: flex; align-items: center; gap: 10px; }
+        #app-logo { height: 45px; width: auto; cursor: pointer; transition: transform 0.2s, filter 0.2s; filter: drop-shadow(0 0 2px rgba(0, 229, 255, 0.3)); }
+        #app-logo:hover { transform: scale(1.1); filter: drop-shadow(0 0 5px rgba(0, 229, 255, 0.8)); }
+        h2 { margin: 0; color: var(--accent); font-size: 1.3rem; line-height: 1.1; }
+        .ver { font-size: 0.65rem; color: var(--text-muted); opacity: 0.8; display: block; }
+        
+        #language-select { background: var(--input-bg); border: 1px solid var(--border); color: var(--text-main); padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; cursor: pointer; }
+        #language-select option { background: var(--panel-bg); }
+
+        /* Navigation Bar */
+        #nav-bar { display: flex; flex-direction: column; gap: 5px; margin-bottom: 5px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; border: 1px solid #333; }
+        .nav-row { display: flex; gap: 5px; }
+        #section-select { flex: 1; background: #222; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 4px; font-size: 0.85rem; cursor: pointer; }
+        #section-select:hover { border-color: var(--accent); }
+        #search-box { flex: 1; background: #222; color: #fff; border: 1px solid #555; border-radius: 4px; padding: 4px 8px; font-size: 0.85rem; }
+        #search-box:focus { border-color: var(--accent); outline: none; }
+        .search-highlight { background-color: var(--highlight); color: #000 !important; border-radius: 2px; padding: 0 2px; transition: 0.3s; }
+
+        h3 { font-size: 0.85rem; border-bottom: 1px solid var(--accent); margin-top: 15px; padding-bottom: 3px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; scroll-margin-top: 10px; }
+
+        .control-group { margin-bottom: 6px; }
+        .control-row { display: flex; gap: 8px; align-items: center; margin-bottom: 4px; }
+        label { font-size: 0.75rem; display: flex; justify-content: space-between; color: #b2ebf2; margin-bottom: 2px; align-items: center; white-space: nowrap; }
+        span.val { color: var(--accent); font-family: monospace; font-size: 0.9rem; font-weight: bold; min-width: 35px; text-align: right; display: inline-block; }
+        
+        input.direct-input { width: 50px; background: #000; border: 1px solid var(--accent); color: var(--accent); font-family: monospace; font-size: 0.9rem; text-align: right; padding: 2px 4px; display: none; z-index:100; }
+        input[type="range"] { width: 100%; margin: 4px 0; cursor: pointer; appearance: none; background: transparent; }
+        input[type="range"]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: #006064; border-radius: 2px; }
+        input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: var(--accent); margin-top: -5px; box-shadow: 0 0 5px var(--accent); transition: 0.2s; }
+        input[type="range"]:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        select, input[type="text"], textarea { width: 100%; background: var(--input-bg); border: 1px solid #00838f; color: white; padding: 6px; border-radius: 4px; font-size: 0.85rem; font-family: sans-serif; box-sizing: border-box; }
+        textarea { resize: vertical; min-height: 40px; }
+        
+        /* Toggle Switch Style */
+        .toggle-switch { display: flex; align-items: center; gap: 8px; cursor: pointer; justify-content: start; width: 100%; margin-bottom: 4px; }
+        .toggle-input { display: none; }
+        .toggle-knob { width: 36px; height: 18px; background: #444; border-radius: 9px; position: relative; transition: 0.3s; border:1px solid #666; flex-shrink: 0; }
+        .toggle-knob::after { content:''; position:absolute; left:2px; top:2px; width:12px; height:12px; background:white; border-radius:50%; transition:0.3s; }
+        .toggle-input:checked + .toggle-knob { background: var(--accent); border-color:var(--accent); }
+        .toggle-input:checked + .toggle-knob::after { left: 20px; background: black; }
+        .toggle-label { color: #e0f7fa; font-size: 0.8rem; user-select: none; }
+
+        .file-upload { position: relative; display: inline-block; width: 100%; }
+        .file-upload input[type="file"] { display: none; }
+        .file-upload-label { display: block; width: 100%; padding: 8px; background: #004d40; border: 1px dashed #00e5ff; color: #e0f7fa; text-align: center; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; box-sizing: border-box; }
+        .file-upload-label:hover { background: #006064; }
+        .file-upload-label.preset { background: #37474f; border-color: #90a4ae; color: #eceff1; }
+        .file-upload-label.preset:hover { background: #455a64; }
+
+        button { width: 100%; background: transparent; border: 1px solid var(--accent); padding: 10px; color: var(--accent); font-weight: bold; cursor: pointer; border-radius: 4px; margin-top: 5px; transition: 0.2s; text-transform: uppercase; font-size: 0.8rem; }
+        button:hover { background: var(--accent); color: #000; box-shadow: 0 0 10px var(--accent); }
+        button:disabled { border-color: #555; color: #555; background: rgba(0,0,0,0.5); cursor: not-allowed; box-shadow: none; }
+        button.secondary { border-color: #555; color: #aaa; }
+        button.secondary:hover { background: #555; color: white; }
+        button.danger { border-color: var(--danger); color: var(--danger); margin-top:0; padding: 0; }
+        button.danger:hover { background: var(--danger); color: white; }
+        button.accent { background: rgba(0, 229, 255, 0.1); }
+        button.accent:hover { background: var(--accent); color: black; }
+        .btn-square { width: 34px; height: 34px; display: flex; justify-content: center; align-items: center; font-size: 1.2rem; margin: 0; flex-shrink: 0; }
+        .btn-small { padding: 6px; font-size: 0.75rem; margin-top: 0; }
+
+        .color-input { -webkit-appearance: none; border: none; width: 100%; height: 30px; cursor: pointer; padding: 0; background: none; }
+        .palette-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 6px; }
+        .palette-swatch { width: 100%; padding-bottom: 60%; border-radius: 3px; cursor: pointer; border: 1px solid #555; transition: transform 0.1s; }
+        .palette-swatch:hover { transform: scale(1.1); border-color: white; z-index: 10; box-shadow: 0 0 8px rgba(255,255,255,0.5); }
+
+        #history-controls { position: absolute; top: 10px; left: 415px; z-index: 10; display: flex; gap: 5px; }
+        .hist-btn { background: rgba(0,0,0,0.8); border: 1px solid var(--accent); color: var(--accent); width: 40px; height: 40px; border-radius: 4px; font-size: 1.2rem; cursor: pointer; display: flex; justify-content: center; align-items: center; padding: 0; margin: 0; }
+        .hist-btn:hover { background: var(--accent); color: #000; }
+        .hist-btn:disabled { border-color: #555; color: #555; background: rgba(0,0,0,0.5); }
+
+        #render-mode-controls { position: absolute; top: 60px; left: 415px; z-index: 10; width: 120px; }
+        #render-mode-controls select { background: rgba(0,0,0,0.8); border: 1px solid var(--accent); color: var(--accent); padding: 5px; cursor: pointer; width: 100%; }
+
+        #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; color: var(--accent); font-size: 1.5rem; transition: opacity 0.5s; }
+        #force-start-btn { margin-top: 20px; padding: 10px 20px; border: 1px solid white; color: white; background: transparent; cursor: pointer; display: none; }
+        #error-log { color:#ff5252; font-size:0.9rem; margin-top:10px; max-width:80%; font-family:monospace; white-space: pre-wrap; }
+        #batch-progress { margin-top: 20px; font-size: 1rem; color: var(--text-main); display: none; }
+
+        .info-link { font-size: 0.75rem; color: #aaa; margin-bottom: 6px; line-height: 1.3; }
+        .info-link a { color: var(--accent); text-decoration: none; }
+        .info-link a:hover { text-decoration: underline; }
+
+        .custom-select-container { position: relative; width: 100%; }
+        .custom-select-head { background: var(--input-bg); border: 1px solid #00838f; color: white; padding: 8px; border-radius: 4px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .custom-select-head:hover { border-color: var(--accent); }
+        .custom-select-list { position: absolute; top: 100%; left: 0; right: 0; background: #1e272c; border: 1px solid var(--accent); border-top: none; z-index: 999; max-height: 200px; overflow-y: auto; display: none; border-radius: 0 0 4px 4px; }
+        .custom-select-list.open { display: block; }
+        .custom-option { padding: 8px; cursor: pointer; font-size: 0.85rem; border-bottom: 1px solid #333; }
+        .custom-option:hover { background: rgba(0, 229, 255, 0.2); color: white; }
+        .custom-option.selected { background: var(--accent); color: black; font-weight: bold; }
+
+        .section-sep { border-top: 1px solid #333; margin: 15px 0 5px 0; }
+        .v60-sub-panel { background: var(--sub-bg); padding: 8px; border-radius: 4px; border: 1px dashed #444; margin-top: 5px; }
+        .v60-import-panel { background: var(--import-bg); padding: 8px; border-radius: 4px; border: 1px dashed #ff9800; margin-top: 5px; }
+        .v60-label { color: #ffeb3b; font-weight: bold; }
+        .v60-label-side { color: #b2ff59; font-weight: bold; }
+        .v61-texture-panel { background: var(--texture-bg); padding: 8px; border-radius: 4px; border: 1px dashed #e91e63; margin-top: 5px; }
+        /* V63 New CSS for Texture Map Panel */
+        .v63-texture-map-panel { background: rgba(156, 39, 176, 0.05); padding: 8px; border-radius: 4px; border: 1px dashed #ba68c8; margin-top: 5px; }
+    </style>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
+                "three-bvh-csg": "https://unpkg.com/three-bvh-csg@0.0.16/build/index.module.js",
+                "three-mesh-bvh": "https://unpkg.com/three-mesh-bvh@0.7.3/build/index.module.js"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="loading">
+        <div>Initializing V63...</div>
+        <div id="error-log"></div>
+        <div id="batch-progress"></div>
+        <button id="force-start-btn">FORCE START</button>
+    </div>
+
+    <div id="top-right-panel">
+        <div class="cost-row">
+            <span data-i18n="lbl_weight">Est. Weight:</span>
+            <span class="cost-val"><span id="info-weight">0.00</span> g</span>
+        </div>
+        <div class="cost-row">
+            <span data-i18n="lbl_cost">Est. Cost:</span>
+            <span class="cost-val"><span id="info-currency">¥</span> <span id="info-cost">0</span></span>
+        </div>
+        <div class="cost-sub" id="info-fil-name" style="margin-bottom:10px;">Select Material</div>
+        
+        <div class="fil-control">
+            <label data-i18n="lbl_vendor">Vendor:</label>
+            <select id="fil-vendor"></select>
+        </div>
+        <div class="fil-control">
+            <label data-i18n="lbl_material">Material:</label>
+            <select id="fil-material"></select>
+        </div>
+
+        <button id="btn-toggle-fil" data-i18n="btn_details">▼ Details / Edit</button>
+
+        <div class="fil-details" id="fil-details-panel">
+            <div style="font-size:0.7rem; color:#80deea; margin-bottom:5px;" data-i18n="lbl_manual_override">Manual Override</div>
+            <div class="fil-input-row">
+                <label data-i18n="lbl_price">Price</label>
+                <input type="number" id="fil-price" placeholder="Price">
+            </div>
+            <div class="fil-input-row">
+                <label data-i18n="lbl_spool">Spool</label>
+                <input type="number" id="fil-capacity" placeholder="g">
+            </div>
+            <div class="fil-input-row">
+                <label data-i18n="lbl_density">Dens.</label>
+                <input type="number" id="fil-density" placeholder="g/cm3" step="0.01">
+            </div>
+            <div style="text-align:right; font-size:0.65rem; color:#555; margin-top:2px;">*Updates calculations instantly</div>
+        </div>
+    </div>
+
+    <div id="history-controls">
+        <button class="hist-btn" id="btn-undo" title="Undo" disabled>↩</button>
+        <button class="hist-btn" id="btn-redo" title="Redo" disabled>↪</button>
+    </div>
+
+    <div id="render-mode-controls">
+        <select id="render-mode">
+            <option value="standard">Standard</option>
+            <option value="wireframe">Wireframe</option>
+        </select>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <div id="ui-panel">
+        
+        <div id="ui-header-area">
+            <div class="header-row">
+                <div class="title-block">
+                    <svg id="app-logo" onclick="location.reload()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55" title="Click to Reload">
+                        <defs>
+                            <style>
+                                .cls-1{stroke:#ccc;}.cls-1,.cls-2,.cls-3{stroke-miterlimit:10;}.cls-1,.cls-3{fill:none;}.cls-2{fill:aqua;}.cls-2,.cls-3{stroke:aqua;}.cls-3{stroke-width:4px;}.cls-4{fill:#b3b3b3;}
+                            </style>
+                        </defs>
+                        <g>
+                            <g>
+                                <polygon class="cls-4" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/>
+                                <polygon class="cls-4" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/>
+                                <polygon class="cls-4" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/>
+                            </g>
+                            <g>
+                                <line class="cls-1" x1="35.16" y1="29.06" x2=".61" y2="135.77"/>
+                                <line class="cls-1" x1=".25" y1="136.62" x2="148.91" y2="216.18"/>
+                                <line class="cls-1" x1="151.25" y1="80.26" x2="35.16" y2="29.06"/>
+                                <line class="cls-1" x1="148.91" y1="216.18" x2="151.25" y2="80.26"/>
+                                <line class="cls-1" x1="273.2" y1="41.92" x2="151.25" y2="80.26"/>
+                                <line class="cls-1" x1="305.59" y1="144.63" x2="273.2" y2="41.92"/>
+                                <polyline class="cls-1" points="148.91 217.1 149.26 216.93 305.59 144.63"/>
+                                <line class="cls-1" x1="152.73" y1=".49" x2="273.2" y2="41.92"/>
+                                <line class="cls-1" x1="152.73" y1=".49" x2="35.16" y2="29.06"/>
+                            </g>
+                        </g>
+                        <g>
+                            <line class="cls-3" x1="86.1" y1="30.23" x2="119.97" y2="22"/>
+                            <line class="cls-3" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/>
+                            <line class="cls-3" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/>
+                            <line class="cls-3" x1="224.32" y1="41.22" x2="198.07" y2="32.19"/>
+                            <path class="cls-2" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/>
+                            <path class="cls-2" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/>
+                        </g>
+                    </svg>
+                    <div>
+                        <h2>Keycap Gen</h2>
+                        <span class="ver">V63</span>
+                    </div>
+                </div>
+                <select id="language-select">
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="en">🇺🇸 English</option>
+                </select>
+            </div>
+
+            <div id="nav-bar">
+                <div class="nav-row">
+                    <select id="section-select">
+                        <option value="" data-i18n="nav_jump">--- Jump to Section ---</option>
+                        <option value="sec-basic" data-i18n="nav_basic">Basic Size</option>
+                        <option value="sec-structure" data-i18n="nav_structure">Structure</option>
+                        <option value="sec-shape" data-i18n="nav_shape">Shape</option>
+                        <option value="sec-texture" data-i18n="nav_texture">Texture Map</option>
+                        <option value="sec-utility" data-i18n="nav_utility">Utility</option>
+                        <option value="sec-import" data-i18n="nav_import">Import 3D</option>
+                        <option value="sec-stem" data-i18n="nav_stem">Stem</option>
+                        <option value="sec-text" data-i18n="nav_text">Text / Legend</option>
+                        <option value="sec-svg" data-i18n="nav_svg">SVG Icon</option>
+                        <option value="sec-color" data-i18n="nav_color">Colors</option>
+                        <option value="sec-preset" data-i18n="nav_preset">Presets</option>
+                        <option value="sec-export" data-i18n="nav_export">Export</option>
+                    </select>
+                </div>
+                <div class="nav-row">
+                    <input type="text" id="search-box" placeholder="🔍 Search settings...">
+                </div>
+            </div>
+        </div>
+        <div id="ui-scroll-area">
+
+            <h3 id="sec-basic" data-i18n="h_basic" style="margin-top:0;">基本サイズ</h3>
+            
+            <div class="control-group">
+                <label data-i18n="lbl_unit_size">基本ピッチ (Unit Size)</label>
+                <select id="unit-size-select">
+                    <option value="19.05">19.05mm (Standard MX)</option>
+                    <option value="19.00">19.00mm (Just)</option>
+                    <option value="18.00">18.00mm</option>
+                    <option value="17.00">17.00mm (Choc/Narrow)</option>
+                    <option value="16.00">16.00mm (Mini)</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label><span data-i18n="lbl_u_size">キーサイズ (U)</span> <span id="v-u-size" class="val" data-target="u-size">1.0</span></label>
+                <input type="range" id="u-size" min="1.0" max="10.0" step="0.25" value="1.0">
+            </div>
+            
+            <div class="control-group" style="margin-top:5px; padding-top:5px; border-top:1px dashed #333;">
+                <label>スタビライザー (Stabilizer)</label>
+                <select id="stabilizer-type">
+                    <option value="auto">Auto (自動)</option>
+                    <option value="custom">Custom (手動設定)</option>
+                </select>
+                <div id="stabilizer-custom-ui" style="display:none; margin-top:5px;">
+                     <label>Pitch (Center Offset) <span id="v-stabilizer-offset" class="val">0.0</span>mm</label>
+                     <input type="range" id="stabilizer-offset" min="0" max="150" step="0.1" value="0">
+                     <div style="font-size:0.7em; color:#aaa;">※中心からステム中心までの距離</div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label data-i18n="lbl_profile">プロファイル</label>
+                <select id="profile-select">
+                    <option value="cherry">Cherry Profile</option>
+                    <option value="oem">OEM Profile</option>
+                    <option value="sa">SA Profile</option>
+                    <option value="xda">XDA Profile</option>
+                    <option value="dsa">DSA Profile</option>
+                </select>
+            </div>
+            <div class="control-group" id="row-group">
+                <label data-i18n="lbl_row">行 (Row)</label>
+                <select id="row-select">
+                    <option value="R4">R4 (ESC/Num)</option>
+                    <option value="R3">R3 (QWERTY)</option>
+                    <option value="R2">R2 (ASDF)</option>
+                    <option value="R1">R1 (ZXCV/Space)</option>
+                </select>
+            </div>
+
+            <h3 id="sec-structure" data-i18n="h_structure">構造・ボッチ</h3>
+            
+            <div class="control-group">
+                <label style="color:#00e5ff; font-weight:bold;"><span data-i18n="lbl_round_corner">角の丸み (Fillet)</span> <span><span id="v-round-corner" class="val" data-target="round-corner">0.0</span>mm</span></label>
+                <input type="range" id="round-corner" min="0.0" max="7.0" step="0.1" value="0.0">
+                <div style="font-size:0.7em; color:#aaa;" data-i18n="note_round">※Squircle Mapping (高速・安定)</div>
+            </div>
+
+            <div class="control-group">
+                <label><span data-i18n="lbl_wall_thick">壁の厚み</span> <span><span id="v-wall-thick" class="val" data-target="wall-thick">1.5</span>mm</span></label>
+                <input type="range" id="wall-thick" min="0.8" max="4.0" step="0.1" value="1.5">
+            </div>
+            <div class="control-group">
+                <label style="color:#ff80ab;"><span data-i18n="lbl_rib_shorten">リブ短縮 (底上げ)</span> <span><span id="v-rib-shorten" class="val" data-target="rib-shorten">4.3</span>mm</span></label>
+                <input type="range" id="rib-shorten" min="0.0" max="10.0" step="0.1" value="4.3">
+            </div>
+            
+            <label class="toggle-switch">
+                <input type="checkbox" id="enable-ribs" checked class="toggle-input">
+                <span class="toggle-knob"></span>
+                <span class="toggle-label" data-i18n="lbl_enable_ribs">補強リブ (十字)</span>
+            </label>
+            
+            <div class="control-group" style="margin-top:5px; border-top:1px solid #333; padding-top:5px;">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="homing-bump" class="toggle-input">
+                    <span class="toggle-knob"></span>
+                    <span class="toggle-label" style="color:#ff4081;" data-i18n="lbl_homing_bump">ホームポジション突起</span>
+                </label>
+                
+                <select id="homing-type" style="margin-bottom: 5px;">
+                    <option value="round" data-i18n="opt_bump_round">丸型 (Round)</option>
+                    <option value="bar" data-i18n="opt_bump_bar">長方形 (Bar)</option>
+                </select>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_pos_x">位置 X</span> <span id="v-bump-x" class="val" data-target="bump-x">0.0</span></label>
+                        <input type="range" id="bump-x" min="-10" max="10" step="0.1" value="0.0">
+                    </div>
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_pos_z">位置 Z</span> <span id="v-bump-z" class="val" data-target="bump-z">0.0</span></label>
+                        <input type="range" id="bump-z" min="-10" max="10" step="0.1" value="0.0">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label><span data-i18n="lbl_bump_offset">高さ微調整 (Offset)</span> <span><span id="v-bump-offset-y" class="val" data-target="bump-offset-y">0.0</span>mm</span></label>
+                    <input type="range" id="bump-offset-y" min="-5.0" max="5.0" step="0.1" value="0.0">
+                </div>
+            </div>
+<h3 id="sec-shape" data-i18n="h_shape">形状</h3>
+            <div class="control-group">
+                <label><span data-i18n="lbl_top_scale">上面サイズ (Taper)</span> <span id="v-top-scale" class="val" data-target="top-scale">1.00</span></label>
+                <input type="range" id="top-scale" min="0.5" max="1.0" step="0.01" value="1.0">
+            </div>
+            <div class="control-group">
+                <label data-i18n="lbl_dish_type">上面形状 (Dish Type)</label>
+                <select id="dish-type">
+                    <option value="cylindrical" data-i18n="opt_dish_cyl">Cylindrical (円筒)</option>
+                    <option value="spherical" data-i18n="opt_dish_sph">Spherical (球)</option>
+                    <option value="flat" data-i18n="opt_dish_flat">Flat (平)</option>
+                </select>
+            </div>
+            
+            <div class="v61-texture-panel">
+                <label style="color:#e91e63; font-weight:bold;" data-i18n="lbl_texture">表面プロシージャル (Procedural)</label>
+                <select id="texture-type" style="margin-bottom:5px;">
+                    <option value="none" data-i18n="opt_tex_none">None (なし)</option>
+                    <option value="noise" data-i18n="opt_tex_noise">Noise (梨地/Sand)</option>
+                    <option value="grid" data-i18n="opt_tex_grid">Grid (グリップ/Studs)</option>
+                    <option value="knurling">Knurling (ローレット/Diamond)</option>
+                    <option value="stripes">Stripes (ストライプ)</option>
+                </select>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_tex_scale">Scale</span> <span id="v-tex-scale" class="val">50</span></label>
+                        <input type="range" id="tex-scale" min="1" max="100" step="1" value="50">
+                    </div>
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_tex_strength">Strength</span> <span id="v-tex-strength" class="val">0.05</span></label>
+                        <input type="range" id="tex-strength" min="0.01" max="0.5" step="0.01" value="0.05">
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="sec-texture" data-i18n="h_texture_map" style="color:#ba68c8; border-color:#ba68c8;">画像テクスチャ (Image Map)</h3>
+            <div class="v63-texture-map-panel">
+                <div class="file-upload">
+                    <label for="img-texture-input" class="file-upload-label" style="border-color:#ba68c8; color:#e1bee7;" data-i18n="btn_upload_img">📁 画像読込 (PNG/JPG)</label>
+                    <input type="file" id="img-texture-input" accept="image/*">
+                </div>
+                
+                <div class="control-row" style="margin-top:5px; align-items:center;">
+                    <label class="toggle-switch" style="flex:1; margin:0;">
+                        <input type="checkbox" id="img-texture-visible" class="toggle-input">
+                        <span class="toggle-knob"></span>
+                        <span class="toggle-label" data-i18n="lbl_visible">表示 (Visible)</span>
+                    </label>
+                    <button class="danger btn-small" id="btn-clear-img-texture" style="width:30px; margin:0;">×</button>
+                </div>
+
+                <div class="control-group" style="margin-top:5px;">
+                    <label>Scale <span id="v-img-scale" class="val">1.0</span></label>
+                    <input type="range" id="img-scale" min="0.1" max="3.0" step="0.1" value="1.0">
+                </div>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>Pos X <span id="v-img-pos-x" class="val">0.0</span></label>
+                        <input type="range" id="img-pos-x" min="-0.5" max="0.5" step="0.01" value="0.0">
+                    </div>
+                    <div style="flex:1">
+                        <label>Pos Y <span id="v-img-pos-y" class="val">0.0</span></label>
+                        <input type="range" id="img-pos-y" min="-0.5" max="0.5" step="0.01" value="0.0">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Rotation <span id="v-img-rot" class="val">0</span>°</label>
+                    <input type="range" id="img-rot" min="-180" max="180" step="1" value="0">
+                </div>
+            </div>
+
+            <div class="control-group" style="border-top:1px dashed #555; margin-top:5px; padding-top:5px;">
+                <label style="color:#b2ff59;">Twist (ねじり)</label>
+                <input type="range" id="twist-factor" min="-90" max="90" step="1" value="0">
+                
+                <label style="color:#b2ff59; margin-top:5px;">Tilt (天面角度調整)</label>
+                <div class="control-row">
+                    <div style="flex:1"><label>X-Tilt</label><input type="range" id="tilt-x" min="-20" max="20" step="0.5" value="0"></div>
+                    <div style="flex:1"><label>Z-Tilt</label><input type="range" id="tilt-z" min="-20" max="20" step="0.5" value="0"></div>
+                </div>
+            </div>
+
+            <h3 id="sec-stem" data-i18n="h_stem">ステム設定</h3>
+            <div class="control-group">
+                <label style="color:#80deea;" data-i18n="lbl_stem_type">軸タイプ: Cherry MX (固定)</label>
+            </div>
+            
+            <div class="control-group">
+                <label style="color:#ffeb3b;"><span data-i18n="lbl_stem_diameter">ステム外径 (Diameter)</span> <span><span id="v-stem-diameter" class="val" data-target="stem-diameter">5.50</span>mm</span></label>
+                <input type="range" id="stem-diameter" min="5.0" max="7.0" step="0.05" value="5.50">
+            </div>
+
+            <div class="control-group">
+                <label style="color:#ffeb3b;"><span data-i18n="lbl_clearance">クリアランス</span> <span><span id="v-stem-clearance" class="val" data-target="stem-clearance">0.30</span>mm</span></label>
+                <input type="range" id="stem-clearance" min="0.0" max="1.0" step="0.01" value="0.30">
+            </div>
+
+            <div class="control-group" style="border-top:1px solid #333; margin-top:5px; padding-top:5px;">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="enable-stem-extension" class="toggle-input">
+                    <span class="toggle-knob"></span>
+                    <span class="toggle-label" style="color:#80deea;">長さを拡張 (Stem Extension)</span>
+                </label>
+                <div id="stem-ext-control" style="display:none; margin-top:5px;">
+                    <label>Extension <span id="v-stem-extension" class="val">1.0</span>mm</label>
+                    <input type="range" id="stem-extension" min="0.0" max="5.0" step="0.1" value="1.0">
+                </div>
+            </div>
+            
+            <label class="toggle-switch" style="margin-top:5px;">
+                <input type="checkbox" id="box-stem" class="toggle-input">
+                <span class="toggle-knob"></span>
+                <span class="toggle-label" style="color:#ffeb3b;">Box Stem (ボックス軸)</span>
+            </label>
+            
+            <label class="toggle-switch">
+                <input type="checkbox" id="lego-stud" class="toggle-input">
+                <span class="toggle-knob"></span>
+                <span class="toggle-label" style="color:#ff5722;">Lego Stud (天面ポッチ)</span>
+            </label>
+            <div id="lego-adj-panel" style="display:none; background:rgba(255,87,34,0.1); padding:5px; border-radius:4px; margin-bottom:5px; border:1px dashed #ff5722;">
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>Pos X <span id="v-lego-x" class="val">0.0</span></label>
+                        <input type="range" id="lego-x" min="-10" max="10" step="0.1" value="0.0">
+                    </div>
+                    <div style="flex:1">
+                        <label>Pos Z <span id="v-lego-z" class="val">0.0</span></label>
+                        <input type="range" id="lego-z" min="-10" max="10" step="0.1" value="0.0">
+                    </div>
+                </div>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>Pos Y <span id="v-lego-y" class="val">0.0</span></label>
+                        <input type="range" id="lego-y" min="-5" max="5" step="0.1" value="0.0">
+                    </div>
+                    <div style="flex:1">
+                        <label>Clearance <span id="v-lego-clear" class="val">0.0</span></label>
+                        <input type="range" id="lego-clear" min="-0.5" max="0.5" step="0.05" value="0.0">
+                    </div>
+                </div>
+            </div>
+<div class="section-sep"></div>
+            <h3 id="sec-utility" style="color:#00e5ff;">Utility</h3>
+            
+            <div class="control-group" style="display:flex; gap:5px; align-items:center;">
+                <button id="btn-random" class="accent" style="border-color:#e040fb; color:#e040fb; flex:1;">🎲 Randomizer</button>
+                <button id="btn-reset-params" class="danger btn-square" title="Reset Params to Default" style="width:40px; margin-top:5px;">×</button>
+            </div>
+            
+            <h3 id="sec-import" style="color:#ff9800; margin-top:10px; border-bottom:1px solid #ff9800;" data-i18n="h_import">外部モデル (Import 3D)</h3>
+            <div class="v60-import-panel">
+                <div class="control-group" style="display:flex; gap:5px; align-items: flex-end;">
+                    <div class="file-upload" style="flex:1;">
+                        <label for="model-file-input" class="file-upload-label" style="border-color:#ff9800; color:#ff9800;">📁 STLモデル読込</label>
+                        <input type="file" id="model-file-input" accept=".stl">
+                    </div>
+                    <button class="danger btn-square" id="btn-clear-model" title="モデル削除">×</button>
+                </div>
+                
+                <label class="toggle-switch" style="margin-top:5px;">
+                    <input type="checkbox" id="model-visible" checked class="toggle-input">
+                    <span class="toggle-knob"></span>
+                    <span class="toggle-label" data-i18n="lbl_visible">表示 (Visible)</span>
+                </label>
+
+                <div class="control-group" style="margin-top:5px; background:rgba(0,0,0,0.2); padding:5px; border-radius:4px;">
+                    <label style="color:#ff9800;">合成モード (Operation)</label>
+                    <select id="model-operation">
+                        <option value="union">Union (結合 - 追加)</option>
+                        <option value="subtract">Subtract (型抜き - 彫刻)</option>
+                    </select>
+                    <div style="font-size:0.7em; color:#aaa; margin-top:2px;">※Subtractは処理に時間がかかります</div>
+                </div>
+
+                <div class="control-group">
+                    <label>Pivot / Transform (位置/回転)</label>
+                    <div class="control-row">
+                        <div style="flex:1">
+                            <label>Scale <span id="v-model-scale" class="val">1.0</span></label>
+                            <input type="range" id="model-scale" min="0.1" max="5.0" step="0.1" value="1.0">
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div style="flex:1">
+                            <label>X <span id="v-model-x" class="val">0.0</span></label>
+                            <input type="range" id="model-x" min="-15" max="15" step="0.5" value="0">
+                        </div>
+                        <div style="flex:1">
+                            <label>Z <span id="v-model-z" class="val">0.0</span></label>
+                            <input type="range" id="model-z" min="-15" max="15" step="0.5" value="0">
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div style="flex:1">
+                            <label>Y-Pos <span id="v-model-y" class="val">0.0</span></label>
+                            <input type="range" id="model-y" min="-10" max="20" step="0.5" value="0">
+                        </div>
+                    </div>
+                    <div class="control-row">
+                        <div style="flex:1">
+                            <label>Rot X <span id="v-model-rx" class="val">0</span>°</label>
+                            <input type="range" id="model-rx" min="-180" max="180" step="15" value="0">
+                        </div>
+                        <div style="flex:1">
+                            <label>Rot Y <span id="v-model-ry" class="val">0</span>°</label>
+                            <input type="range" id="model-ry" min="-180" max="180" step="15" value="0">
+                        </div>
+                        <div style="flex:1">
+                            <label>Rot Z <span id="v-model-rz" class="val">0</span>°</label>
+                            <input type="range" id="model-rz" min="-180" max="180" step="15" value="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 id="sec-text" data-i18n="h_text">文字設定</h3>
+            <div class="control-group">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="enable-text" checked class="toggle-input">
+                    <span class="toggle-knob"></span>
+                    <span class="toggle-label" data-i18n="lbl_enable_text">文字を生成する</span>
+                </label>
+                <textarea id="text-content" rows="2" placeholder="例: A&#13;&#10;{&#13;&#10;["></textarea>
+                <div style="font-size:0.7em; color:#aaa; text-align:right;" data-i18n="note_multiline">※改行で2段印字が可能</div>
+            </div>
+            
+            <div class="control-group">
+                <label data-i18n="lbl_font">フォント</label>
+                <select id="font-family" style="display:none;">
+                    <option value="helvetiker">Helvetiker (標準)</option>
+                    <option value="optimer">Optimer (標準)</option>
+                    <option value="gentilis">Gentilis (標準)</option>
+                    <option value="droid_sans">Droid Sans (標準)</option>
+                    <option value="droid_serif">Droid Serif (標準)</option>
+                </select>
+                <div class="custom-select-container" id="custom-font-ui">
+                    <div class="custom-select-head" id="custom-font-head">Helvetiker (標準) ▼</div>
+                    <div class="custom-select-list" id="custom-font-list"></div>
+                </div>
+            </div>
+
+            <div class="control-group" style="border: 1px dashed #555; padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.3); margin-top: 5px;">
+                <div class="info-link" data-i18n="note_font_upload">
+                    ※.ttf などをそのまま読み込むことはできません。<br>
+                    <a href="http://gero3.github.io/facetype.js/" target="_blank">Facetype.js</a> などでJSONに変換したファイルを使用してください。
+                </div>
+                <div class="file-upload">
+                    <label for="font-file-input" class="file-upload-label" data-i18n="btn_upload_font">📁 カスタムフォント (.json)</label>
+                    <input type="file" id="font-file-input" accept=".json">
+                </div>
+            </div>
+
+            <div class="control-group" style="background:rgba(0,229,255,0.1); padding:5px; border-radius:4px; margin-bottom:5px; margin-top:5px;">
+                <label data-i18n="lbl_text_mode" style="color:#00e5ff; font-weight:bold;">生成モード (Mode)</label>
+                <select id="text-mode">
+                    <option value="emboss" data-i18n="opt_mode_emboss">Emboss (浮き出し)</option>
+                    <option value="engrave" data-i18n="opt_mode_engrave">Engrave (刻印/掘り込み)</option>
+                    <option value="doubleshot" data-i18n="opt_mode_doubleshot">Double-Shot (埋め込み)</option>
+                </select>
+                <div style="font-size:0.7em; color:#aaa; margin-top:3px;" data-i18n="note_engrave">※Engraveは計算処理に時間がかかります</div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_size">サイズ</span> <span id="v-font-size" class="val" data-target="font-size">8.0</span></label>
+                        <input type="range" id="font-size" min="3" max="20" step="0.5" value="8.0">
+                    </div>
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_thickness">深さ/高さ</span> <span id="v-text-height" class="val" data-target="text-height">0.5</span></label>
+                        <div style="display:flex; align-items:center; gap:5px;">
+                            <input type="range" id="text-height" min="0.1" max="5.0" step="0.1" value="0.5" disabled>
+                            
+                            <label class="toggle-switch" style="margin:0; width:auto;" title="厚みを固定">
+                                <input type="checkbox" id="lock-thickness" checked class="toggle-input">
+                                <span class="toggle-knob" style="width:28px; height:14px;"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <label class="toggle-switch">
+                <input type="checkbox" id="text-conform" checked class="toggle-input">
+                <span class="toggle-knob"></span>
+                <span class="toggle-label" data-i18n="lbl_conform">曲面に合わせる (Conform)</span>
+            </label>
+
+            <div class="control-group">
+                <label data-i18n="lbl_align_preset">文字配置 (プリセット)</label>
+                <div class="control-row">
+                    <button id="btn-align-center" class="secondary" style="margin:0;" data-i18n="btn_align_center">Center (中央)</button>
+                    <button id="btn-align-tl" class="secondary" style="margin:0;" data-i18n="btn_align_tl">Top-Left (左上)</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label data-i18n="lbl_pos_xz_fine">位置 X / Z (微調整)</label>
+                <div class="control-row">
+                    <input type="range" id="pos-x" min="-15" max="15" step="0.5" value="0" title="X Position">
+                    <input type="range" id="pos-z" min="-15" max="15" step="0.5" value="0" title="Z Position">
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:0.7em; color:#aaa;">
+                    <span>X: <span id="v-pos-x">0.0</span></span>
+                    <span>Z: <span id="v-pos-z">0.0</span></span>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label style="color:#aaa; font-size:0.7rem;"><span data-i18n="lbl_offset_y">高さ微調整 (Offset Y)</span> <span id="v-text-offset-y" class="val">0.0</span></label>
+                <input type="range" id="text-offset-y" min="-5.0" max="5.0" step="0.01" value="0.0">
+            </div>
+
+            <div class="v60-sub-panel">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="enable-text2" class="toggle-input">
+                    <span class="toggle-knob"></span>
+                    <span class="toggle-label" class="v60-label">サブ文字 (Legend 2)</span>
+                </label>
+                <textarea id="text2-content" rows="1" placeholder="例: あ / @" style="margin-bottom:5px;"></textarea>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>Size <span id="v-text2-size" class="val">4.0</span></label>
+                        <input type="range" id="text2-size" min="2" max="15" step="0.1" value="4.0">
+                    </div>
+                </div>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>X <span id="v-text2-x" class="val">3.5</span></label>
+                        <input type="range" id="text2-x" min="-10" max="10" step="0.1" value="3.5">
+                    </div>
+                    <div style="flex:1">
+                        <label>Z <span id="v-text2-z" class="val">3.5</span></label>
+                        <input type="range" id="text2-z" min="-10" max="10" step="0.1" value="3.5">
+                    </div>
+                </div>
+            </div>
+
+            <div class="v60-sub-panel">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="enable-side" class="toggle-input">
+                    <span class="toggle-knob"></span>
+                    <span class="toggle-label" class="v60-label-side">サイド印字 (Side Print)</span>
+                </label>
+                <input type="text" id="side-text" placeholder="FRONT TEXT" style="margin-bottom:5px;">
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>Size <span id="v-side-size" class="val">3.0</span></label>
+                        <input type="range" id="side-size" min="1" max="10" step="0.1" value="3.0">
+                    </div>
+                    <div style="flex:1">
+                        <label>Y-Ofs <span id="v-side-y" class="val">-2.0</span></label>
+                        <input type="range" id="side-y" min="-10" max="5" step="0.1" value="-2.0">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Rotate X <span id="v-side-rot" class="val">0</span>°</label>
+                    <input type="range" id="side-rot" min="-45" max="45" step="1" value="0">
+                </div>
+            </div>
+<h3 id="sec-svg" data-i18n="h_svg">SVG (アイコン) 設定</h3>
+            <div class="control-group" style="display:flex; gap:5px; align-items: flex-end;">
+                <div class="file-upload" style="flex:1;">
+                    <label for="svg-file-input" class="file-upload-label" style="border-color:#ffeb3b; color:#ffeb3b;" data-i18n="btn_upload_svg">📁 SVG読込</label>
+                    <input type="file" id="svg-file-input" accept=".svg">
+                </div>
+                <button class="danger btn-square" id="btn-clear-svg" title="SVGを削除">×</button>
+            </div>
+            
+            <label class="toggle-switch" style="margin-top:5px;">
+                <input type="checkbox" id="svg-visible" checked class="toggle-input">
+                <span class="toggle-knob"></span>
+                <span class="toggle-label" data-i18n="lbl_visible">表示する</span>
+            </label>
+
+            <div class="control-row">
+                <div style="flex:1">
+                    <label><span data-i18n="lbl_size">サイズ</span> <span id="v-svg-scale" class="val" data-target="svg-scale">1.0</span></label>
+                    <input type="range" id="svg-scale" min="0.1" max="5.0" step="0.1" value="1.0">
+                </div>
+                <div style="flex:1">
+                    <label><span data-i18n="lbl_thickness">厚み</span> <span id="v-svg-thickness" class="val" data-target="svg-thickness">0.6</span></label>
+                    <input type="range" id="svg-thickness" min="0.1" max="5.0" step="0.1" value="0.6">
+                </div>
+            </div>
+
+            <div class="control-group" style="background:rgba(0,229,255,0.1); padding:5px; border-radius:4px; margin-bottom:5px;">
+                <label class="toggle-switch" style="margin:0;">
+                    <input type="checkbox" id="svg-double-shot" checked class="toggle-input">
+                    <span class="toggle-knob"></span>
+                    <span class="toggle-label" style="color:#00e5ff; font-weight:bold;" data-i18n="lbl_doubleshot">ダブルショット風 (埋め込み)</span>
+                </label>
+            </div>
+            
+            <label class="toggle-switch">
+                <input type="checkbox" id="svg-conform" checked class="toggle-input">
+                <span class="toggle-knob"></span>
+                <span class="toggle-label" data-i18n="lbl_conform">曲面に合わせる (Conform)</span>
+            </label>
+            
+            <div class="control-group">
+                <label data-i18n="lbl_rotation">回転 (XYZ) </label>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>X <span id="v-svg-rot-x" class="val" data-target="svg-rot-x">0</span>°</label>
+                        <input type="range" id="svg-rot-x" min="-180" max="180" step="5" value="0">
+                    </div>
+                    <div style="flex:1">
+                        <label>Y <span id="v-svg-rot-y" class="val" data-target="svg-rot-y">0</span>°</label>
+                        <input type="range" id="svg-rot-y" min="-180" max="180" step="5" value="0">
+                    </div>
+                    <div style="flex:1">
+                        <label>Z <span id="v-svg-rot-z" class="val" data-target="svg-rot-z">0</span>°</label>
+                        <input type="range" id="svg-rot-z" min="-180" max="180" step="5" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_pos_x">位置 X</span> <span id="v-svg-pos-x" class="val" data-target="svg-pos-x">0.0</span></label>
+                        <input type="range" id="svg-pos-x" min="-15" max="15" step="0.5" value="0">
+                    </div>
+                    <div style="flex:1">
+                        <label><span data-i18n="lbl_pos_z">位置 Z</span> <span id="v-svg-pos-z" class="val" data-target="svg-pos-z">0.0</span></label>
+                        <input type="range" id="svg-pos-z" min="-15" max="15" step="0.5" value="0">
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label style="color:#aaa; font-size:0.7rem;"><span data-i18n="lbl_offset_y">高さ微調整 (Offset Y)</span> <span id="v-svg-offset-y" class="val">0.0</span></label>
+                <input type="range" id="svg-offset-y" min="-5.0" max="5.0" step="0.01" value="0.0">
+            </div>
+
+            <h3 id="sec-color" data-i18n="h_colors">色設定</h3>
+            <div class="control-group">
+                <label data-i18n="lbl_col_body">本体色</label>
+                <input type="color" id="col-body" value="#333333" class="color-input">
+                <div class="palette-grid" id="palette-body"></div>
+            </div>
+            <div class="control-group" style="margin-top:15px;">
+                <label data-i18n="lbl_col_text">文字・SVG色</label>
+                <input type="color" id="col-text" value="#00e5ff" class="color-input">
+                <div class="palette-grid" id="palette-text"></div>
+            </div>
+
+            <div class="section-sep"></div>
+            <h3 id="sec-preset" data-i18n="h_preset">プリセット管理</h3>
+            <div class="control-group">
+                <label data-i18n="lbl_browser_storage">ブラウザに保存 (Quick Save/Load)</label>
+                <div class="control-row">
+                    <button id="btn-quick-save" class="secondary btn-small" data-i18n="btn_quick_save">一時保存 (Save)</button>
+                    <button id="btn-quick-load" class="secondary btn-small" data-i18n="btn_quick_load">復元 (Load)</button>
+                </div>
+            </div>
+            <div class="control-group">
+                <label data-i18n="lbl_file_storage">ファイルに保存 (File I/O)</label>
+                <div class="control-row">
+                    <button id="btn-export-preset" class="secondary btn-small" data-i18n="btn_export_file">書き出し (.json)</button>
+                    <div class="file-upload" style="flex:1;">
+                        <label for="preset-file-input" class="file-upload-label preset btn-small" data-i18n="btn_import_file">読み込み (.json)</label>
+                        <input type="file" id="preset-file-input" accept=".json">
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-sep"></div>
+            <h3 id="sec-export" data-i18n="h_export">エクスポート (STL/OBJ)</h3>
+            <div class="control-group">
+                <label>全体回転 (Print Orientation)</label>
+                <div class="control-row">
+                    <div style="flex:1">
+                        <label>Rot X</label>
+                        <input type="range" id="global-rot-x" min="-180" max="180" step="15" value="0" title="Global Rot X">
+                    </div>
+                    <div style="flex:1">
+                        <label>Rot Y</label>
+                        <input type="range" id="global-rot-y" min="-180" max="180" step="15" value="0" title="Global Rot Y">
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-group" style="margin-bottom:10px;">
+                <label data-i18n="lbl_filename">ファイル名設定 (自動で[文字]が付与されます)</label>
+                <input type="text" id="export-name" value="keycap" style="text-align:left;">
+            </div>
+            <button id="btn-export-all" data-i18n="btn_export_all">全体をSTLで保存</button>
+            <button id="btn-export-obj" class="accent" style="margin-top:5px; color:#ff9800; border-color:#ff9800;" data-i18n="btn_export_obj">全体をOBJで保存 (Color)</button>
+            
+            <div class="control-row">
+                <button class="secondary" id="btn-export-body" data-i18n="btn_export_body">本体のみ (STL)</button>
+                <button class="secondary" id="btn-export-text" data-i18n="btn_export_text">文字のみ (STL)</button>
+            </div>
+
+            <div class="section-sep"></div>
+            <h3 id="sec-batch" data-i18n="h_batch">バッチ出力 (Batch Export)</h3>
+            <div class="control-group">
+                <label data-i18n="lbl_batch_list">文字リスト (カンマ/改行区切り)</label>
+                <textarea id="batch-list" rows="3" placeholder="Q,W,E,R,T,Y..."></textarea>
+                <div style="font-size:0.7em; color:#aaa; text-align:right;" data-i18n="note_batch">※現在の設定で連続生成します</div>
+            </div>
+            <button id="btn-batch-export" class="accent" data-i18n="btn_batch_run_dl">一括生成して連続保存 (No ZIP)</button>
+
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { STLExporter } from 'three/addons/exporters/STLExporter.js';
+        import { OBJExporter } from 'three/addons/exporters/OBJExporter.js';
+        import { STLLoader } from 'three/addons/loaders/STLLoader.js';
+        import { FontLoader } from 'three/addons/loaders/FontLoader.js';
+        import { TextGeometry } from 'three/addons/geometries/TextGeometry.js';
+        import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
+        import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
+        import { ViewHelper } from 'three/addons/helpers/ViewHelper.js';
+        // V63 Import: CSG for Engraving
+        import { SUBTRACTION, Brush, Evaluator } from 'three-bvh-csg';
+
+        // ■■■ i18n Data (Updated for V63) ■■■
+        const translations = {
+            ja: {
+                nav_jump: "--- セクション移動 ---",
+                nav_basic: "基本サイズ (Basic)", nav_structure: "構造・ボッチ (Structure)", nav_shape: "形状 (Shape)",
+                nav_texture: "画像テクスチャ (Map)", nav_utility: "ユーティリティ (Utility)", nav_import: "外部モデル (Import)", 
+                nav_stem: "ステム (Stem)", nav_text: "文字・刻印 (Text)", nav_svg: "SVGアイコン (Icon)", nav_color: "色設定 (Colors)",
+                nav_preset: "プリセット (Presets)", nav_export: "書き出し (Export)",
+
+                h_basic: "基本サイズ", lbl_u_size: "キーサイズ (U)", lbl_profile: "プロファイル", lbl_row: "行 (Row)",
+                lbl_unit_size: "基本ピッチ (Unit Size)", 
+                
+                h_structure: "構造・ボッチ", lbl_wall_thick: "壁の厚み", lbl_rib_shorten: "リブ短縮 (底上げ)", lbl_enable_ribs: "補強リブ (十字)",
+                lbl_homing_bump: "ホームポジション突起", opt_bump_round: "丸型 (Round)", opt_bump_bar: "長方形 (Bar)",
+                lbl_pos_x: "位置 X", lbl_pos_z: "位置 Z", lbl_bump_offset: "高さ微調整 (Offset)",
+                lbl_round_corner: "角の丸み (Fillet)", note_round: "※Squircle Mapping (高速・安定)",
+
+                h_shape: "形状 (テーパー・Dish)", lbl_top_scale: "上面サイズ (Taper)", lbl_dish_type: "上面形状 (Dish Type)",
+                opt_dish_cyl: "Cylindrical (円筒)", opt_dish_sph: "Spherical (球)", opt_dish_flat: "Flat (平)",
+                lbl_texture: "表面プロシージャル (Procedural)", opt_tex_none: "None (なし)", opt_tex_noise: "Noise (梨地/Sand)", opt_tex_grid: "Grid (グリップ/Studs)",
+                lbl_tex_scale: "Scale (細かさ)", lbl_tex_strength: "Strength (深さ)",
+                
+                // V63 New: Image Texture
+                h_texture_map: "画像テクスチャ (Image Map)", btn_upload_img: "📁 画像読込 (PNG/JPG)", 
+                
+                h_stem: "ステム設定", lbl_stem_type: "軸タイプ: Cherry MX (固定)", lbl_clearance: "クリアランス",
+                lbl_stem_diameter: "ステム外径 (Diameter)", 
+
+                h_text: "文字設定", lbl_enable_text: "文字を生成する", pl_text: "例: A\n{\n[", note_multiline: "※改行で2段印字が可能",
+                lbl_font: "フォント", note_font_upload: "※.ttf などをそのまま読み込むことはできません。<br><a href='http://gero3.github.io/facetype.js/' target='_blank'>Facetype.js</a> などでJSONに変換したファイルを使用してください。",
+                btn_upload_font: "📁 カスタムフォント (.json)", lbl_size: "サイズ", lbl_thickness: "深さ/高さ",
+                lbl_conform: "曲面に合わせる (Conform)",
+                lbl_align_preset: "文字配置 (プリセット)", btn_align_center: "Center (中央)", btn_align_tl: "Top-Left (左上)",
+                lbl_pos_xz_fine: "位置 X / Z (微調整)", lbl_offset_y: "高さ微調整 (Offset Y)",
+                
+                // V63 New: Text Mode
+                lbl_text_mode: "生成モード (Mode)", opt_mode_emboss: "Emboss (浮き出し)", opt_mode_engrave: "Engrave (刻印/掘り込み)", opt_mode_doubleshot: "Double-Shot (埋め込み)",
+                note_engrave: "※Engraveは計算処理に時間がかかります",
+
+                h_svg: "SVG (アイコン) 設定", btn_upload_svg: "📁 SVG読込", lbl_visible: "表示 (Visible)", lbl_rotation: "回転 (XYZ)",
+                lbl_doubleshot: "ダブルショット風 (埋め込み)", 
+                
+                h_colors: "色設定", lbl_col_body: "本体色", lbl_col_text: "文字・SVG色",
+                h_preset: "プリセット管理", lbl_browser_storage: "ブラウザに保存 (Quick Save/Load)", btn_quick_save: "一時保存 (Save)", btn_quick_load: "復元 (Load)",
+                lbl_file_storage: "ファイルに保存 (File I/O)", btn_export_file: "書き出し (.json)", btn_import_file: "読み込み (.json)",
+                h_export: "エクスポート (STL/OBJ)", lbl_filename: "ファイル名設定 (自動で[文字]が付与されます)", btn_export_all: "全体をSTLで保存", btn_export_obj: "全体をOBJで保存 (Color)",
+                btn_export_body: "本体のみ (STL)", btn_export_text: "文字のみ (STL)",
+                h_batch: "バッチ出力 (Batch Export)", lbl_batch_list: "文字リスト (カンマ/改行区切り)", pl_batch: "Q,W,E,R,T,Y...",
+                note_batch: "※現在の設定で連続生成・保存します (許可が必要です)", btn_batch_run_dl: "一括生成して連続保存 (No ZIP)", 
+                batch_processing: "処理中: ", batch_zipping: "完了！",
+                msg_save_ok: "設定をブラウザに一時保存しました。", msg_load_ok: "設定を復元しました。", msg_load_err: "保存された設定が見つかりません。",
+                msg_import_err: "ファイル読み込みエラー: 正しいJSON形式ではありません。", msg_batch_empty: "文字リストが空です。",
+                h_import: "外部モデル (Import)",
+                
+                lbl_weight: "予想重量:", lbl_cost: "予想コスト:", 
+                lbl_vendor: "ベンダー:", lbl_material: "材料:", btn_details: "▼ 詳細 / 編集",
+                lbl_manual_override: "手動設定 (Manual Override)", lbl_price: "価格", lbl_spool: "リール(g)", lbl_density: "密度"
+            },
+            en: {
+                nav_jump: "--- Jump to Section ---",
+                nav_basic: "Basic Size", nav_structure: "Structure", nav_shape: "Shape",
+                nav_texture: "Texture Map", nav_utility: "Utility", nav_import: "Import 3D", nav_stem: "Stem",
+                nav_text: "Text / Legend", nav_svg: "SVG Icon", nav_color: "Colors",
+                nav_preset: "Presets", nav_export: "Export",
+
+                h_basic: "Basic Size", lbl_u_size: "Key Size (U)", lbl_profile: "Profile", lbl_row: "Row",
+                lbl_unit_size: "Unit Size (Pitch)",
+
+                h_structure: "Structure & Stem", lbl_wall_thick: "Wall Thickness", lbl_rib_shorten: "Rib Shorten (Lift)", lbl_enable_ribs: "Reinforcement Ribs",
+                lbl_homing_bump: "Homing Bump", opt_bump_round: "Round", opt_bump_bar: "Bar",
+                lbl_pos_x: "Pos X", lbl_pos_z: "Pos Z", lbl_bump_offset: "Bump Offset Y",
+                lbl_round_corner: "Round Corner (Fillet)", note_round: "*Squircle Mapping (Fast & Stable)",
+
+                h_shape: "Shape (Taper/Dish)", lbl_top_scale: "Top Scale (Taper)", lbl_dish_type: "Dish Type",
+                opt_dish_cyl: "Cylindrical", opt_dish_sph: "Spherical", opt_dish_flat: "Flat",
+                lbl_texture: "Surface Procedural", opt_tex_none: "None", opt_tex_noise: "Noise (Sand)", opt_tex_grid: "Grid (Studs)",
+                lbl_tex_scale: "Scale", lbl_tex_strength: "Strength",
+                
+                h_texture_map: "Image Texture (Image Map)", btn_upload_img: "📁 Load Image (PNG/JPG)",
+
+                h_stem: "Stem Settings", lbl_stem_type: "Stem Type: Cherry MX (Fixed)", lbl_clearance: "Clearance",
+                lbl_stem_diameter: "Stem Diameter", 
+
+                h_text: "Legend Settings", lbl_enable_text: "Enable Text", pl_text: "Ex: A\n{\n[", note_multiline: "*Use line breaks for multi-line.",
+                lbl_font: "Font", note_font_upload: "*Cannot load .ttf directly.<br>Use <a href='http://gero3.github.io/facetype.js/' target='_blank'>Facetype.js</a> to convert to JSON.",
+                btn_upload_font: "📁 Custom Font (.json)", lbl_size: "Size", lbl_thickness: "Depth/Height",
+                lbl_conform: "Conform to Surface",
+                lbl_align_preset: "Text Alignment (Preset)", btn_align_center: "Center", btn_align_tl: "Top-Left",
+                lbl_pos_xz_fine: "Pos X / Z (Fine Tune)", lbl_offset_y: "Offset Y (Fine Tune)",
+                
+                lbl_text_mode: "Gen Mode", opt_mode_emboss: "Emboss", opt_mode_engrave: "Engrave (Cut)", opt_mode_doubleshot: "Double-Shot",
+                note_engrave: "*Engrave mode takes longer to calculate.",
+
+                h_svg: "SVG (Icon) Settings", btn_upload_svg: "📁 Load SVG", lbl_visible: "Visible", lbl_rotation: "Rotation (XYZ)",
+                lbl_doubleshot: "Fake Double-Shot", 
+                
+                h_colors: "Colors", lbl_col_body: "Body Color", lbl_col_text: "Text/SVG Color",
+                h_preset: "Preset Management", lbl_browser_storage: "Browser Storage (Quick Save/Load)", btn_quick_save: "Quick Save", btn_quick_load: "Quick Load",
+                lbl_file_storage: "File Storage (File I/O)", btn_export_file: "Export (.json)", btn_import_file: "Import (.json)",
+                h_export: "Export (STL/OBJ)", lbl_filename: "Filename Prefix (Auto-appends [text])", btn_export_all: "Export All as STL", btn_export_obj: "Export All as OBJ (Color)",
+                btn_export_body: "Body Only (STL)", btn_export_text: "Text Only (STL)",
+                h_batch: "Batch Export", lbl_batch_list: "Character List (comma/newline separated)", pl_batch: "Q,W,E,R,T,Y...",
+                note_batch: "*Generates & Downloads sequentially (Allow multiple DLs).", btn_batch_run_dl: "Generate & Download All (No ZIP)", 
+                batch_processing: "Processing: ", batch_zipping: "Done!",
+                msg_save_ok: "Settings saved temporarily to browser.", msg_load_ok: "Settings restored.", msg_load_err: "No saved settings found.",
+                msg_import_err: "Import Error: Invalid JSON format.", msg_batch_empty: "Character list is empty.",
+                h_import: "Import 3D",
+
+                lbl_weight: "Est. Weight:", lbl_cost: "Est. Cost:", 
+                lbl_vendor: "Vendor:", lbl_material: "Material:", btn_details: "▼ Details / Edit",
+                lbl_manual_override: "Manual Override", lbl_price: "Price", lbl_spool: "Spool(g)", lbl_density: "Dens."
+            }
+        };
+let currentLang = 'ja';
+
+        function updateLanguageUI() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        if (el.placeholder) el.placeholder = t[key];
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = t[key];
+                    } else {
+                        el.innerHTML = t[key]; 
+                    }
+                }
+            });
+            document.getElementById('text-content').placeholder = t.pl_text;
+            
+            updateFilamentDisplay(); 
+            updateCustomDropdownHead(); 
+        }
+
+        document.getElementById('language-select').addEventListener('change', (e) => {
+            currentLang = e.target.value;
+            updateLanguageUI();
+        });
+
+        window.onerror = (msg) => { document.getElementById('error-log').textContent += msg + "\n"; };
+        setTimeout(() => { const b=document.getElementById('force-start-btn'); if(b)b.click(); }, 1000);
+
+        const SimpleNoise = {
+            fract: (x) => x - Math.floor(x),
+            hash: (x, z) => {
+                return SimpleNoise.fract(Math.sin(x * 12.9898 + z * 78.233) * 43758.5453);
+            },
+            noise: (x, z) => {
+                const iX = Math.floor(x); const iZ = Math.floor(z);
+                const fX = SimpleNoise.fract(x); const fZ = SimpleNoise.fract(z);
+                const a = SimpleNoise.hash(iX, iZ);
+                const b = SimpleNoise.hash(iX + 1, iZ);
+                const c = SimpleNoise.hash(iX, iZ + 1);
+                const d = SimpleNoise.hash(iX + 1, iZ + 1);
+                const uX = fX * fX * (3.0 - 2.0 * fX);
+                const uZ = fZ * fZ * (3.0 - 2.0 * fZ);
+                return (a * (1.0 - uX) + b * uX) * (1.0 - uZ) + (c * (1.0 - uX) + d * uX) * uZ;
+            }
+        };
+
+        // ■■■ State (Updated for V63) ■■■
+        const initialState = {
+            uSize: 1.0, profile: 'cherry', row: 'R3',
+            unitSize: 19.05, 
+            topScale: 1.0, dishType: 'cylindrical',
+            textureType: 'none', textureScale: 50, textureStrength: 0.05,
+            
+            // V63: Image Texture Params
+            imgTextureVisible: false, imgScale: 1.0, imgPosX: 0.0, imgPosY: 0.0, imgRot: 0,
+            imgContent: null, // Data URL
+
+            enableStemExtension: false, stemExtension: 1.0,
+            stabilizerType: 'auto', stabilizerOffset: 0.0,
+            
+            twist: 0, tiltX: 0, tiltZ: 0,
+            boxStem: false, 
+            
+            // V63: Lego Params
+            legoStud: false, legoX: 0.0, legoY: 0.0, legoZ: 0.0, legoClear: 0.0,
+
+            wallThickness: 1.5,
+            ribShorten: 4.3, enableRibs: true,
+            homingBump: false, homingType: 'round', bumpX: 0, bumpZ: 0, bumpOffsetY: 0.0,
+            roundCorner: 0.0, 
+            
+            stemType: 'mx', 
+            stemDiameter: 5.50, 
+            stemClearance: 0.3,
+            
+            enableText: true, text: 'A', font: 'helvetiker',
+            fontSize: 8.0, textHeight: 0.5,
+            
+            // V63: Text Mode
+            textMode: 'emboss', // emboss, engrave, doubleshot
+
+            textThicknessLocked: true, 
+            textConform: true, 
+            // doubleShot: true, // Deprecated in favor of textMode
+            
+            posX: 0, posZ: 0, textOffsetY: 0.0,
+            enableText2: false, text2: 'あ', text2Size: 4.0, text2X: 3.5, text2Z: 3.5,
+            enableSide: false, sideText: 'FRONT', sideSize: 3.0, sideY: -2.0, sideRot: 0,
+            renderMode: 'standard', 
+            modelVisible: true, modelScale: 1.0, 
+            modelX: 0, modelY: 0, modelZ: 0, 
+            modelRX: 0, modelRY: 0, modelRZ: 0,
+            modelOperation: 'union', 
+            globalRotX: 0, globalRotY: 0,
+            svgContent: null, svgVisible: true, svgScale: 1.0, svgThickness: 0.6, 
+            svgDoubleShot: true, svgConform: true, 
+            svgRotX: 0, svgRotY: 0, svgRotZ: 0,
+            svgOffsetY: 0.0, svgPosX: 0, svgPosZ: 0,
+            colBody: '#333333', colText: '#00e5ff'
+        };
+        let state = JSON.parse(JSON.stringify(initialState));
+        let lastState = JSON.parse(JSON.stringify(state));
+        let importedModelBuffer = null;
+        
+        const csgEvaluator = new Evaluator();
+        const history = [JSON.parse(JSON.stringify(initialState))];
+        let historyIndex = 0;
+
+        // UI Map (Updated for V63)
+        const paramMap = {
+            'u-size':'uSize', 'wall-thick':'wallThickness', 'rib-shorten':'ribShorten', 'top-scale':'topScale',
+            'stem-clearance':'stemClearance', 'font-size':'fontSize', 'text-height':'textHeight',
+            'text-offset-y':'textOffsetY', 'pos-x':'posX', 'pos-z':'posZ',
+            'profile-select':'profile', 'row-select':'row', 'homing-type':'homingType', 
+            'dish-type':'dishType', 'font-family':'font',
+            'bump-x':'bumpX', 'bump-z':'bumpZ', 'bump-offset-y':'bumpOffsetY',
+            'svg-scale':'svgScale', 'svg-thickness':'svgThickness', 
+            'svg-rot-x':'svgRotX', 'svg-rot-y':'svgRotY', 'svg-rot-z':'svgRotZ',
+            'svg-offset-y':'svgOffsetY', 'svg-pos-x':'svgPosX', 'svg-pos-z':'svgPosZ',
+            'text2-size':'text2Size', 'text2-x':'text2X', 'text2-z':'text2Z',
+            'side-size':'sideSize', 'side-y':'sideY', 'side-rot':'sideRot',
+            'render-mode':'renderMode', 'side-text':'sideText',
+            'model-scale':'modelScale', 'model-x':'modelX', 'model-y':'modelY', 'model-z':'modelZ',
+            'model-rx':'modelRX', 'model-ry':'modelRY', 'model-rz':'modelRZ',
+            'global-rot-x':'globalRotX', 'global-rot-y':'globalRotY',
+            'model-operation':'modelOperation',
+            'texture-type':'textureType', 'tex-scale':'textureScale', 'tex-strength':'textureStrength',
+            'stem-extension':'stemExtension',
+            'stabilizer-type':'stabilizerType', 'stabilizer-offset':'stabilizerOffset',
+            
+            'twist-factor': 'twist', 'tilt-x': 'tiltX', 'tilt-z': 'tiltZ',
+            'unit-size-select': 'unitSize',
+            'round-corner': 'roundCorner',
+            'stem-diameter': 'stemDiameter',
+
+            // V63 New Mappings
+            'text-mode': 'textMode',
+            'img-scale': 'imgScale', 'img-pos-x': 'imgPosX', 'img-pos-y': 'imgPosY', 'img-rot': 'imgRot',
+            'lego-x': 'legoX', 'lego-y': 'legoY', 'lego-z': 'legoZ', 'lego-clear': 'legoClear'
+        };
+        const boolMap = { 
+            'enable-ribs':'enableRibs', 'homing-bump':'homingBump', 
+            'enable-text':'enableText', 'svg-visible':'svgVisible', 
+            'lock-thickness':'textThicknessLocked', 'text-conform':'textConform',
+            // 'double-shot':'doubleShot', // Removed from boolMap logic, handled by textMode
+            'svg-double-shot':'svgDoubleShot', 'svg-conform':'svgConform',
+            'enable-text2':'enableText2', 'enable-side':'enableSide',
+            'model-visible':'modelVisible',
+            'enable-stem-extension':'enableStemExtension',
+            'box-stem': 'boxStem', 'lego-stud': 'legoStud',
+            
+            'img-texture-visible': 'imgTextureVisible'
+        };
+
+        function commitHistory() {
+            if (historyIndex < history.length - 1) history.splice(historyIndex + 1);
+            history.push(JSON.parse(JSON.stringify(state)));
+            historyIndex++;
+            if (history.length > 50) { history.shift(); historyIndex--; }
+            updateHistoryBtns();
+        }
+        function undo() { if(historyIndex>0) { historyIndex--; state=JSON.parse(JSON.stringify(history[historyIndex])); syncUI(); updateCustomDropdown(); requestUpdate(); updateHistoryBtns(); } }
+        function redo() { if(historyIndex<history.length-1) { historyIndex++; state=JSON.parse(JSON.stringify(history[historyIndex])); syncUI(); updateCustomDropdown(); requestUpdate(); updateHistoryBtns(); } }
+        function updateHistoryBtns() {
+            const u = document.getElementById('btn-undo'); if(u) u.disabled = historyIndex === 0;
+            const r = document.getElementById('btn-redo'); if(r) r.disabled = historyIndex === history.length - 1;
+        }
+        function syncUI() {
+            for (const [id, key] of Object.entries(paramMap)) {
+                const el = document.getElementById(id);
+                if(el) {
+                    el.value = state[key];
+                    const span = document.getElementById('v-' + id);
+                    if(span) span.textContent = typeof state[key] === 'number' ? state[key].toFixed(2) : state[key];
+                    if(id === 'tex-scale') if(span) span.textContent = parseInt(state[key]);
+                }
+            }
+            for (const [id, key] of Object.entries(boolMap)) {
+                const el = document.getElementById(id);
+                if(el) el.checked = state[key];
+            }
+            const tHeight = document.getElementById('text-height');
+            if(tHeight) tHeight.disabled = state.textThicknessLocked;
+            
+            const tOffset = document.getElementById('text-offset-y');
+            if(tOffset) tOffset.disabled = false; 
+
+            const sOffset = document.getElementById('svg-offset-y');
+            if(sOffset) sOffset.disabled = false;
+
+            document.getElementById('stem-ext-control').style.display = state.enableStemExtension ? 'block' : 'none';
+            document.getElementById('stabilizer-custom-ui').style.display = state.stabilizerType === 'custom' ? 'block' : 'none';
+            document.getElementById('lego-adj-panel').style.display = state.legoStud ? 'block' : 'none';
+
+            const colB = document.getElementById('col-body'); if(colB) colB.value = state.colBody;
+            const colT = document.getElementById('col-text'); if(colT) colT.value = state.colText;
+            const txt = document.getElementById('text-content'); if(txt) txt.value = state.text;
+            
+            const txt2 = document.getElementById('text2-content'); if(txt2) txt2.value = state.text2;
+            const sideT = document.getElementById('side-text'); if(sideT) sideT.value = state.sideText;
+
+            updateLanguageUI();
+        }
+
+        // ■■■ Filament Manager ■■■
+        const filamentData = {
+            'polymaker': { 
+                name: 'Polymaker',
+                materials: {
+                    'pla': { name: 'PolyLite PLA', d: 1.24, price_jp: 3800, price_us: 25 },
+                    'pla_matte': { name: 'PolyTerra PLA', d: 1.22, price_jp: 3800, price_us: 25 },
+                    'abs': { name: 'PolyLite ABS', d: 1.04, price_jp: 4000, price_us: 27 },
+                    'petg': { name: 'PolyLite PETG', d: 1.27, price_jp: 3800, price_us: 25 },
+                    'asa': { name: 'PolyLite ASA', d: 1.07, price_jp: 5500, price_us: 36 }
+                }
+            },
+            'bambulab': { 
+                name: 'Bambu Lab',
+                materials: {
+                    'pla': { name: 'PLA Basic', d: 1.24, price_jp: 2240, price_us: 22 },
+                    'pla_matte': { name: 'PLA Matte', d: 1.22, price_jp: 2240, price_us: 22 },
+                    'abs': { name: 'Bambu ABS', d: 1.05, price_jp: 3300, price_us: 25 },
+                    'petg': { name: 'PETG Basic', d: 1.27, price_jp: 3000, price_us: 20 },
+                    'asa': { name: 'Bambu ASA', d: 1.07, price_jp: 4200, price_us: 30 }
+                }
+            },
+            'elegoo': { 
+                name: 'Elegoo',
+                materials: {
+                    'pla': { name: 'Elegoo PLA', d: 1.24, price_jp: 2200, price_us: 14 },
+                    'pla_matte': { name: 'Elegoo Matte', d: 1.24, price_jp: 2800, price_us: 18 },
+                    'abs': { name: 'Elegoo ABS', d: 1.04, price_jp: 3000, price_us: 19 },
+                    'petg': { name: 'Elegoo PETG', d: 1.27, price_jp: 2400, price_us: 15 },
+                    'asa': null // N/A
+                }
+            },
+            'esun': { 
+                name: 'eSun',
+                materials: {
+                    'pla': { name: 'PLA+', d: 1.24, price_jp: 3200, price_us: 23 },
+                    'pla_matte': { name: 'ePLA-Matte', d: 1.24, price_jp: 3500, price_us: 25 },
+                    'abs': { name: 'ABS+', d: 1.04, price_jp: 3200, price_us: 23 },
+                    'petg': { name: 'PETG', d: 1.27, price_jp: 3200, price_us: 23 },
+                    'asa': { name: 'eASA', d: 1.07, price_jp: 4000, price_us: 28 }
+                }
+            },
+            'sunlu': { 
+                name: 'Sunlu',
+                materials: {
+                    'pla': { name: 'Sunlu PLA', d: 1.24, price_jp: 2500, price_us: 19 },
+                    'pla_matte': { name: 'Sunlu Matte', d: 1.24, price_jp: 2500, price_us: 19 },
+                    'abs': { name: 'Sunlu ABS', d: 1.04, price_jp: 2800, price_us: 20 },
+                    'petg': { name: 'Sunlu PETG', d: 1.27, price_jp: 2500, price_us: 18 },
+                    'asa': { name: 'Sunlu ASA', d: 1.07, price_jp: 3500, price_us: 25 }
+                }
+            },
+            'overture': { 
+                name: 'Overture',
+                materials: {
+                    'pla': { name: 'Overture PLA', d: 1.24, price_jp: 2800, price_us: 19 },
+                    'pla_matte': { name: 'Matte PLA', d: 1.24, price_jp: 2800, price_us: 19 },
+                    'abs': { name: 'Overture ABS', d: 1.04, price_jp: 3000, price_us: 21 },
+                    'petg': { name: 'Overture PETG', d: 1.27, price_jp: 2800, price_us: 18 },
+                    'asa': { name: 'Overture ASA', d: 1.07, price_jp: 4500, price_us: 31 }
+                }
+            },
+            'generic': {
+                name: 'Generic (Manual)',
+                materials: {
+                    'pla': { name: 'Generic PLA', d: 1.24, price_jp: 2500, price_us: 20 },
+                    'pla_matte': { name: 'Generic Matte', d: 1.24, price_jp: 2500, price_us: 20 },
+                    'abs': { name: 'Generic ABS', d: 1.04, price_jp: 2500, price_us: 20 },
+                    'petg': { name: 'Generic PETG', d: 1.27, price_jp: 2500, price_us: 20 },
+                    'asa': { name: 'Generic ASA', d: 1.07, price_jp: 3000, price_us: 25 }
+                }
+            }
+        };
+
+        let selectedVendor = 'bambulab';
+        let selectedMaterial = 'pla';
+
+        function initFilamentManager() {
+            const vSel = document.getElementById('fil-vendor');
+            const mSel = document.getElementById('fil-material');
+            Object.keys(filamentData).forEach(key => { const opt = document.createElement('option'); opt.value = key; opt.textContent = filamentData[key].name; vSel.appendChild(opt); });
+            vSel.value = selectedVendor;
+            const materials = [{id:'pla', label:'PLA'},{id:'pla_matte', label:'PLA Matte'},{id:'abs', label:'ABS'},{id:'petg', label:'PETG'},{id:'asa', label:'ASA'}];
+            materials.forEach(m => { const opt = document.createElement('option'); opt.value = m.id; opt.textContent = m.label; mSel.appendChild(opt); });
+            mSel.value = selectedMaterial;
+            vSel.addEventListener('change', e => { selectedVendor = e.target.value; updateFilamentDisplay(); });
+            mSel.addEventListener('change', e => { selectedMaterial = e.target.value; updateFilamentDisplay(); });
+            const btn = document.getElementById('btn-toggle-fil');
+            const panel = document.getElementById('fil-details-panel');
+            btn.addEventListener('click', () => { panel.classList.toggle('open'); });
+            ['fil-price','fil-capacity','fil-density'].forEach(id => { document.getElementById(id).addEventListener('input', calculateStats); });
+            updateFilamentDisplay();
+        }
+
+        function updateFilamentDisplay() {
+            const data = filamentData[selectedVendor].materials[selectedMaterial];
+            const nameEl = document.getElementById('info-fil-name');
+            const priceIn = document.getElementById('fil-price');
+            const denIn = document.getElementById('fil-density');
+            const currEl = document.getElementById('info-currency');
+            const isJP = currentLang === 'ja';
+            currEl.textContent = isJP ? '¥' : '$';
+            if (!data) { nameEl.textContent = "N/A"; priceIn.value = ""; denIn.value = ""; calculateStats(); return; }
+            nameEl.textContent = data.name;
+            priceIn.value = isJP ? data.price_jp : data.price_us;
+            denIn.value = data.d;
+            document.getElementById('fil-capacity').value = 1000;
+            calculateStats();
+        }
+
+        function calculateStats() {
+            const price = parseFloat(document.getElementById('fil-price').value);
+            const capacity = parseFloat(document.getElementById('fil-capacity').value);
+            const density = parseFloat(document.getElementById('fil-density').value);
+            const wEl = document.getElementById('info-weight');
+            const cEl = document.getElementById('info-cost');
+            if (isNaN(price) || isNaN(capacity) || isNaN(density) || capacity <= 0) { wEl.textContent = "--"; cEl.textContent = "--"; return; }
+            const p = getParams();
+            const baseVol = p.baseW * p.baseD * p.h; 
+            let fillFactor = 0.22 + (state.wallThickness - 1.5) * 0.1;
+            if(state.boxStem) fillFactor += 0.05;
+            const volCm3 = (baseVol * fillFactor) / 1000;
+            const weight = volCm3 * density;
+            const totalCost = weight * (price / capacity);
+            wEl.textContent = weight.toFixed(2);
+            cEl.textContent = (currentLang === 'ja') ? Math.ceil(totalCost) : totalCost.toFixed(2);
+        }
+
+        function randomizeParams() {
+            state.uSize = 1.0; 
+            state.profile = ['cherry','oem','sa','xda','dsa'][Math.floor(Math.random()*5)];
+            state.topScale = 0.6 + Math.random() * 0.4;
+            state.dishType = ['cylindrical','spherical','flat'][Math.floor(Math.random()*3)];
+            state.textureType = ['none','noise','grid','knurling','stripes'][Math.floor(Math.random()*5)];
+            state.textureScale = 10 + Math.random() * 80;
+            state.twist = Math.floor(Math.random() * 60) - 30;
+            state.tiltX = Math.floor(Math.random() * 20) - 10;
+            state.colBody = '#' + Math.floor(Math.random()*16777215).toString(16);
+            state.colText = '#' + Math.floor(Math.random()*16777215).toString(16);
+            syncUI(); updateModel();
+        }
+
+        function resetParams() {
+            if(!confirm("Reset all parameters to default?")) return;
+            state = JSON.parse(JSON.stringify(initialState));
+            syncUI(); updateModel();
+        }
+
+        let committedFont = state.font;
+        function setupCustomDropdown() {
+            const head = document.getElementById('custom-font-head');
+            const list = document.getElementById('custom-font-list');
+            const hiddenSelect = document.getElementById('font-family');
+            if(!head || !list || !hiddenSelect) return;
+            function populate() {
+                list.innerHTML = '';
+                Array.from(hiddenSelect.options).forEach(opt => {
+                    const div = document.createElement('div');
+                    div.className = 'custom-option';
+                    div.textContent = opt.text;
+                    if(opt.value === state.font) div.classList.add('selected');
+                    div.addEventListener('mouseenter', () => { state.font = opt.value; requestUpdate(); });
+                    div.addEventListener('click', () => {
+                        committedFont = opt.value; state.font = committedFont; hiddenSelect.value = committedFont;
+                        list.classList.remove('open'); updateCustomDropdownHead(); commitHistory(); requestUpdate();
+                    });
+                    list.appendChild(div);
+                });
+            }
+            head.addEventListener('click', () => { if(!list.classList.contains('open')) { committedFont = state.font; populate(); list.classList.add('open'); } else { list.classList.remove('open'); } });
+            list.addEventListener('mouseleave', () => { state.font = committedFont; requestUpdate(); });
+            document.addEventListener('click', (e) => { const ui = document.getElementById('custom-font-ui'); if(ui && !ui.contains(e.target) && list.classList.contains('open')) { list.classList.remove('open'); state.font = committedFont; requestUpdate(); } });
+            updateCustomDropdownHead();
+        }
+        function updateCustomDropdown() { committedFont = state.font; updateCustomDropdownHead(); }
+        function updateCustomDropdownHead() {
+            const hiddenSelect = document.getElementById('font-family');
+            const head = document.getElementById('custom-font-head');
+            if(hiddenSelect && head) { const opt = hiddenSelect.querySelector(`option[value="${state.font}"]`); if(opt) head.textContent = opt.text + " ▼"; }
+        }
+
+        // Navigation Logic
+        function initNavigation() {
+            const select = document.getElementById('section-select');
+            select.addEventListener('change', (e) => {
+                const id = e.target.value;
+                if(id) {
+                    const el = document.getElementById(id);
+                    if(el) {
+                        el.scrollIntoView({ behavior: 'smooth' });
+                        el.style.color = '#fff';
+                        setTimeout(() => el.style.color = '', 1000);
+                    }
+                    select.value = "";
+                }
+            });
+            const search = document.getElementById('search-box');
+            search.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase();
+                const labels = document.querySelectorAll('#ui-panel label, #ui-panel h3');
+                document.querySelectorAll('.search-highlight').forEach(el => el.classList.remove('search-highlight'));
+                if(!query) return;
+                let firstMatch = null;
+                labels.forEach(lbl => {
+                    const text = lbl.textContent.toLowerCase();
+                    if(text.includes(query)) {
+                        lbl.classList.add('search-highlight');
+                        if(!firstMatch) firstMatch = lbl;
+                    }
+                });
+                if(firstMatch) firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        }
+const PROFILES = {
+            cherry: { R4: {h:11.5, a:6}, R3: {h:9.5, a:3}, R2: {h:8.5, a:-3}, R1: {h:9.5, a:-6}, dish:'cylindrical' },
+            oem:    { R4: {h:12.5, a:8}, R3: {h:11.0, a:4}, R2: {h:10.0, a:-4}, R1: {h:11.0, a:-8}, dish:'cylindrical' },
+            sa:     { R4: {h:16.5, a:7}, R3: {h:14.0, a:0}, R2: {h:14.0, a:0}, R1: {h:14.0, a:-7}, dish:'spherical' },
+            xda:    { all:{h:9.0, a:0}, dish:'spherical' },
+            dsa:    { all:{h:7.5, a:0}, dish:'spherical' }
+        };
+        const HTML_COLORS = ['#000000','#333333','#666666','#ffffff','#ff0000','#ff8000','#ffff00','#00ff00','#00ffff','#0000ff','#8000ff','#ff00ff','#800000','#008000','#000080','#808000'];
+
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene(); scene.background = new THREE.Color(0x121212);
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000);
+        camera.position.set(20, 30, 30);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); 
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.autoClear = false; 
+        container.appendChild(renderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        const viewHelper = new ViewHelper(camera, renderer.domElement);
+
+        scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+        const dl = new THREE.DirectionalLight(0xffffff, 1.0); dl.position.set(10,50,20); dl.castShadow=true; scene.add(dl);
+        const bl = new THREE.DirectionalLight(0x00bcd4, 0.5); bl.position.set(0,-20,0); scene.add(bl);
+        scene.add(new THREE.GridHelper(200, 200, 0x444444, 0x222222));
+        const mainGroup = new THREE.Group(); scene.add(mainGroup);
+        const fontLoader = new FontLoader(); const loadedFonts = {};
+        const textureLoader = new THREE.TextureLoader(); // V63: Texture Loader
+
+        function getParams() {
+            const p = PROFILES[state.profile];
+            const r = p.all ? p.all : p[state.row];
+            const unit = parseFloat(state.unitSize) || 19.05; 
+            return { h: r.h, angle: r.a, baseW: (unit * state.uSize) - 0.5, baseD: unit - 0.5 };
+        }
+
+        function getStabilizerOffset(u) {
+            if (state.stabilizerType === 'custom') return state.stabilizerOffset;
+            if (u < 2.0) return 0;
+            if (u < 3.0) return 11.9;
+            if (u < 6.0) return 19.05;
+            if (u == 6.25) return 50.0;
+            if (u >= 7.0) return 57.15;
+            return 38.1;
+        }
+
+        const DISH_DEPTH = 0.8; 
+
+        function getDishOffset(x, z, p) {
+            const wHalf = p.baseW * state.topScale * 0.5;
+            const dHalf = p.baseD * state.topScale * 0.5;
+            const nx = x / (wHalf || 1);
+            const nz = z / (dHalf || 1);
+            let offset = 0;
+            const type = state.dishType;
+            if(type === 'flat') offset = 0;
+            else if(type === 'cylindrical') {
+                if(Math.abs(nx) < 2.0) offset = DISH_DEPTH * (Math.pow(nx, 2) - 1.0);
+            } else {
+                const dist = Math.sqrt(nx*nx + nz*nz);
+                if(dist < 2.0) offset = DISH_DEPTH * (Math.pow(dist, 2) - 1.0);
+            }
+            return offset;
+        }
+
+        function getSurfaceHeight(x, z, p) {
+            const tiltXRad = THREE.MathUtils.degToRad(state.tiltX);
+            const tiltZRad = THREE.MathUtils.degToRad(state.tiltZ);
+            const baseTilt = Math.tan(THREE.MathUtils.degToRad(p.angle)) * z;
+            const customTilt = (Math.tan(tiltXRad) * z) + (Math.tan(tiltZRad) * x);
+            return (p.h - baseTilt - customTilt) + getDishOffset(x, z, p);
+        }
+
+        function safeMerge(geometries) {
+            const clean = [];
+            geometries.forEach(g => { if(g) { if(g.index) g = g.toNonIndexed(); clean.push(g); } });
+            if(clean.length === 0) return null;
+            return BufferGeometryUtils.mergeGeometries(clean, false);
+        }
+
+        function applySquircle(x, z, w, d, r) {
+            if (r <= 0.01) return {x, z};
+            const innerW = (w / 2) - r;
+            const innerD = (d / 2) - r;
+            const absX = Math.abs(x);
+            const absZ = Math.abs(z);
+            if (absX > innerW && absZ > innerD) {
+                const dx = absX - innerW;
+                const dz = absZ - innerD;
+                const dist = Math.sqrt(dx*dx + dz*dz);
+                if (dist > 0) {
+                    const newX = innerW + (dx / dist) * Math.min(dist, r);
+                    const newZ = innerD + (dz / dist) * Math.min(dist, r);
+                    return { x: Math.sign(x) * newX, z: Math.sign(z) * newZ };
+                }
+            }
+            return {x, z};
+        }
+
+        function createBodyParts(p) {
+            const thick = state.wallThickness;
+            const seg = 64; 
+            const topBox = new THREE.BoxGeometry(p.baseW, thick, p.baseD, seg, 1, seg);
+            topBox.translate(0, p.h - thick/2, 0); 
+            const wH = p.h - thick + 0.1;
+            const front = new THREE.BoxGeometry(p.baseW, wH, thick, seg, 1, 4);
+            front.translate(0, wH/2, p.baseD/2 - thick/2);
+            const back = new THREE.BoxGeometry(p.baseW, wH, thick, seg, 1, 4);
+            back.translate(0, wH/2, -(p.baseD/2 - thick/2));
+            const left = new THREE.BoxGeometry(thick, wH, p.baseD - thick*2, 4, 1, seg);
+            left.translate(-(p.baseW/2 - thick/2), wH/2, 0);
+            const right = new THREE.BoxGeometry(thick, wH, p.baseD - thick*2, 4, 1, seg);
+            right.translate((p.baseW/2 - thick/2), wH/2, 0);
+            const merged = safeMerge([topBox, front, back, left, right]);
+            if(merged) deformMesh(merged, p);
+            return merged;
+        }
+
+        function deformMesh(geo, p) {
+            const pos = geo.attributes.position;
+            const v = new THREE.Vector3();
+            const thick = state.wallThickness;
+            geo.computeBoundingBox();
+            
+            // V63: UV Mapping for Image Texture
+            const uvs = geo.attributes.uv;
+            const useImageTexture = state.imgContent && state.imgTextureVisible;
+
+            const useProcedural = state.textureType !== 'none';
+            const texScale = state.textureScale * 0.1;
+            const texStr = state.textureStrength;
+
+            const twistRad = THREE.MathUtils.degToRad(state.twist);
+            const twistPerUnit = twistRad / p.h;
+            const filletR = state.roundCorner;
+            const hasFillet = filletR > 0.05;
+
+            for(let i=0; i<pos.count; i++){
+                v.fromBufferAttribute(pos, i);
+                
+                // Twist
+                if (Math.abs(state.twist) > 0.1) {
+                    const angle = twistPerUnit * v.y;
+                    const sinA = Math.sin(angle);
+                    const cosA = Math.cos(angle);
+                    const tx = v.x * cosA - v.z * sinA;
+                    const tz = v.x * sinA + v.z * cosA;
+                    v.x = tx; v.z = tz;
+                }
+
+                // Taper
+                const ratioY = Math.max(0, Math.min(1, v.y / p.h));
+                let currentScale = 1.0;
+                if (ratioY > 0.01) {
+                    currentScale = THREE.MathUtils.lerp(1.0, state.topScale, ratioY);
+                    v.x *= currentScale; v.z *= currentScale;
+                }
+
+                // Fillet
+                if (hasFillet) {
+                    const currentW = p.baseW * (ratioY > 0.01 ? currentScale : 1.0);
+                    const currentD = p.baseD * (ratioY > 0.01 ? currentScale : 1.0);
+                    const scaledR = filletR * currentScale;
+                    const deformed = applySquircle(v.x, v.z, currentW, currentD, scaledR);
+                    v.x = deformed.x; v.z = deformed.z;
+                }
+
+                // Surface Height
+                if (ratioY > 0.01) {
+                    const surfY = getSurfaceHeight(v.x, v.z, p);
+                    const origY = v.y;
+                    let targetY = 0;
+                    if (origY > p.h - thick/2) targetY = surfY; 
+                    else if (origY > p.h - thick - 0.1) targetY = surfY - thick; 
+                    else {
+                        const wallMaxY = p.h - thick;
+                        if (origY > wallMaxY - 0.5) targetY = surfY - thick + 0.1; 
+                        else targetY = (origY / wallMaxY) * (surfY - thick + 0.1);
+                    }
+                    v.y = targetY;
+
+                    // Procedural Texture (Bump)
+                    if (useProcedural) {
+                        let noiseVal = 0;
+                        let isTop = ratioY > 0.95 && targetY > p.h - thick;
+                        if(state.textureType === 'noise') {
+                            if(isTop) noiseVal = SimpleNoise.noise(v.x * texScale, v.z * texScale);
+                            else noiseVal = SimpleNoise.noise(Math.atan2(v.z, v.x) * 10, v.y * texScale); 
+                        } else if(state.textureType === 'grid') {
+                            if(isTop) noiseVal = Math.sin(v.x * texScale) * Math.sin(v.z * texScale);
+                            else noiseVal = Math.sin(Math.atan2(v.z, v.x) * 20) * Math.sin(v.y * texScale);
+                        } else if (state.textureType === 'knurling') {
+                            if (isTop) noiseVal = Math.sin((v.x + v.z) * texScale) * Math.sin((v.x - v.z) * texScale);
+                            else noiseVal = Math.sin(Math.atan2(v.z, v.x) * 10 + v.y * texScale) * Math.sin(Math.atan2(v.z, v.x) * 10 - v.y * texScale);
+                        } else if (state.textureType === 'stripes') {
+                            if (isTop) noiseVal = Math.sin(v.x * texScale);
+                            else noiseVal = Math.sin(Math.atan2(v.z, v.x) * 20);
+                        }
+                        if (isTop) v.y += noiseVal * texStr;
+                        else if (ratioY > 0.1) { 
+                            const pushVec = new THREE.Vector3(v.x, 0, v.z).normalize();
+                            v.x += pushVec.x * noiseVal * texStr; v.z += pushVec.z * noiseVal * texStr;
+                        }
+                    }
+                }
+                pos.setXYZ(i, v.x, v.y, v.z);
+
+                // V63: UV Calculation for Image Texture (Planar Projection)
+                if (useImageTexture && uvs) {
+                    const cosR = Math.cos(THREE.MathUtils.degToRad(-state.imgRot));
+                    const sinR = Math.sin(THREE.MathUtils.degToRad(-state.imgRot));
+                    
+                    let ux = v.x; let uz = v.z;
+                    // Rotate
+                    const rx = ux * cosR - uz * sinR;
+                    const rz = ux * sinR + uz * cosR;
+                    
+                    // Normalize (assuming 19.05mm max width for mapping space)
+                    const mapSize = 19.05 * state.uSize; 
+                    let u = (rx / mapSize) + 0.5;
+                    let v_uv = (rz / mapSize) + 0.5;
+
+                    // Scale & Offset
+                    u = (u - 0.5) / state.imgScale + 0.5 - state.imgPosX;
+                    v_uv = (v_uv - 0.5) / state.imgScale + 0.5 - state.imgPosY;
+
+                    uvs.setXY(i, u, v_uv);
+                }
+            }
+            geo.computeVertexNormals();
+        }
+function createStemUnit(height, rOuter, clear) {
+            const shape = new THREE.Shape();
+            shape.absarc(0,0, rOuter, 0, Math.PI*2);
+            const w = (1.15 + clear)/2; 
+            const l = (4.1 + clear)/2;
+            const hole = new THREE.Path();
+            hole.moveTo(-w,-l); hole.lineTo(w,-l); hole.lineTo(w,-w); hole.lineTo(l,-w);
+            hole.lineTo(l,w); hole.lineTo(w,w); hole.lineTo(w,l); hole.lineTo(-w,l);
+            hole.lineTo(-w,w); hole.lineTo(-l,w); hole.lineTo(-l,-w); hole.lineTo(-w,-w);
+            hole.lineTo(-w,-l);
+            shape.holes.push(hole);
+            const geo = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled:false, curveSegments:24 }); 
+            geo.rotateX(Math.PI/2);
+            geo.translate(0, height, 0); 
+            return geo;
+        }
+
+        function createStemAndRibs(p) {
+            const thick = state.wallThickness;
+            const rawH = p.h;
+            const clear = state.stemClearance; 
+            const ext = state.enableStemExtension ? state.stemExtension : 0.0;
+            const totalStemH = rawH + ext;
+            const rOuter = state.stemDiameter / 2;
+
+            const stemGeos = [];
+            const cStem = createStemUnit(totalStemH, rOuter, clear);
+            if (ext > 0) cStem.translate(0, -ext, 0);
+            
+            if (state.boxStem) {
+                const boxSize = 5.6 + clear; 
+                const boxH = totalStemH * 0.8; 
+                const wWall = 0.8; 
+                const bS = boxSize + wWall*2;
+                
+                const front = new THREE.BoxGeometry(bS, boxH, wWall); 
+                front.translate(0, boxH/2-ext, boxSize/2+wWall/2);
+                
+                const back = new THREE.BoxGeometry(bS, boxH, wWall); 
+                back.translate(0, boxH/2-ext, -(boxSize/2+wWall/2));
+                
+                const left = new THREE.BoxGeometry(wWall, boxH, boxSize); 
+                left.translate(-(boxSize/2+wWall/2), boxH/2-ext, 0);
+                
+                const right = new THREE.BoxGeometry(wWall, boxH, boxSize); 
+                right.translate(boxSize/2+wWall/2, boxH/2-ext, 0);
+                
+                stemGeos.push(front, back, left, right);
+            }
+
+            stemGeos.push(cStem); 
+
+            const stabOffset = getStabilizerOffset(state.uSize);
+            if(stabOffset > 0) {
+                const sL = createStemUnit(totalStemH, rOuter, clear); 
+                if(ext > 0) sL.translate(0, -ext, 0);
+                sL.translate(-stabOffset, 0, 0);
+                const sR = createStemUnit(totalStemH, rOuter, clear); 
+                if(ext > 0) sR.translate(0, -ext, 0);
+                sR.translate(stabOffset, 0, 0);
+                stemGeos.push(sL, sR);
+            }
+
+            const ribGeos = [];
+            if(state.enableRibs && !state.boxStem) {
+                const shorten = state.ribShorten;
+                const ribH = rawH - shorten;
+                const ribY = shorten;
+                const ribThick = 1.2;
+                if(ribH > 0.1) {
+                    const endX = (p.baseW/2)-thick+0.5; const lx = endX - (rOuter + 0.5); 
+                    if(lx>0) {
+                        const rX = new THREE.BoxGeometry(lx, ribH, ribThick);
+                        const cx = (rOuter + 0.5) + lx/2;
+                        const r1 = rX.clone(); r1.translate(cx, ribY+ribH/2, 0);
+                        const r2 = rX.clone(); r2.translate(-cx, ribY+ribH/2, 0);
+                        ribGeos.push(r1, r2);
+                    }
+                    const endZ = (p.baseD/2)-thick+0.5; const lz = endZ - (rOuter + 0.5);
+                    if(lz>0) {
+                        const rZ = new THREE.BoxGeometry(ribThick, ribH, lz);
+                        const cz = (rOuter + 0.5) + lz/2;
+                        const r3 = rZ.clone(); r3.translate(0, ribY+ribH/2, cz);
+                        const r4 = rZ.clone(); r4.translate(0, ribY+ribH/2, -cz);
+                        ribGeos.push(r3, r4);
+                    }
+                }
+            }
+            const merged = safeMerge([...stemGeos, ...ribGeos]);
+            if(merged) {
+                const pos = merged.attributes.position;
+                const v = new THREE.Vector3();
+                merged.computeBoundingBox();
+                const maxY = merged.boundingBox.max.y;
+                const twistRad = THREE.MathUtils.degToRad(state.twist);
+                const twistPerUnit = twistRad / p.h;
+
+                for(let i=0; i<pos.count; i++){
+                    v.fromBufferAttribute(pos, i);
+                    if (Math.abs(state.twist) > 0.1) {
+                        const angle = twistPerUnit * v.y;
+                        const sinA = Math.sin(angle);
+                        const cosA = Math.cos(angle);
+                        const tx = v.x * cosA - v.z * sinA;
+                        const tz = v.x * sinA + v.z * cosA;
+                        v.x = tx; v.z = tz;
+                    }
+                    const ratioY = Math.max(0, v.y / p.h); 
+                    const dist = Math.sqrt(v.x*v.x + v.z*v.z);
+                    if(dist > rOuter + 0.5) { 
+                        const taper = THREE.MathUtils.lerp(1.0, state.topScale, ratioY);
+                        v.x *= taper; v.z *= taper;
+                    }
+                    if(v.y > maxY - 1.0) {
+                        const sy = getSurfaceHeight(v.x, v.z, p);
+                        v.y = sy - thick; 
+                    }
+                    pos.setXYZ(i, v.x, v.y, v.z);
+                }
+                merged.computeVertexNormals();
+            }
+            return merged;
+        }
+
+        function createHomingBump(p) {
+            // V63: Enhanced Lego Stud Logic
+            if (state.legoStud) {
+                // Lego stud diameter 4.8mm -> radius 2.4mm
+                const r = 2.4 + (state.legoClear || 0);
+                const stud = new THREE.CylinderGeometry(r, r, 1.8, 24);
+                
+                const bx = state.legoX;
+                const bz = state.legoZ;
+                const y = getSurfaceHeight(bx, bz, p);
+                stud.translate(bx, y + 0.9 + state.legoY, bz);
+                stud.rotateX(THREE.MathUtils.degToRad(p.angle));
+                
+                return stud;
+            }
+
+            if(!state.homingBump) return null;
+            const bx = state.bumpX; 
+            const bz = state.bumpZ;
+            const y = getSurfaceHeight(bx, bz, p);
+            let geo;
+            if(state.homingType === 'round') {
+                geo = new THREE.SphereGeometry(0.6, 12, 12);
+                geo.scale(1, 0.6, 1);
+            } else {
+                geo = new THREE.BoxGeometry(4.0, 0.5, 0.8);
+            }
+            geo.translate(bx, y + state.bumpOffsetY, bz);
+            geo.rotateX(THREE.MathUtils.degToRad(p.angle));
+            
+            if (Math.abs(state.twist) > 0.1) {
+                const twistRad = THREE.MathUtils.degToRad(state.twist);
+                const angle = (twistRad / p.h) * y;
+                geo.rotateY(-angle); 
+            }
+            return geo;
+        }
+
+        function createConformedText(p, textVal, sizeVal, xVal, zVal) {
+            if (!loadedFonts[state.font] || !textVal) return null;
+            
+            // V63: Mode Handling
+            const isEngrave = state.textMode === 'engrave';
+            const isDoubleShot = state.textMode === 'doubleshot';
+            
+            let baseOffset = 0;
+            // DoubleShot: starts slightly below surface
+            if (isDoubleShot) baseOffset = -state.textHeight + 0.02;
+            // Engrave: starts slightly below surface to ensure intersection for subtraction, 
+            // but for subtraction we want the solid to BE inside.
+            // Actually for subtraction: The mesh needs to intersect the body.
+            // We'll position it "into" the body.
+            else if (isEngrave) baseOffset = -state.textHeight + 0.05; 
+            
+            const effectiveOffset = baseOffset + state.textOffsetY;
+
+            const lines = textVal.split('\n');
+            const font = loadedFonts[state.font];
+            const size = sizeVal;
+            const height = state.textHeight; 
+            
+            const lineHeight = size * 1.2;
+            const lineGeos = [];
+            lines.forEach((lineText, i) => {
+                if(!lineText) return;
+                const geo = new TextGeometry(lineText, {
+                    font: font, size: size, height: height, curveSegments: 6, bevelEnabled: false
+                });
+                geo.computeBoundingBox();
+                const cx = -0.5 * (geo.boundingBox.max.x + geo.boundingBox.min.x);
+                const cy = -0.5 * (geo.boundingBox.max.y + geo.boundingBox.min.y);
+                geo.translate(cx, cy, 0);
+                lineGeos.push({ geo: geo, index: i });
+            });
+            const mergedLines = [];
+            const blockYOffset = (lines.length - 1) * lineHeight / 2;
+            lineGeos.forEach(item => {
+                const yPos = blockYOffset - (item.index * lineHeight);
+                item.geo.translate(0, yPos, 0);
+                mergedLines.push(item.geo);
+            });
+            if(mergedLines.length === 0) return null;
+            const combinedGeo = BufferGeometryUtils.mergeGeometries(mergedLines);
+
+            if (!state.textConform) {
+                combinedGeo.rotateX(-Math.PI/2);
+                const sy = getSurfaceHeight(xVal, zVal, p);
+                combinedGeo.translate(xVal, sy + effectiveOffset, zVal);
+                combinedGeo.rotateX(THREE.MathUtils.degToRad(p.angle));
+                return combinedGeo;
+            } else {
+                const pos = combinedGeo.attributes.position;
+                const v = new THREE.Vector3();
+                const twistRad = THREE.MathUtils.degToRad(state.twist);
+                const twistPerUnit = twistRad / p.h;
+
+                for(let i=0; i<pos.count; i++) {
+                    v.fromBufferAttribute(pos, i);
+                    const targetX = v.x + xVal;
+                    const targetZ = -v.y + zVal;
+                    const thicknessOffset = v.z; 
+                    const surfY = getSurfaceHeight(targetX, targetZ, p);
+
+                    let finalX = targetX; 
+                    let finalZ = targetZ;
+                    if (Math.abs(state.twist) > 0.1) {
+                        const angle = twistPerUnit * surfY;
+                        const sinA = Math.sin(angle);
+                        const cosA = Math.cos(angle);
+                        finalX = targetX * cosA - targetZ * sinA;
+                        finalZ = targetX * sinA + targetZ * cosA;
+                    }
+                    pos.setXYZ(i, finalX, surfY + thicknessOffset + effectiveOffset, finalZ);
+                }
+                combinedGeo.computeVertexNormals();
+                return combinedGeo;
+            }
+        }
+
+        function createSidePrint(p) {
+            if (!state.enableSide || !state.sideText || !loadedFonts[state.font]) return null;
+            const geo = new TextGeometry(state.sideText, {font: loadedFonts[state.font], size: state.sideSize, height: 0.5, curveSegments: 4, bevelEnabled: false});
+            geo.computeBoundingBox(); geo.translate(-0.5*(geo.boundingBox.max.x+geo.boundingBox.min.x), -0.5*(geo.boundingBox.max.y+geo.boundingBox.min.y), 0);
+            geo.rotateX(THREE.MathUtils.degToRad(state.sideRot)); geo.translate(0, p.h/2 + state.sideY, 0);
+            const pos = geo.attributes.position; const v = new THREE.Vector3();
+            for(let i=0; i<pos.count; i++) { v.fromBufferAttribute(pos, i); 
+            const s=THREE.MathUtils.lerp(1.0, state.topScale, Math.max(0,Math.min(1,v.y/p.h))); v.z += (p.baseD/2)*s + 0.05; pos.setXYZ(i, v.x, v.y, v.z); }
+            geo.computeVertexNormals(); return geo;
+        }
+
+        function createConformedSVG(p) {
+            if (!state.svgContent || !state.svgVisible) return null;
+            const loader = new SVGLoader(); const data = loader.parse(state.svgContent);
+            const shapes = []; data.paths.forEach(p=>shapes.push(...SVGLoader.createShapes(p)));
+            if(shapes.length===0) return null;
+            const geo = new THREE.ExtrudeGeometry(shapes, {depth: state.svgThickness, bevelEnabled: false});
+            geo.computeBoundingBox(); const c = new THREE.Vector3(); geo.boundingBox.getCenter(c);
+            geo.translate(-c.x, -c.y, -c.z); geo.scale(0.1*state.svgScale, -0.1*state.svgScale, 1.0); geo.rotateZ(THREE.MathUtils.degToRad(state.svgRotZ));
+            
+            const isDouble = state.svgDoubleShot;
+            const offset = (isDouble ? -state.svgThickness + 0.02 : 0) + state.svgOffsetY;
+            
+            if(!state.svgConform) {
+                geo.rotateX(Math.PI/2); geo.rotateX(THREE.MathUtils.degToRad(state.svgRotX)); geo.rotateY(THREE.MathUtils.degToRad(state.svgRotY));
+                geo.rotateX(THREE.MathUtils.degToRad(p.angle)); const sy = getSurfaceHeight(state.svgPosX, state.svgPosZ, p);
+                geo.translate(state.svgPosX, sy + offset, state.svgPosZ); return geo;
+            } else {
+                const pos = geo.attributes.position; const v = new THREE.Vector3();
+                for(let i=0; i<pos.count; i++) { v.fromBufferAttribute(pos, i);
+                const tx=v.x+state.svgPosX; const tz=-v.y+state.svgPosZ; const sy=getSurfaceHeight(tx, tz, p);
+                pos.setXYZ(i, tx, sy+v.z+offset, tz); }
+                geo.computeVertexNormals(); return geo;
+            }
+        }
+
+        function updateModel() {
+            mainGroup.rotation.x = THREE.MathUtils.degToRad(state.globalRotX);
+            mainGroup.rotation.y = THREE.MathUtils.degToRad(state.globalRotY);
+
+            const p = getParams();
+            
+            // V63: Texture Map Material Setup
+            let bodyMat, textMat;
+            
+            if (state.renderMode === 'wireframe') {
+                bodyMat = new THREE.MeshBasicMaterial({ color: state.colBody, wireframe: true });
+                textMat = new THREE.MeshBasicMaterial({ color: state.colText, wireframe: true });
+            } else {
+                let map = null;
+                if (state.imgContent && state.imgTextureVisible) {
+                    map = textureLoader.load(state.imgContent);
+                    map.wrapS = THREE.ClampToEdgeWrapping;
+                    map.wrapT = THREE.ClampToEdgeWrapping;
+                    map.minFilter = THREE.LinearFilter;
+                    // Encoding/ColorSpace adjustments if needed, but defaults are usually OK for this usage
+                }
+                
+                bodyMat = new THREE.MeshStandardMaterial({ 
+                    color: state.colBody, 
+                    roughness: 0.6, metalness: 0.1, 
+                    side: THREE.DoubleSide,
+                    map: map 
+                });
+                textMat = new THREE.MeshStandardMaterial({ color: state.colText, side: THREE.DoubleSide });
+            }
+
+            const body = createBodyParts(p);
+            const stem = createStemAndRibs(p);
+            const bump = createHomingBump(p);
+            let finalKeycapGeo = safeMerge([body, stem, bump]);
+            
+            const oldText = mainGroup.getObjectByName("KeycapText"); if(oldText) mainGroup.remove(oldText);
+            const oldSVG = mainGroup.getObjectByName("KeycapSVG"); if(oldSVG) mainGroup.remove(oldSVG);
+            
+            const textGeos = [];
+            let engraveGeos = []; // V63: List for boolean subtraction
+            
+            if (state.enableText && loadedFonts[state.font]) { 
+                const t = createConformedText(p, state.text, state.fontSize, state.posX, state.posZ); 
+                if(t) {
+                    if (state.textMode === 'engrave') engraveGeos.push(t);
+                    else textGeos.push(t);
+                }
+            }
+            if (state.enableText2 && loadedFonts[state.font]) { 
+                const t = createConformedText(p, state.text2, state.text2Size, state.text2X, state.text2Z); 
+                if(t) {
+                    if (state.textMode === 'engrave') engraveGeos.push(t);
+                    else textGeos.push(t);
+                }
+            }
+            if(state.enableSide) { 
+                const t = createSidePrint(p); 
+                if(t) textGeos.push(t); // Side print is usually additive or separate color
+            }
+            
+            let finalTextGeo = safeMerge(textGeos);
+            let finalSVGGeo = state.svgContent && state.svgVisible ? createConformedSVG(p) : null;
+            let finalEngraveGeo = safeMerge(engraveGeos);
+
+            // Imported Model
+            let impMesh = mainGroup.getObjectByName("ImportedModel"); if(impMesh) mainGroup.remove(impMesh);
+            let importedGeo = null;
+            if(importedModelBuffer && state.modelVisible) {
+                importedGeo = new STLLoader().parse(importedModelBuffer);
+                importedGeo.scale(state.modelScale, state.modelScale, state.modelScale);
+                importedGeo.rotateX(THREE.MathUtils.degToRad(state.modelRX));
+                importedGeo.rotateY(THREE.MathUtils.degToRad(state.modelRY));
+                importedGeo.rotateZ(THREE.MathUtils.degToRad(state.modelRZ));
+                importedGeo.translate(state.modelX, state.modelY, state.modelZ);
+            }
+
+            // CSG Operations (Slow but powerful)
+            // 1. Model Subtraction
+            if (state.modelOperation === 'subtract' && importedGeo && finalKeycapGeo) {
+                const b1 = new Brush(finalKeycapGeo); b1.updateMatrixWorld();
+                const b2 = new Brush(importedGeo); b2.updateMatrixWorld();
+                const res = csgEvaluator.evaluate(b1, b2, SUBTRACTION);
+                finalKeycapGeo = res.geometry;
+                importedGeo = null; 
+            }
+            
+            // 2. V63: Text Engraving (Subtraction)
+            if (finalEngraveGeo && finalKeycapGeo) {
+                const b1 = new Brush(finalKeycapGeo); b1.updateMatrixWorld();
+                const b2 = new Brush(finalEngraveGeo); b2.updateMatrixWorld();
+                const res = csgEvaluator.evaluate(b1, b2, SUBTRACTION);
+                finalKeycapGeo = res.geometry;
+                finalEngraveGeo = null; // Consumed
+            }
+
+            const oldBody = mainGroup.getObjectByName("KeycapBody"); if(oldBody) mainGroup.remove(oldBody);
+            
+            if(finalKeycapGeo) {
+                finalKeycapGeo.computeVertexNormals();
+                const mesh = new THREE.Mesh(finalKeycapGeo, bodyMat);
+                mesh.name = "KeycapBody";
+                mesh.castShadow = true; mesh.receiveShadow = true;
+                mainGroup.add(mesh);
+            }
+            if(finalTextGeo) {
+                const mesh = new THREE.Mesh(finalTextGeo, textMat);
+                mesh.name = "KeycapText"; mainGroup.add(mesh);
+            }
+            if(finalSVGGeo) {
+                const mesh = new THREE.Mesh(finalSVGGeo, textMat);
+                mesh.name = "KeycapSVG"; mainGroup.add(mesh);
+            }
+            if(importedGeo) {
+                const mesh = new THREE.Mesh(importedGeo, textMat); 
+                mesh.name = "ImportedModel"; mainGroup.add(mesh);
+            }
+            
+            lastState = JSON.parse(JSON.stringify(state));
+            calculateStats();
+        }
+
+        let timer = null; function requestUpdate() { if(timer) clearTimeout(timer); timer = setTimeout(updateModel, 20); }
+
+        async function init() {
+            const fonts = ['helvetiker','optimer','gentilis','droid/droid_sans','droid/droid_serif'];
+            await Promise.all(fonts.map(n=>new Promise(r=>fontLoader.load(`https://unpkg.com/three@0.160.0/examples/fonts/${n}_regular.typeface.json`, f=>{const key = n.includes('/') ? n.split('/')[1] : n; loadedFonts[key]=f; r();}))));
+            document.getElementById('loading').style.display='none';
+            setupCustomDropdown();
+            const mkPal = (id, tid, k) => { const el = document.getElementById(id); if(!el) return; HTML_COLORS.forEach(c => { const d = document.createElement('div'); d.className='palette-swatch'; d.style.backgroundColor=c; d.onclick=()=>{ const t = document.getElementById(tid); if(t) t.value=c; state[k]=c; updateModel(); }; el.appendChild(d); }); };
+            mkPal('palette-body', 'col-body', 'colBody'); mkPal('palette-text', 'col-text', 'colText');
+            updateLanguageUI(); 
+
+            initFilamentManager();
+            initNavigation();
+
+            // V63: Image Texture Handler
+            const imgInput = document.getElementById('img-texture-input');
+            if(imgInput) imgInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if(file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => {
+                        state.imgContent = evt.target.result;
+                        state.imgTextureVisible = true;
+                        syncUI(); updateModel();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            document.getElementById('btn-clear-img-texture').addEventListener('click', () => {
+                state.imgContent = null;
+                imgInput.value = '';
+                updateModel();
+            });
+
+            const mInput = document.getElementById('model-file-input');
+            if(mInput) mInput.addEventListener('change', (e) => {
+                const file = e.target.files[0]; if(file) {
+                    const reader = new FileReader();
+                    reader.onload = (evt) => { importedModelBuffer = evt.target.result; state.modelVisible = true; requestUpdate(); };
+                    reader.readAsArrayBuffer(file);
+                }
+            });
+            document.getElementById('btn-clear-model').addEventListener('click', () => { importedModelBuffer = null; mInput.value = ''; updateModel(); });
+
+            document.getElementById('enable-stem-extension').addEventListener('change', (e) => document.getElementById('stem-ext-control').style.display = e.target.checked ? 'block' : 'none');
+            document.getElementById('stabilizer-type').addEventListener('change', (e) => document.getElementById('stabilizer-custom-ui').style.display = e.target.value === 'custom' ? 'block' : 'none');
+            // V63 Lego Event
+            document.getElementById('lego-stud').addEventListener('change', (e) => document.getElementById('lego-adj-panel').style.display = e.target.checked ? 'block' : 'none');
+
+            document.getElementById('btn-random').addEventListener('click', randomizeParams);
+            document.getElementById('btn-reset-params').addEventListener('click', resetParams);
+
+            requestUpdate(); animate();
+        }
+        function animate() { 
+            requestAnimationFrame(animate); 
+            renderer.clear();
+            controls.update(); 
+            renderer.render(scene, camera);
+            const vhSize = 128;
+            renderer.setViewport(container.clientWidth - vhSize, 0, vhSize, vhSize); 
+            renderer.setScissor(container.clientWidth - vhSize, 0, vhSize, vhSize);
+            renderer.setScissorTest(true);
+            viewHelper.render(renderer);
+            renderer.setScissorTest(false);
+            renderer.setViewport(0, 0, container.clientWidth, container.clientHeight);
+        }
+
+        const bind = (id, key) => {
+            const el = document.getElementById(id); if(!el) return;
+            const up = () => {
+                const v = (el.type==='checkbox')?el.checked:(el.type==='range'||el.type==='number'?parseFloat(el.value):el.value);
+                state[key]=v; 
+                if(el.type==='range') { const sp = document.getElementById('v-'+id); if(sp) sp.textContent= (id === 'tex-scale') ? parseInt(v) : v.toFixed(2); }
+                if(id === 'lock-thickness') {
+                    const slider = document.getElementById('text-height');
+                    if(slider) { slider.disabled = v; if(v) { slider.value=0.5; state.textHeight=0.5; document.getElementById('v-text-height').textContent="0.5"; } }
+                }
+                requestUpdate();
+            };
+            el.addEventListener('input', up); el.addEventListener('change', ()=>{up(); commitHistory();});
+            const vS = document.getElementById('v-'+id);
+            if(vS && id !== 'text-height') vS.addEventListener('dblclick', ()=>{
+                const i=document.createElement('input'); i.type='number'; i.value=state[key]; i.className='direct-input';
+                vS.style.display='none'; vS.parentNode.insertBefore(i, vS.nextSibling); i.style.display='inline-block'; i.focus();
+                const end = ()=>{ const n=parseFloat(i.value); if(!isNaN(n)){state[key]=n; el.value=n; vS.textContent=n.toFixed(2); requestUpdate(); commitHistory();} i.remove(); vS.style.display='inline-block'; };
+                i.addEventListener('blur', end); i.addEventListener('keydown', e=>{if(e.key==='Enter')end();});
+            });
+        };
+        Object.keys(paramMap).forEach(id => bind(id, paramMap[id]));
+        Object.keys(boolMap).forEach(id => bind(id, boolMap[id]));
+        
+        const txtC = document.getElementById('text-content'); if(txtC) txtC.addEventListener('input', e=>{state.text=e.target.value; requestUpdate();});
+        const txt2C = document.getElementById('text2-content'); if(txt2C) txt2C.addEventListener('input', e=>{state.text2=e.target.value; requestUpdate();});
+        const sideT = document.getElementById('side-text'); if(sideT) sideT.addEventListener('input', e=>{state.sideText=e.target.value; requestUpdate();});
+        
+        const colB = document.getElementById('col-body'); if(colB) colB.addEventListener('input', e=>{state.colBody=e.target.value; updateModel();});
+        const colT = document.getElementById('col-text'); if(colT) colT.addEventListener('input', e=>{state.colText=e.target.value; updateModel();});
+        
+        const bUndo = document.getElementById('btn-undo'); if(bUndo) bUndo.addEventListener('click', undo); 
+        const bRedo = document.getElementById('btn-redo'); if(bRedo) bRedo.addEventListener('click', redo);
+        window.addEventListener('resize', () => { camera.aspect=container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth,container.clientHeight); });
+        
+        const fInput = document.getElementById('font-file-input');
+        if(fInput) fInput.addEventListener('change', function(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const json = JSON.parse(e.target.result);
+                    const font = fontLoader.parse(json);
+                    const fontName = "custom_" + Date.now();
+                    loadedFonts[fontName] = font;
+                    const select = document.getElementById('font-family');
+                    if(select) {
+                        const option = document.createElement('option'); option.value = fontName; option.text = file.name.replace('.json','');
+                        select.add(option); select.value = fontName; state.font = fontName;
+                        committedFont = fontName; updateCustomDropdown(); setupCustomDropdown(); requestUpdate();
+                    }
+                } catch(err) { alert(translations[currentLang].msg_import_err); }
+            };
+            reader.readAsText(file);
+        });
+
+        const sInput = document.getElementById('svg-file-input');
+        if(sInput) sInput.addEventListener('change', function(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) { state.svgContent = e.target.result; updateModel(); };
+            reader.readAsText(file);
+        });
+        const bClearSvg = document.getElementById('btn-clear-svg');
+        if(bClearSvg) bClearSvg.addEventListener('click', () => { state.svgContent = null; if(sInput) sInput.value = ''; updateModel(); });
+
+        const getFileName = () => {
+            const el = document.getElementById('export-name');
+            const base = el ? (el.value || 'keycap') : 'keycap';
+            const suffix = state.text ? `_[${state.text.replace(/\n/g,'_')}]` : '';
+            return base + suffix;
+        };
+        
+        const saveBlob = (blob, name) => {
+            if (typeof saveAs !== 'undefined') { saveAs(blob, name); } 
+            else { const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 100); }
+        };
+
+        const exportSTL = (suff) => {
+            const clone = new THREE.Group();
+            mainGroup.traverse(c => { if(c.isMesh && c.visible) clone.add(c.clone()); });
+            const res = new STLExporter().parse(clone, {binary:true});
+            saveBlob(new Blob([res], {type:'application/octet-stream'}), getFileName()+suff);
+        };
+        const exportOBJ = () => {
+            const clone = new THREE.Group();
+            mainGroup.traverse(c => { if(c.isMesh && c.visible) clone.add(c.clone()); });
+            const res = new OBJExporter().parse(clone);
+            saveBlob(new Blob([res], {type:'text/plain'}), getFileName() + '.obj');
+        };
+        
+        const bExpAll = document.getElementById('btn-export-all'); if(bExpAll) bExpAll.addEventListener('click', ()=>exportSTL('.stl'));
+        const bExpBody = document.getElementById('btn-export-body'); if(bExpBody) bExpBody.addEventListener('click', ()=>exportSTL('_body.stl'));
+        const bExpText = document.getElementById('btn-export-text'); if(bExpText) bExpText.addEventListener('click', ()=>exportSTL('_text_svg.stl'));
+        const bExpObj = document.getElementById('btn-export-obj'); if(bExpObj) bExpObj.addEventListener('click', exportOBJ);
+
+        const STORAGE_KEY = 'keycap_gen_v63_preset';
+        document.getElementById('btn-quick-save').addEventListener('click', () => { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); alert(translations[currentLang].msg_save_ok); });
+        document.getElementById('btn-quick-load').addEventListener('click', () => { const data = localStorage.getItem(STORAGE_KEY); if(data) { state = JSON.parse(data); syncUI(); updateCustomDropdown(); requestUpdate(); commitHistory(); alert(translations[currentLang].msg_load_ok); } else { alert(translations[currentLang].msg_load_err); } });
+        document.getElementById('btn-export-preset').addEventListener('click', () => { const blob = new Blob([JSON.stringify(state, null, 2)], {type: "application/json"}); saveBlob(blob, "keycap_preset.json"); });
+        document.getElementById('preset-file-input').addEventListener('change', (e) => {
+            const file = e.target.files[0]; if(!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try { state = JSON.parse(e.target.result); syncUI(); updateCustomDropdown(); requestUpdate(); commitHistory(); } catch(err) { alert(translations[currentLang].msg_import_err); }
+                e.target.value = '';
+            };
+            reader.readAsText(file);
+        });
+
+        async function runBatchExport() {
+            const raw = document.getElementById('batch-list').value;
+            const list = raw.split(/[\n,]+/).map(s => s.trim()).filter(s => s);
+            if(list.length === 0) { alert(translations[currentLang].msg_batch_empty); return; }
+            const originalText = state.text;
+            const loading = document.getElementById('loading');
+            const progress = document.getElementById('batch-progress');
+            loading.style.display = 'flex'; progress.style.display = 'block';
+            try {
+                for(let i=0; i<list.length; i++) {
+                    const char = list[i];
+                    progress.textContent = `${translations[currentLang].batch_processing} ${char} (${i+1}/${list.length})`;
+                    state.text = char; updateModel(); 
+                    await new Promise(r => setTimeout(r, 500)); // V63: Longer wait for CSG
+                    const clone = new THREE.Group();
+                    mainGroup.traverse(c => { if(c.isMesh && c.visible) clone.add(c.clone()); });
+                    const stl = new STLExporter().parse(clone, {binary:true});
+                    const baseName = document.getElementById('export-name').value || 'keycap';
+                    const safeChar = char.replace(/[\\/:*?"<>|]/g, '_');
+                    saveBlob(new Blob([stl], {type:'application/octet-stream'}), `${baseName}_[${safeChar}].stl`);
+                }
+                progress.textContent = translations[currentLang].batch_zipping;
+                await new Promise(r => setTimeout(r, 1000)); 
+            } finally {
+                state.text = originalText; syncUI(); requestUpdate();
+                loading.style.display = 'none'; progress.style.display = 'none';
+            }
+        }
+        document.getElementById('btn-batch-export').addEventListener('click', runBatchExport);
+
+        const pSel = document.getElementById('profile-select');
+        if(pSel) pSel.addEventListener('change', e => {
+            const defs = {cherry:4.3, oem:5.0, sa:6.0, xda:2.5, dsa:2.5};
+            if(defs[e.target.value]) { state.ribShorten = defs[e.target.value]; document.getElementById('rib-shorten').value = state.ribShorten; document.getElementById('v-rib-shorten').textContent = state.ribShorten.toFixed(2); requestUpdate(); }
+        });
+
+        const fStart = document.getElementById('force-start-btn');
+        if(fStart) fStart.addEventListener('click', ()=>{document.getElementById('loading').style.display='none'; requestUpdate();});
+        
+        init();
+    </script>
+</body>
+</html>
