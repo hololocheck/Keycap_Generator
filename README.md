@@ -30,7 +30,7 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V63.3)
+### 📝 アップデート情報 (V63.1)
 - **UIの改善**: サイドバーの折りたたみ、統計パネルの最小化機能を追加。
 - **Lego Stud対応**: 天面にレゴ互換のポッチを配置できる機能を追加。
 - **安定性の向上**: CSG演算（刻印）アルゴリズムを最適化。
@@ -58,7 +58,7 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V63.3)
+### 📝 Update Notes (V63.1)
 - **UI Improvements**: Added collapsible sidebar and minimized statistics panel for a larger workspace.
 - **Lego Stud Support**: Added functionality to place Lego-compatible studs on the top surface.
 
