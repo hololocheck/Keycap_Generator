@@ -1,0 +1,88 @@
+Keycap Generator V63.3 Ultimate
+日本語 | English
+
+<a id="japanese"></a>
+
+🇯🇵 日本語 (Japanese)
+ブラウザ上で動作する、高機能な3Dキーキャップ・ジェネレーターです。主要なプロファイルに対応し、刻印からSTL書き出しまでシームレスに行えます。
+
+🌐 関連リンク
+Keycap Generator Wiki: 各種パラメータの詳細な解説、デザインのTips、トラブルシューティングを掲載しています。
+
+ライブデモ (GitHub Pages): インストール不要。 ブラウザから最新版を直接利用できます。
+
+💡 インストール不要で即座に利用可能
+このツールはクライアントサイドJavaScriptのみで構築されているため、ソフトウェアのダウンロードや複雑な環境構築は一切不要です。
+
+Serverless: 全ての演算（3D形状生成、CSG演算）がブラウザ上で完結します。
+
+Cross-Platform: Windows, Mac, Linuxなど、ブラウザがあれば即座に設計・エクスポートが可能です。
+
+✨ 主な機能
+多種多様なプロファイル: Cherry, OEM, SA, XDA, DSAを搭載。
+
+高度なテキスト編集: 複数行印字、曲面への自動追従（Conform）、ダブルショット風書き出し。
+
+SVGアイコン対応: オリジナルロゴ（SVG形式）をキーキャップ表面に配置可能。
+
+外部モデル合成 (Remix): 既存STLの結合（Union）や型抜き（Subtract）が可能。
+
+3Dプリント最適化: ステムのクリアランス調整、補強リブ、Lego Stud対応。
+
+コスト・重量計算: フィラメントに応じた概算重量とコストをリアルタイム算出。
+
+📝 アップデート情報 (V63.3)
+UIの改善: サイドバーの折りたたみ、統計パネルの最小化機能を追加。
+
+Lego Stud対応: 天面にレゴ互換のポッチを配置できる機能を追加。
+
+安定性の向上: CSG演算（刻印）アルゴリズムを最適化。
+
+<a id="english"></a>
+
+🇺🇸 English
+A high-performance 3D keycap generator that runs in your browser. Supports major profiles and provides seamless workflow from design to STL export.
+
+🌐 Related Resources
+Keycap Generator Wiki: Comprehensive guide for parameters, design tips, and troubleshooting.
+
+Live Demo (GitHub Pages): No installation required. Access the latest version directly in your browser.
+
+💡 No Installation Required
+Built entirely with client-side JavaScript, this tool requires no downloads or environment setup.
+
+Serverless: All 3D geometry generation and CSG operations are performed locally in your browser.
+
+Cross-Platform: Accessible from any PC (Windows, Mac, Linux) simply by visiting the link.
+
+✨ Key Features
+Various Profiles: Pre-installed Cherry, OEM, SA, XDA, and DSA profiles.
+
+Advanced Text Editing: Multi-line legends, surface conforming, and double-shot style export.
+
+SVG Icon Support: Place your logos (SVG) directly on the keycap surface.
+
+3D Model Remixing: Import STL files for Union or Subtraction (Engraving) operations.
+
+3D Print Optimization: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
+
+Cost & Weight Calculator: Real-time estimation based on filament settings.
+
+📝 Update Notes (V63.3)
+UI Improvements: Added collapsible sidebar and minimized statistics panel for a larger workspace.
+
+Lego Stud Support: Added functionality to place Lego-compatible studs on the top surface.
+
+Performance: Optimized CSG (engraving) algorithms to improve browser stability.
+
+🛠 Technology Stack / 技術スタック
+Engine: Three.js (WebGL)
+
+Geometry Logic: three-bvh-csg (Advanced Boolean Operations)
+
+UI/UX: HTML5, CSS3 (Vanilla JS)
+
+Exporter: STLExporter, OBJExporter
+
+📄 License / ライセンス
+MIT License.
