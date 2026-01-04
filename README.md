@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-63.3-orange.svg)
+![Version](https://img.shields.io/badge/version-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
@@ -15,7 +15,7 @@
 
 ### 🌐 関連リンク
 - **[Keycap Generator Wiki](https://keycapgeneratorwiki.com/ja/home)**: 各種パラメータの詳細な解説、デザインのTips、トラブルシューティングを掲載しています。
-- **[ツールサイト](https://hololocheck.github.io/Keycap_Generator/)**: **インストール不要。** ブラウザから最新版を直接利用できます。
+- **[ツールページ](https://hololocheck.github.io/Keycap_Generator/)**: **インストール不要。** ブラウザから最新版を直接利用できます。
 
 ### 💡 インストール不要で即座に利用可能
 このツールはクライアントサイドJavaScriptのみで構築されているため、ソフトウェアのダウンロードや複雑な環境構築は一切不要です。
