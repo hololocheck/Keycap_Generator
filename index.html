@@ -5,7 +5,7 @@
     <meta name="google-site-verification" content="E2yuICa6eKYqirbpWGXo9DtwvVG9mlCf_g56Qzpse2M" />
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keycap Generator V63.1</title>
+    <title>Keycap Generator V63.2</title>
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <style>
         :root {
@@ -251,6 +251,13 @@
         #top-right-panel.stats-collapsed #btn-toggle-stats:hover {
             border-color: var(--accent); color: var(--accent);
         }
+        
+        /* ■■■ Added: Social Links ■■■ */
+        .social-links { display: flex; gap: 10px; align-items: center; margin-right: 10px; }
+        .social-icon { width: 32px; height: 32px; cursor: pointer; transition: transform 0.2s, filter 0.2s; fill: var(--text-muted); }
+        .social-icon:hover { transform: scale(1.2); filter: drop-shadow(0 0 5px var(--accent)); fill: var(--accent); }
+        .social-icon.github-icon path { fill: var(--text-muted); transition: fill 0.2s; }
+        .social-icon.github-icon:hover path { fill: var(--accent); }
     </style>
     
     <script type="importmap">
@@ -371,13 +378,29 @@
                     </svg>
                     <div>
                         <h2>Keycap Gen</h2>
-                        <span class="ver">V63.1</span>
+                        <span class="ver">V63.2</span>
                     </div>
                 </div>
-                <select id="language-select">
-                    <option value="ja">🇯🇵 日本語</option>
-                    <option value="en">🇺🇸 English</option>
-                </select>
+                
+                <div style="display:flex; align-items:center;">
+                    <div class="social-links">
+                        <a href="https://keycapgeneratorwiki.com/" target="_blank" id="link-wiki" title="Go to Wiki">
+                            <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55">
+                                 <defs><style>.cls-1{stroke:#ccc;}.cls-1,.cls-2,.cls-3{stroke-miterlimit:10;}.cls-1,.cls-3{fill:none;}.cls-2{fill:aqua;}.cls-2,.cls-3{stroke:aqua;}.cls-3{stroke-width:4px;}.cls-4{fill:#b3b3b3;}</style></defs><g><g><polygon class="cls-4" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon class="cls-4" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon class="cls-4" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/></g><g><line class="cls-1" x1="35.16" y1="29.06" x2=".61" y2="135.77"/><line class="cls-1" x1=".25" y1="136.62" x2="148.91" y2="216.18"/><line class="cls-1" x1="151.25" y1="80.26" x2="35.16" y2="29.06"/><line class="cls-1" x1="148.91" y1="216.18" x2="151.25" y2="80.26"/><line class="cls-1" x1="273.2" y1="41.92" x2="151.25" y2="80.26"/><line class="cls-1" x1="305.59" y1="144.63" x2="273.2" y2="41.92"/><polyline class="cls-1" points="148.91 217.1 149.26 216.93 305.59 144.63"/><line class="cls-1" x1="152.73" y1=".49" x2="273.2" y2="41.92"/><line class="cls-1" x1="152.73" y1=".49" x2="35.16" y2="29.06"/></g></g><g><line class="cls-3" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line class="cls-3" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><line class="cls-3" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/><line class="cls-3" x1="224.32" y1="41.22" x2="198.07" y2="32.19"/><path class="cls-2" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/><path class="cls-2" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/><path class="cls-2" d="M134.59,37.59s-10.53-2.15-15.09,0,4.12-3.16,1.67-4.79c-2.44-1.63,6.19,2.8,12.48.1,6.29-2.7-6.94,3.03.94,4.69Z"/></g>
+                            </svg>
+                        </a>
+                    
+                        <a href="https://github.com/hololocheck/Keycap_Generator" target="_blank" id="link-github" title="Go to GitHub">
+                            <svg class="social-icon github-icon" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M512 0C229.12 0 0 229.12 0 512C0 738.56 146.56 930.56 349.44 997.76C375.04 1002.24 384.64 986.88 384.64 973.44C384.64 961.28 384 920.96 384 878.08C256 901.12 222.72 846.72 212.48 817.92C206.72 803.2 181.76 757.76 159.36 745.6C140.8 735.36 114.56 710.4 158.72 709.12C199.68 707.84 228.48 748.8 238.08 764.16C284.16 840.96 357.76 819.84 387.2 806.4C391.68 773.76 405.12 751.36 419.84 737.92C300.16 724.48 174.08 678.4 174.08 472.96C174.08 414.08 195.2 366.08 229.76 328.32C224 314.88 205.44 259.84 234.88 184.96C234.88 184.96 280.32 170.88 383.36 240.64C426.24 228.48 472.32 222.72 517.76 222.72C563.2 222.72 609.28 228.48 652.8 240.64C755.2 170.24 800 184.96 800 184.96C829.44 259.84 810.88 314.88 805.76 328.32C840.32 366.08 860.8 414.08 860.8 472.96C860.8 679.04 734.08 723.84 613.76 737.28C633.6 753.92 650.88 786.56 650.88 837.12C650.88 908.8 650.24 967.04 650.24 973.44C650.24 987.52 659.84 1002.88 686.08 997.76C888.32 930.56 1033.6 738.56 1033.6 512C1033.6 229.12 804.48 0 512 0Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <select id="language-select">
+                        <option value="ja">🇯🇵 日本語</option>
+                        <option value="en">🇺🇸 English</option>
+                    </select>
+                </div>
             </div>
 
             <div id="nav-bar">
@@ -455,8 +478,7 @@
                     <option value="R1">R1 (ZXCV/Space)</option>
                 </select>
             </div>
-
-            <h3 id="sec-structure" data-i18n="h_structure">構造・ボッチ</h3>
+<h3 id="sec-structure" data-i18n="h_structure">構造・ボッチ</h3>
             
             <div class="control-group">
                 <label style="color:#00e5ff; font-weight:bold;"><span data-i18n="lbl_round_corner">角の丸み (Fillet)</span> <span><span id="v-round-corner" class="val" data-target="round-corner">0.0</span>mm</span></label>
@@ -505,7 +527,8 @@
                     <input type="range" id="bump-offset-y" min="-5.0" max="5.0" step="0.1" value="0.0">
                 </div>
             </div>
-<h3 id="sec-shape" data-i18n="h_shape">形状</h3>
+            
+            <h3 id="sec-shape" data-i18n="h_shape">形状</h3>
             <div class="control-group">
                 <label><span data-i18n="lbl_top_scale">上面サイズ (Taper)</span> <span id="v-top-scale" class="val" data-target="top-scale">1.00</span></label>
                 <input type="range" id="top-scale" min="0.5" max="1.0" step="0.01" value="1.0">
@@ -647,7 +670,7 @@
                     </div>
                 </div>
             </div>
-<div class="section-sep"></div>
+            <div class="section-sep"></div>
             <h3 id="sec-utility" style="color:#00e5ff;">Utility</h3>
             
             <div class="control-group" style="display:flex; gap:5px; align-items:center;">
@@ -866,7 +889,8 @@
                     <input type="range" id="side-rot" min="-45" max="45" step="1" value="0">
                 </div>
             </div>
-<h3 id="sec-svg" data-i18n="h_svg">SVG (アイコン) 設定</h3>
+
+            <h3 id="sec-svg" data-i18n="h_svg">SVG (アイコン) 設定</h3>
             <div class="control-group" style="display:flex; gap:5px; align-items: flex-end;">
                 <div class="file-upload" style="flex:1;">
                     <label for="svg-file-input" class="file-upload-label" style="border-color:#ffeb3b; color:#ffeb3b;" data-i18n="btn_upload_svg">📁 SVG読込</label>
@@ -1025,10 +1049,9 @@
         import { SVGLoader } from 'three/addons/loaders/SVGLoader.js';
         import * as BufferGeometryUtils from 'three/addons/utils/BufferGeometryUtils.js';
         import { ViewHelper } from 'three/addons/helpers/ViewHelper.js';
-        // V63 Import: CSG for Engraving
         import { SUBTRACTION, Brush, Evaluator } from 'three-bvh-csg';
 
-        // ■■■ i18n Data (Updated for V63) ■■■
+        // ■■■ i18n Data (Updated for Button Translations) ■■■
         const translations = {
             ja: {
                 nav_jump: "--- セクション移動 ---",
@@ -1050,7 +1073,6 @@
                 lbl_texture: "表面プロシージャル (Procedural)", opt_tex_none: "None (なし)", opt_tex_noise: "Noise (梨地/Sand)", opt_tex_grid: "Grid (グリップ/Studs)",
                 lbl_tex_scale: "Scale (細かさ)", lbl_tex_strength: "Strength (深さ)",
                 
-                // V63 New: Image Texture
                 h_texture_map: "画像テクスチャ (Image Map)", btn_upload_img: "📁 画像読込 (PNG/JPG)", 
                 
                 h_stem: "ステム設定", lbl_stem_type: "軸タイプ: Cherry MX (固定)", lbl_clearance: "クリアランス",
@@ -1063,7 +1085,6 @@
                 lbl_align_preset: "文字配置 (プリセット)", btn_align_center: "Center (中央)", btn_align_tl: "Top-Left (左上)",
                 lbl_pos_xz_fine: "位置 X / Z (微調整)", lbl_offset_y: "高さ微調整 (Offset Y)",
                 
-                // V63 New: Text Mode
                 lbl_text_mode: "生成モード (Mode)", opt_mode_emboss: "Emboss (浮き出し)", opt_mode_engrave: "Engrave (刻印/掘り込み)", opt_mode_doubleshot: "Double-Shot (埋め込み)",
                 note_engrave: "※Engraveは計算処理に時間がかかります",
 
@@ -1084,7 +1105,10 @@
                 
                 lbl_weight: "予想重量:", lbl_cost: "予想コスト:", 
                 lbl_vendor: "ベンダー:", lbl_material: "材料:", btn_details: "▼ 詳細 / 編集",
-                lbl_manual_override: "手動設定 (Manual Override)", lbl_price: "価格", lbl_spool: "リール(g)", lbl_density: "密度"
+                lbl_manual_override: "手動設定 (Manual Override)", lbl_price: "価格", lbl_spool: "リール(g)", lbl_density: "密度",
+                
+                // Wiki/GitHub Buttons
+                link_wiki: "Wikiへ移動", link_github: "GitHubへ移動"
             },
             en: {
                 nav_jump: "--- Jump to Section ---",
@@ -1138,7 +1162,10 @@
 
                 lbl_weight: "Est. Weight:", lbl_cost: "Est. Cost:", 
                 lbl_vendor: "Vendor:", lbl_material: "Material:", btn_details: "▼ Details / Edit",
-                lbl_manual_override: "Manual Override", lbl_price: "Price", lbl_spool: "Spool(g)", lbl_density: "Dens."
+                lbl_manual_override: "Manual Override", lbl_price: "Price", lbl_spool: "Spool(g)", lbl_density: "Dens.",
+
+                // Wiki/GitHub Buttons
+                link_wiki: "Go to Wiki", link_github: "Go to GitHub"
             }
         };
         let currentLang = 'ja';
@@ -1161,6 +1188,12 @@
             
             updateFilamentDisplay(); 
             updateCustomDropdownHead(); 
+
+            // Update Link Titles
+            const linkWiki = document.getElementById('link-wiki');
+            const linkGithub = document.getElementById('link-github');
+            if(linkWiki) linkWiki.title = t.link_wiki || "Wiki";
+            if(linkGithub) linkGithub.title = t.link_github || "GitHub";
         }
 
         document.getElementById('language-select').addEventListener('change', (e) => {
@@ -1189,16 +1222,14 @@
             }
         };
 
-        // ■■■ State (Updated for V63) ■■■
         const initialState = {
             uSize: 1.0, profile: 'cherry', row: 'R3',
             unitSize: 19.05, 
             topScale: 1.0, dishType: 'cylindrical',
             textureType: 'none', textureScale: 50, textureStrength: 0.05,
             
-            // V63: Image Texture Params
             imgTextureVisible: false, imgScale: 1.0, imgPosX: 0.0, imgPosY: 0.0, imgRot: 0,
-            imgContent: null, // Data URL
+            imgContent: null,
 
             enableStemExtension: false, stemExtension: 1.0,
             stabilizerType: 'auto', stabilizerOffset: 0.0,
@@ -1206,7 +1237,6 @@
             twist: 0, tiltX: 0, tiltZ: 0,
             boxStem: false, 
             
-            // V63: Lego Params
             legoStud: false, legoX: 0.0, legoY: 0.0, legoZ: 0.0, legoClear: 0.0,
 
             wallThickness: 1.5,
@@ -1221,12 +1251,10 @@
             enableText: true, text: 'A', font: 'helvetiker',
             fontSize: 8.0, textHeight: 0.5,
             
-            // V63: Text Mode
-            textMode: 'emboss', // emboss, engrave, doubleshot
+            textMode: 'emboss',
 
             textThicknessLocked: true, 
             textConform: true, 
-            // doubleShot: true, // Deprecated in favor of textMode
             
             posX: 0, posZ: 0, textOffsetY: 0.0,
             enableText2: false, text2: 'あ', text2Size: 4.0, text2X: 3.5, text2Z: 3.5,
@@ -1251,7 +1279,6 @@
         const history = [JSON.parse(JSON.stringify(initialState))];
         let historyIndex = 0;
 
-        // UI Map (Updated for V63)
         const paramMap = {
             'u-size':'uSize', 'wall-thick':'wallThickness', 'rib-shorten':'ribShorten', 'top-scale':'topScale',
             'stem-clearance':'stemClearance', 'font-size':'fontSize', 'text-height':'textHeight',
@@ -1278,7 +1305,6 @@
             'round-corner': 'roundCorner',
             'stem-diameter': 'stemDiameter',
 
-            // V63 New Mappings
             'text-mode': 'textMode',
             'img-scale': 'imgScale', 'img-pos-x': 'imgPosX', 'img-pos-y': 'imgPosY', 'img-rot': 'imgRot',
             'lego-x': 'legoX', 'lego-y': 'legoY', 'lego-z': 'legoZ', 'lego-clear': 'legoClear'
@@ -1287,13 +1313,11 @@
             'enable-ribs':'enableRibs', 'homing-bump':'homingBump', 
             'enable-text':'enableText', 'svg-visible':'svgVisible', 
             'lock-thickness':'textThicknessLocked', 'text-conform':'textConform',
-            // 'double-shot':'doubleShot', // Removed from boolMap logic, handled by textMode
             'svg-double-shot':'svgDoubleShot', 'svg-conform':'svgConform',
             'enable-text2':'enableText2', 'enable-side':'enableSide',
             'model-visible':'modelVisible',
             'enable-stem-extension':'enableStemExtension',
             'box-stem': 'boxStem', 'lego-stud': 'legoStud',
-            
             'img-texture-visible': 'imgTextureVisible'
         };
 
@@ -1347,7 +1371,6 @@
             updateLanguageUI();
         }
 
-        // ■■■ Filament Manager ■■■
         const filamentData = {
             'polymaker': { 
                 name: 'Polymaker',
@@ -1376,7 +1399,7 @@
                     'pla_matte': { name: 'Elegoo Matte', d: 1.24, price_jp: 2800, price_us: 18 },
                     'abs': { name: 'Elegoo ABS', d: 1.04, price_jp: 3000, price_us: 19 },
                     'petg': { name: 'Elegoo PETG', d: 1.27, price_jp: 2400, price_us: 15 },
-                    'asa': null // N/A
+                    'asa': null
                 }
             },
             'esun': { 
@@ -1528,7 +1551,6 @@
             if(hiddenSelect && head) { const opt = hiddenSelect.querySelector(`option[value="${state.font}"]`); if(opt) head.textContent = opt.text + " ▼"; }
         }
 
-        // Navigation Logic
         function initNavigation() {
             const select = document.getElementById('section-select');
             select.addEventListener('change', (e) => {
@@ -1560,7 +1582,8 @@
                 if(firstMatch) firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
         }
-const PROFILES = {
+        
+        const PROFILES = {
             cherry: { R4: {h:11.5, a:6}, R3: {h:9.5, a:3}, R2: {h:8.5, a:-3}, R1: {h:9.5, a:-6}, dish:'cylindrical' },
             oem:    { R4: {h:12.5, a:8}, R3: {h:11.0, a:4}, R2: {h:10.0, a:-4}, R1: {h:11.0, a:-8}, dish:'cylindrical' },
             sa:     { R4: {h:16.5, a:7}, R3: {h:14.0, a:0}, R2: {h:14.0, a:0}, R1: {h:14.0, a:-7}, dish:'spherical' },
@@ -1590,7 +1613,7 @@ const PROFILES = {
         scene.add(new THREE.GridHelper(200, 200, 0x444444, 0x222222));
         const mainGroup = new THREE.Group(); scene.add(mainGroup);
         const fontLoader = new FontLoader(); const loadedFonts = {};
-        const textureLoader = new THREE.TextureLoader(); // V63: Texture Loader
+        const textureLoader = new THREE.TextureLoader();
 
         function getParams() {
             const p = PROFILES[state.profile];
@@ -1687,7 +1710,6 @@ const PROFILES = {
             const thick = state.wallThickness;
             geo.computeBoundingBox();
             
-            // V63: UV Mapping for Image Texture
             const uvs = geo.attributes.uv;
             const useImageTexture = state.imgContent && state.imgTextureVisible;
 
@@ -1703,7 +1725,6 @@ const PROFILES = {
             for(let i=0; i<pos.count; i++){
                 v.fromBufferAttribute(pos, i);
                 
-                // Twist
                 if (Math.abs(state.twist) > 0.1) {
                     const angle = twistPerUnit * v.y;
                     const sinA = Math.sin(angle);
@@ -1713,7 +1734,6 @@ const PROFILES = {
                     v.x = tx; v.z = tz;
                 }
 
-                // Taper
                 const ratioY = Math.max(0, Math.min(1, v.y / p.h));
                 let currentScale = 1.0;
                 if (ratioY > 0.01) {
@@ -1721,7 +1741,6 @@ const PROFILES = {
                     v.x *= currentScale; v.z *= currentScale;
                 }
 
-                // Fillet
                 if (hasFillet) {
                     const currentW = p.baseW * (ratioY > 0.01 ? currentScale : 1.0);
                     const currentD = p.baseD * (ratioY > 0.01 ? currentScale : 1.0);
@@ -1730,7 +1749,6 @@ const PROFILES = {
                     v.x = deformed.x; v.z = deformed.z;
                 }
 
-                // Surface Height
                 if (ratioY > 0.01) {
                     const surfY = getSurfaceHeight(v.x, v.z, p);
                     const origY = v.y;
@@ -1744,7 +1762,6 @@ const PROFILES = {
                     }
                     v.y = targetY;
 
-                    // Procedural Texture (Bump)
                     if (useProcedural) {
                         let noiseVal = 0;
                         let isTop = ratioY > 0.95 && targetY > p.h - thick;
@@ -1770,22 +1787,18 @@ const PROFILES = {
                 }
                 pos.setXYZ(i, v.x, v.y, v.z);
 
-                // V63: UV Calculation for Image Texture (Planar Projection)
                 if (useImageTexture && uvs) {
                     const cosR = Math.cos(THREE.MathUtils.degToRad(-state.imgRot));
                     const sinR = Math.sin(THREE.MathUtils.degToRad(-state.imgRot));
                     
                     let ux = v.x; let uz = v.z;
-                    // Rotate
                     const rx = ux * cosR - uz * sinR;
                     const rz = ux * sinR + uz * cosR;
                     
-                    // Normalize (assuming 19.05mm max width for mapping space)
                     const mapSize = 19.05 * state.uSize; 
                     let u = (rx / mapSize) + 0.5;
                     let v_uv = (rz / mapSize) + 0.5;
 
-                    // Scale & Offset
                     u = (u - 0.5) / state.imgScale + 0.5 - state.imgPosX;
                     v_uv = (v_uv - 0.5) / state.imgScale + 0.5 - state.imgPosY;
 
@@ -1794,7 +1807,8 @@ const PROFILES = {
             }
             geo.computeVertexNormals();
         }
-function createStemUnit(height, rOuter, clear) {
+
+        function createStemUnit(height, rOuter, clear) {
             const shape = new THREE.Shape();
             shape.absarc(0,0, rOuter, 0, Math.PI*2);
             const w = (1.15 + clear)/2; 
@@ -1919,9 +1933,7 @@ function createStemUnit(height, rOuter, clear) {
         }
 
         function createHomingBump(p) {
-            // V63: Enhanced Lego Stud Logic
             if (state.legoStud) {
-                // Lego stud diameter 4.8mm -> radius 2.4mm
                 const r = 2.4 + (state.legoClear || 0);
                 const stud = new THREE.CylinderGeometry(r, r, 1.8, 24);
                 
@@ -1959,14 +1971,11 @@ function createStemUnit(height, rOuter, clear) {
         function createConformedText(p, textVal, sizeVal, xVal, zVal) {
             if (!loadedFonts[state.font] || !textVal) return null;
             
-            // V63: Mode Handling
             const isEngrave = state.textMode === 'engrave';
             const isDoubleShot = state.textMode === 'doubleshot';
             
             let baseOffset = 0;
-            // DoubleShot: starts slightly below surface
             if (isDoubleShot) baseOffset = -state.textHeight + 0.02;
-            // Engrave: starts slightly below surface to ensure intersection for subtraction
             else if (isEngrave) baseOffset = -state.textHeight + 0.05; 
             
             const effectiveOffset = baseOffset + state.textOffsetY;
@@ -2076,7 +2085,6 @@ function createStemUnit(height, rOuter, clear) {
 
             const p = getParams();
             
-            // V63: Texture Map Material Setup
             let bodyMat, textMat;
             
             if (state.renderMode === 'wireframe') {
@@ -2109,7 +2117,7 @@ function createStemUnit(height, rOuter, clear) {
             const oldSVG = mainGroup.getObjectByName("KeycapSVG"); if(oldSVG) mainGroup.remove(oldSVG);
             
             const textGeos = [];
-            let engraveGeos = []; // V63: List for boolean subtraction
+            let engraveGeos = [];
             
             if (state.enableText && loadedFonts[state.font]) { 
                 const t = createConformedText(p, state.text, state.fontSize, state.posX, state.posZ); 
@@ -2134,7 +2142,6 @@ function createStemUnit(height, rOuter, clear) {
             let finalSVGGeo = state.svgContent && state.svgVisible ? createConformedSVG(p) : null;
             let finalEngraveGeo = safeMerge(engraveGeos);
 
-            // Imported Model
             let impMesh = mainGroup.getObjectByName("ImportedModel"); if(impMesh) mainGroup.remove(impMesh);
             let importedGeo = null;
             if(importedModelBuffer && state.modelVisible) {
@@ -2146,8 +2153,6 @@ function createStemUnit(height, rOuter, clear) {
                 importedGeo.translate(state.modelX, state.modelY, state.modelZ);
             }
 
-            // CSG Operations (Slow but powerful)
-            // 1. Model Subtraction
             if (state.modelOperation === 'subtract' && importedGeo && finalKeycapGeo) {
                 const b1 = new Brush(finalKeycapGeo); b1.updateMatrixWorld();
                 const b2 = new Brush(importedGeo); b2.updateMatrixWorld();
@@ -2156,13 +2161,12 @@ function createStemUnit(height, rOuter, clear) {
                 importedGeo = null; 
             }
             
-            // 2. V63: Text Engraving (Subtraction)
             if (finalEngraveGeo && finalKeycapGeo) {
                 const b1 = new Brush(finalKeycapGeo); b1.updateMatrixWorld();
                 const b2 = new Brush(finalEngraveGeo); b2.updateMatrixWorld();
                 const res = csgEvaluator.evaluate(b1, b2, SUBTRACTION);
                 finalKeycapGeo = res.geometry;
-                finalEngraveGeo = null; // Consumed
+                finalEngraveGeo = null; 
             }
 
             const oldBody = mainGroup.getObjectByName("KeycapBody"); if(oldBody) mainGroup.remove(oldBody);
@@ -2205,7 +2209,6 @@ function createStemUnit(height, rOuter, clear) {
             initFilamentManager();
             initNavigation();
 
-            // V63: Image Texture Handler
             const imgInput = document.getElementById('img-texture-input');
             if(imgInput) imgInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
@@ -2237,15 +2240,11 @@ function createStemUnit(height, rOuter, clear) {
 
             document.getElementById('enable-stem-extension').addEventListener('change', (e) => document.getElementById('stem-ext-control').style.display = e.target.checked ? 'block' : 'none');
             document.getElementById('stabilizer-type').addEventListener('change', (e) => document.getElementById('stabilizer-custom-ui').style.display = e.target.value === 'custom' ? 'block' : 'none');
-            // V63 Lego Event
             document.getElementById('lego-stud').addEventListener('change', (e) => document.getElementById('lego-adj-panel').style.display = e.target.checked ? 'block' : 'none');
 
             document.getElementById('btn-random').addEventListener('click', randomizeParams);
             document.getElementById('btn-reset-params').addEventListener('click', resetParams);
 
-            // ■■■ Added: UI Toggle Logic ■■■
-            
-            // 1. Stats Panel Toggle
             const statsPanel = document.getElementById('top-right-panel');
             const toggleStatsBtn = document.getElementById('btn-toggle-stats');
             if(toggleStatsBtn) {
@@ -2255,7 +2254,6 @@ function createStemUnit(height, rOuter, clear) {
                 });
             }
 
-            // 2. Sidebar Toggle
             const toggleUiBtn = document.getElementById('btn-toggle-ui');
             if(toggleUiBtn) {
                 toggleUiBtn.addEventListener('click', () => {
@@ -2263,7 +2261,6 @@ function createStemUnit(height, rOuter, clear) {
                     const isClosed = document.body.classList.contains('ui-closed');
                     toggleUiBtn.textContent = isClosed ? "▶" : "◀";
                     
-                    // Recalculate 3D Canvas Size
                     setTimeout(() => {
                         const w = container.clientWidth;
                         const h = container.clientHeight;
@@ -2413,7 +2410,7 @@ function createStemUnit(height, rOuter, clear) {
                     const char = list[i];
                     progress.textContent = `${translations[currentLang].batch_processing} ${char} (${i+1}/${list.length})`;
                     state.text = char; updateModel(); 
-                    await new Promise(r => setTimeout(r, 500)); // V63: Longer wait for CSG
+                    await new Promise(r => setTimeout(r, 500)); 
                     const clone = new THREE.Group();
                     mainGroup.traverse(c => { if(c.isMesh && c.visible) clone.add(c.clone()); });
                     const stl = new STLExporter().parse(clone, {binary:true});
