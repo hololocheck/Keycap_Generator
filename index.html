@@ -71,7 +71,7 @@
         #top-right-panel {
             position: absolute; top: 10px; right: 10px; width: 260px;
             background: rgba(20, 20, 20, 0.95); border: 1px solid var(--accent);
-            padding: 12px 12px 12px 50px; /* Space for toggle button */
+            padding: 12px 12px 12px 50px;
             border-radius: 6px; z-index: 10;
             box-shadow: -4px 4px 15px rgba(0,0,0,0.5);
             font-family: monospace; transition: all 0.3s ease;
@@ -222,7 +222,6 @@
         .v61-texture-panel { background: var(--texture-bg); padding: 8px; border-radius: 4px; border: 1px dashed #e91e63; margin-top: 5px; }
         .v63-texture-map-panel { background: rgba(156, 39, 176, 0.05); padding: 8px; border-radius: 4px; border: 1px dashed #ba68c8; margin-top: 5px; }
 
-        /* ■■■ Added: New Toggle Buttons ■■■ */
         #btn-toggle-ui {
             position: absolute; left: 400px; top: 10px; z-index: 20;
             width: 30px; height: 40px; border-radius: 0 4px 4px 0;
@@ -252,7 +251,6 @@
             border-color: var(--accent); color: var(--accent);
         }
         
-        /* ■■■ Added: Social Links ■■■ */
         .social-links { display: flex; gap: 10px; align-items: center; margin-right: 10px; }
         .social-icon { width: 32px; height: 32px; cursor: pointer; transition: transform 0.2s, filter 0.2s; fill: var(--text-muted); }
         .social-icon:hover { transform: scale(1.2); filter: drop-shadow(0 0 5px var(--accent)); fill: var(--accent); }
@@ -1051,7 +1049,6 @@
         import { ViewHelper } from 'three/addons/helpers/ViewHelper.js';
         import { SUBTRACTION, Brush, Evaluator } from 'three-bvh-csg';
 
-        // ■■■ i18n Data (Updated for Button Translations) ■■■
         const translations = {
             ja: {
                 nav_jump: "--- セクション移動 ---",
@@ -1107,7 +1104,6 @@
                 lbl_vendor: "ベンダー:", lbl_material: "材料:", btn_details: "▼ 詳細 / 編集",
                 lbl_manual_override: "手動設定 (Manual Override)", lbl_price: "価格", lbl_spool: "リール(g)", lbl_density: "密度",
                 
-                // Wiki/GitHub Buttons
                 link_wiki: "Wikiへ移動", link_github: "GitHubへ移動"
             },
             en: {
@@ -1164,7 +1160,6 @@
                 lbl_vendor: "Vendor:", lbl_material: "Material:", btn_details: "▼ Details / Edit",
                 lbl_manual_override: "Manual Override", lbl_price: "Price", lbl_spool: "Spool(g)", lbl_density: "Dens.",
 
-                // Wiki/GitHub Buttons
                 link_wiki: "Go to Wiki", link_github: "Go to GitHub"
             }
         };
@@ -1189,7 +1184,6 @@
             updateFilamentDisplay(); 
             updateCustomDropdownHead(); 
 
-            // Update Link Titles
             const linkWiki = document.getElementById('link-wiki');
             const linkGithub = document.getElementById('link-github');
             if(linkWiki) linkWiki.title = t.link_wiki || "Wiki";
