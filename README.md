@@ -11,7 +11,7 @@
 <a id="japanese"></a>
 ## 🇯🇵 日本語 (Japanese)
 
-ブラウザ上で動作する、高機能な3Dキーキャップ・ジェネレーターです。主要なプロファイルに対応し、刻印からSTL書き出しまでシームレスに行えます。
+ブラウザ上で動作する、高機能な3Dキーキャップ・ジェネレーターです。主要なプロファイルに対応し、刻印からSTL/3MF書き出しまでシームレスに行えます。
 
 ### 🌐 関連リンク
 - **[Keycap Generator Wiki](https://keycapgeneratorwiki.com/ja/home)**: 各種パラメータの詳細な解説、デザインのTips、トラブルシューティングを掲載しています。
@@ -30,17 +30,18 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V63.1)
-- **UIの改善**: サイドバーの折りたたみ、統計パネルの最小化機能を追加。
-- **Lego Stud対応**: 天面にレゴ互換のポッチを配置できる機能を追加。
-- **安定性の向上**: CSG演算（刻印）アルゴリズムを最適化。
+### 📝 アップデート情報 (V63.3)
+- **3MFエクスポート対応**: 本体と文字を別オブジェクトとして保存できる3MF形式に対応（マルチカラー印刷に最適）。
+- **テクスチャ表現の拡張**: 木目、ハニカム、打痕など5種類の新パターンを追加し、全体適用（Global Apply）も可能に。
+- **刻印モードの完全制御**: サブ文字やサイド印字、SVGアイコンの生成モード（刻印/浮き出し/埋め込み）を個別に設定可能に。
+- **操作性の向上**: 文字配置プリセット（四隅・中央）やボールドフォント対応、バッチ出力オプションを追加。
 
 ---
 
 <a id="english"></a>
 ## 🇺🇸 English
 
-A high-performance 3D keycap generator that runs in your browser. Supports major profiles and provides seamless workflow from design to STL export.
+A high-performance 3D keycap generator that runs in your browser. Supports major profiles and provides seamless workflow from design to STL/3MF export.
 
 ### 🌐 Related Resources
 - **[Keycap Generator Wiki](https://keycapgeneratorwiki.com/ja/home)**: Comprehensive guide for parameters, design tips, and troubleshooting.
@@ -58,16 +59,18 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V63.1)
-- **UI Improvements**: Added collapsible sidebar and minimized statistics panel for a larger workspace.
-- **Lego Stud Support**: Added functionality to place Lego-compatible studs on the top surface.
+### 📝 Update Notes (V63.3)
+- **3MF Export Support**: Added support for .3mf files, allowing body and legends to be exported as separate objects for multi-color printing.
+- **Expanded Textures**: Introduced 5 new procedural patterns (Wood, Hexagon, Ripple, etc.) with a "Global Apply" option.
+- **Granular Control**: Generation modes (Emboss/Engrave/Double-Shot) can now be set independently for Sub Legends, Side Prints, and SVGs.
+- **Usability Enhancements**: Added text alignment presets, bold font support, and batch export format options.
 
 ---
 
 ### 🛠 Technology Stack / 技術スタック
 - **Engine**: [Three.js](https://threejs.org/)
 - **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg)
-- **Exporter**: STLExporter, OBJExporter
+- **Exporter**: STLExporter, OBJExporter, 3MFLoader(Customized)
 
 ### 📄 License / ライセンス
 MIT License.
