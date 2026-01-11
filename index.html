@@ -1437,7 +1437,7 @@ import * as THREE from 'three';
                     (i === 0 && sd.areaRatio > 0.70 && allShapes.length > 1);
                 
                 if (isBackground) {
-                    console.log("V63.43: Removed background shape #" + sd.idx + " (area:" + (sd.areaRatio*100).toFixed(1) + "%, pts:" + sd.numPts + ")");
+                    console.log("V63.3.1: Removed background shape #" + sd.idx + " (area:" + (sd.areaRatio*100).toFixed(1) + "%, pts:" + sd.numPts + ")");
                 } else {
                     validShapes.push(sd.shape);
                 }
@@ -1449,7 +1449,7 @@ import * as THREE from 'three';
             let effectiveSvgThickness = state.svgThickness;
             if ((mode === 'engrave' || mode === 'doubleshot') && effectiveSvgThickness > maxEngraveDepth) {
                 effectiveSvgThickness = maxEngraveDepth;
-                console.log("V63.43: SVG depth limited to " + effectiveSvgThickness.toFixed(2) + "mm");
+                console.log("V63.3.1: SVG depth limited to " + effectiveSvgThickness.toFixed(2) + "mm");
             }
             
             let genThick = effectiveSvgThickness;
@@ -1501,7 +1501,7 @@ import * as THREE from 'three';
                 geo = extrudedGeos[0];
             } else {
                 try {
-                    console.log("V63.65: Merging " + extrudedGeos.length + " SVG shapes with CSG Union...");
+                    console.log("V63.3.1: Merging " + extrudedGeos.length + " SVG shapes with CSG Union...");
                     geo = extrudedGeos[0];
                     for (let i = 1; i < extrudedGeos.length; i++) {
                         const b1 = new Brush(geo); b1.updateMatrixWorld();
@@ -1511,7 +1511,7 @@ import * as THREE from 'three';
                     }
                     geo = BufferGeometryUtils.mergeVertices(geo, 0.08);
                     geo.computeVertexNormals();
-                    console.log("V63.65: CSG Union complete");
+                    console.log("V63.3.1: CSG Union complete");
                 } catch (e) {
                     console.warn("SVG CSG Union failed, falling back to merge:", e);
                     geo = BufferGeometryUtils.mergeGeometries(extrudedGeos);
@@ -1778,7 +1778,7 @@ import * as THREE from 'three';
             try {
                 const p = getParams();
                 
-                console.log("Building export geometry V63.21...");
+                console.log("Building export geometry V63.3.1...");
                 
                 const body = createBodyParts(p, false);
                 const stem = createStemAndRibs(p, false);
@@ -1829,18 +1829,18 @@ import * as THREE from 'three';
                 if (state.svgContent && state.svgVisible) {
                     let svgGeo = createConformedSVGForExport(p, state.svgMode);
                     if (svgGeo) {
-                        console.log("V63.53: Applying enhanced repair to SVG geometry...");
+                        console.log("V63.3.1: Applying enhanced repair to SVG geometry...");
                         svgGeo = repairSVGMesh(svgGeo);
                         
                         if (state.svgMode === 'emboss' && finalKeycapGeo) {
                             try {
-                                console.log("V63.41: CSG Union SVG with body...");
+                                console.log("V63.3.1: CSG Union SVG with body...");
                                 const b1 = new Brush(finalKeycapGeo); b1.updateMatrixWorld();
                                 const b2 = new Brush(svgGeo); b2.updateMatrixWorld();
                                 const res = csgEvaluator.evaluate(b1, b2, ADDITION);
                                 finalKeycapGeo = res.geometry;
                                 finalKeycapGeo = BufferGeometryUtils.mergeVertices(finalKeycapGeo, 0.0001);
-                                console.log("V63.41: CSG Union successful");
+                                console.log("V63.3.1: CSG Union successful");
                                 svgGeo = null;
                             } catch (e) {
                                 console.error("SVG CSG Union failed:", e);
