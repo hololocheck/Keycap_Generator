@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="E2yuICa6eKYqirbpWGXo9DtwvVG9mlCf_g56Qzpse2M" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keycap Generator V63.3.1</title>
+    <title>Keycap Generator V64.0</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 306.06 217.55'%3E%3Cstyle%3E.a%7Bstroke:%23ccc;stroke-miterlimit:10;fill:none%7D.b%7Bfill:aqua;stroke:aqua;stroke-miterlimit:10%7D.c%7Bstroke:aqua;stroke-miterlimit:10;fill:none;stroke-width:4px%7D.d%7Bfill:%23b3b3b3%7D%3C/style%3E%3Cpolygon class='d' points='273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92'/%3E%3Cpolygon class='d' points='273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92'/%3E%3Cpolygon class='d' points='151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26'/%3E%3Cline class='a' x1='35.16' y1='29.06' x2='.61' y2='135.77'/%3E%3Cline class='a' x1='.25' y1='136.62' x2='148.91' y2='216.18'/%3E%3Cline class='a' x1='151.25' y1='80.26' x2='35.16' y2='29.06'/%3E%3Cline class='a' x1='148.91' y1='216.18' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='273.2' y1='41.92' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='305.59' y1='144.63' x2='273.2' y2='41.92'/%3E%3Cpolyline class='a' points='148.91 217.1 149.26 216.93 305.59 144.63'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='273.2' y2='41.92'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='35.16' y2='29.06'/%3E%3Cline class='c' x1='86.1' y1='30.23' x2='119.97' y2='22'/%3E%3Cline class='c' x1='155.68' y1='60.92' x2='86.1' y2='30.23'/%3E%3Cline class='c' x1='224.32' y1='40.72' x2='154.45' y2='60.92'/%3E%3Cline class='c' x1='224.32' y1='41.22' x2='198.07' y2='32.19'/%3E%3Cpath class='b' d='M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z'/%3E%3Cpath class='b' d='M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z'/%3E%3Cpath class='b' d='M134.59,37.59s-10.53-2.15-15.09,0,4.12-3.16,1.67-4.79c-2.44-1.63,6.19,2.8,12.48.1,6.29-2.7-6.94,3.03.94,4.69Z'/%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -111,6 +111,13 @@
         .toggle-input:checked + .toggle-knob::after { left: 20px; background: black; }
         .toggle-label { color: #e0f7fa; font-size: 0.8rem; user-select: none; }
 
+        /* Tooltip hint system */
+        .hint-tooltip { position: fixed; background: rgba(0, 40, 45, 0.95); border: 1px solid var(--accent); color: #e0f7fa; padding: 10px 14px; border-radius: 6px; font-size: 0.75rem; max-width: 280px; z-index: 9999; pointer-events: none; box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3); opacity: 0; transform: translateY(5px); transition: opacity 0.3s ease, transform 0.3s ease; line-height: 1.5; }
+        .hint-tooltip.visible { opacity: 1; transform: translateY(0); }
+        .hint-tooltip::before { content: '💡'; margin-right: 6px; }
+        [data-hint] { position: relative; }
+        [data-hint].hint-highlight { background: rgba(0, 229, 255, 0.1); border-radius: 4px; transition: background 0.3s; }
+
         .file-upload { position: relative; display: inline-block; width: 100%; }
         .file-upload input[type="file"] { display: none; }
         .file-upload-label { display: block; width: 100%; padding: 8px; background: #004d40; border: 1px dashed #00e5ff; color: #e0f7fa; text-align: center; border-radius: 4px; cursor: pointer; font-size: 0.8rem; transition: 0.3s; box-sizing: border-box; }
@@ -145,6 +152,7 @@
         #render-mode-controls select { background: rgba(0,0,0,0.8); border: 1px solid var(--accent); color: var(--accent); padding: 5px; cursor: pointer; width: 100%; }
         body.ui-closed #history-controls { left: 50px; top: 10px; }
         body.ui-closed #render-mode-controls { left: 50px; top: 60px; }
+        body.ui-closed #preset-float-panel { left: 50px; top: 110px; }
 
         #loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 1000; color: var(--accent); font-size: 1.5rem; transition: opacity 0.5s; }
         #force-start-btn { margin-top: 20px; padding: 10px 20px; border: 1px solid white; color: white; background: transparent; cursor: pointer; display: none; }
@@ -188,6 +196,7 @@
         .toast.error { border-color: var(--danger); color: #ffeb3b; }
     </style>
     
+    <script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
     <script type="importmap">
         {
             "imports": {
@@ -202,7 +211,7 @@
 <body>
     <div id="toast-container"></div>
     <div id="loading">
-        <div>Initializing V63.3.1...</div>
+        <div>Initializing V64...</div>
         <div id="error-log"></div>
         <div id="batch-progress"></div>
         <button id="force-start-btn">FORCE START</button>
@@ -237,6 +246,33 @@
         </select>
     </div>
 
+    <div id="preset-float-panel" style="position:absolute; top:110px; left:450px; z-index:10; transition:all 0.3s ease;">
+        <button id="btn-show-presets" style="background:rgba(0,0,0,0.8); border:1px solid #ff9800; color:#ff9800; padding:8px 12px; border-radius:4px; cursor:pointer; font-size:0.8rem; display:none;">📁 プリセット (<span id="preset-count">0</span>)</button>
+        <div id="preset-dropdown" style="display:none; margin-top:5px; background:rgba(20,20,20,0.95); border:1px solid #ff9800; border-radius:6px; padding:10px; min-width:220px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <div style="color:#ff9800; font-size:0.75rem; font-weight:bold;">📁 読み込み済み</div>
+                <button id="btn-clear-all-presets" style="background:#ff5252; border:none; color:white; padding:3px 8px; border-radius:3px; cursor:pointer; font-size:0.65rem;" data-i18n="btn_clear_all">全削除</button>
+            </div>
+            <div style="display:flex; gap:5px; align-items:center;">
+                <select id="preset-switcher-float" style="flex:1; background:#111; border:1px solid #ff9800; color:#fff; padding:6px; font-size:0.8rem; border-radius:3px; cursor:pointer;"></select>
+                <button id="btn-remove-preset" style="background:#ff5252; border:none; color:white; width:28px; height:28px; border-radius:3px; cursor:pointer; font-size:1rem;" title="選択中を削除">×</button>
+            </div>
+            <div id="preset-preview-float" style="margin-top:10px; font-size:0.7rem; color:#aaa; background:#000; padding:8px; border-radius:4px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span data-i18n="pv_profile">Profile:</span><span id="pf-profile" style="color:#ff9800;">-</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span data-i18n="pv_size">Size:</span><span id="pf-size" style="color:#ff9800;">-</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span data-i18n="pv_shape">Shape:</span><span id="pf-shape" style="color:#ff9800;">-</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span data-i18n="pv_text">Text:</span><span id="pf-text" style="color:#ff9800;">-</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span data-i18n="pv_text2">Sub Text:</span><span id="pf-text2" style="color:#ff9800;">-</span></div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:3px;"><span data-i18n="pv_side">Side:</span><span id="pf-side" style="color:#ff9800;">-</span></div>
+                <div style="display:flex; justify-content:space-between;"><span data-i18n="pv_svg">SVG:</span><span id="pf-svg" style="color:#ff9800;">-</span></div>
+            </div>
+            <div style="display:flex; gap:5px; margin-top:8px;">
+                <button id="btn-prev-preset" style="flex:1; background:#222; border:1px solid #555; color:#fff; padding:5px; border-radius:3px; cursor:pointer;" data-i18n="btn_prev">◀ 前へ</button>
+                <button id="btn-next-preset" style="flex:1; background:#222; border:1px solid #555; color:#fff; padding:5px; border-radius:3px; cursor:pointer;" data-i18n="btn_next">次へ ▶</button>
+            </div>
+        </div>
+    </div>
+
     <div id="canvas-container"></div>
     <button id="btn-toggle-ui" title="Toggle Sidebar">◀</button>
 
@@ -247,7 +283,7 @@
                     <svg id="app-logo" onclick="location.reload()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55">
                          <defs><style>.cls-1{stroke:#ccc;}.cls-1,.cls-2,.cls-3{stroke-miterlimit:10;}.cls-1,.cls-3{fill:none;}.cls-2{fill:aqua;}.cls-2,.cls-3{stroke:aqua;}.cls-3{stroke-width:4px;}.cls-4{fill:#b3b3b3;}</style></defs><g><g><polygon class="cls-4" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon class="cls-4" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon class="cls-4" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/></g><g><line class="cls-1" x1="35.16" y1="29.06" x2=".61" y2="135.77"/><line class="cls-1" x1=".25" y1="136.62" x2="148.91" y2="216.18"/><line class="cls-1" x1="151.25" y1="80.26" x2="35.16" y2="29.06"/><line class="cls-1" x1="148.91" y1="216.18" x2="151.25" y2="80.26"/><line class="cls-1" x1="273.2" y1="41.92" x2="151.25" y2="80.26"/><line class="cls-1" x1="305.59" y1="144.63" x2="273.2" y2="41.92"/><polyline class="cls-1" points="148.91 217.1 149.26 216.93 305.59 144.63"/><line class="cls-1" x1="152.73" y1=".49" x2="273.2" y2="41.92"/><line class="cls-1" x1="152.73" y1=".49" x2="35.16" y2="29.06"/></g></g><g><line class="cls-3" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line class="cls-3" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><line class="cls-3" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/><line class="cls-3" x1="224.32" y1="41.22" x2="198.07" y2="32.19"/><path class="cls-2" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/><path class="cls-2" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/></g>
                     </svg>
-                    <div><h2>Keycap Gen</h2><span class="ver">V63.3.1</span></div>
+                    <div><h2>Keycap Gen</h2><span class="ver">V64</span></div>
                 </div>
                 <div style="display:flex; align-items:center;">
                     <div class="social-links">
@@ -261,34 +297,81 @@
             <div id="nav-bar">
                 <div class="nav-row"><select id="section-select"><option value="" data-i18n="nav_jump">--- Jump to Section ---</option><option value="sec-basic" data-i18n="nav_basic">Basic Size</option><option value="sec-structure" data-i18n="nav_structure">Structure</option><option value="sec-shape" data-i18n="nav_shape">Shape</option><option value="sec-texture" data-i18n="nav_texture">Texture Map</option><option value="sec-utility" data-i18n="nav_utility">Utility</option><option value="sec-import" data-i18n="nav_import">Import 3D</option><option value="sec-stem" data-i18n="nav_stem">Stem</option><option value="sec-text" data-i18n="nav_text">Text / Legend</option><option value="sec-svg" data-i18n="nav_svg">SVG Icon</option><option value="sec-color" data-i18n="nav_color">Colors</option><option value="sec-preset" data-i18n="nav_preset">Presets</option><option value="sec-export" data-i18n="nav_export">Export</option></select></div>
                 <div class="nav-row"><input type="text" id="search-box" placeholder="🔍 Search settings..."></div>
+                <div class="nav-row" style="justify-content:flex-start; padding:2px 0;"><label class="toggle-switch" style="width:auto; margin:0;"><input type="checkbox" id="enable-hints" class="toggle-input" checked><span class="toggle-knob" style="width:28px; height:14px;"></span><span class="toggle-label" style="font-size:0.7rem;" data-i18n="lbl_show_hints">💡 ヒント表示</span></label></div>
             </div>
         </div>
         <div id="ui-scroll-area">
             <h3 id="sec-basic" data-i18n="h_basic" style="margin-top:0;">基本サイズ</h3>
-            <div class="control-group"><label data-i18n="lbl_unit_size">基本ピッチ (Unit Size)</label><select id="unit-size-select"><option value="19.05">19.05mm (Standard MX)</option><option value="19.00">19.00mm (Just)</option><option value="18.00">18.00mm</option><option value="17.00">17.00mm (Choc/Narrow)</option><option value="16.00">16.00mm (Mini)</option></select></div>
-            <div class="control-group"><label><span data-i18n="lbl_u_size">キーサイズ (U)</span> <span id="v-u-size" class="val" data-target="u-size">1.0</span></label><input type="range" id="u-size" min="1.0" max="10.0" step="0.25" value="1.0"></div>
-            <div class="control-group" style="margin-top:5px; padding-top:5px; border-top:1px dashed #333;"><label>スタビライザー (Stabilizer)</label><select id="stabilizer-type"><option value="auto">Auto (自動)</option><option value="custom">Custom (手動設定)</option></select><div id="stabilizer-custom-ui" style="display:none; margin-top:5px;"><label>Pitch (Center Offset) <span id="v-stabilizer-offset" class="val">0.0</span>mm</label><input type="range" id="stabilizer-offset" min="0" max="150" step="0.1" value="0"><div style="font-size:0.7em; color:#aaa;">※中心からステム中心までの距離</div></div></div>
-            <div class="control-group"><label data-i18n="lbl_profile">プロファイル</label><select id="profile-select"><option value="cherry">Cherry Profile</option><option value="oem">OEM Profile</option><option value="sa">SA Profile</option><option value="xda">XDA Profile</option><option value="dsa">DSA Profile</option></select></div>
-            <div class="control-group" id="row-group"><label data-i18n="lbl_row">行 (Row)</label><select id="row-select"><option value="R4">R4 (ESC/Num)</option><option value="R3">R3 (QWERTY)</option><option value="R2">R2 (ASDF)</option><option value="R1">R1 (ZXCV/Space)</option></select></div>
+            <div class="control-group"><label data-i18n="lbl_unit_size" data-hint="hint_unit_size">基本ピッチ (Unit Size)</label><select id="unit-size-select"><option value="19.05">19.05mm (Standard MX)</option><option value="19.00">19.00mm (Just)</option><option value="18.00">18.00mm</option><option value="17.00">17.00mm (Choc/Narrow)</option><option value="16.00">16.00mm (Mini)</option></select></div>
+            <div class="control-group"><label data-hint="hint_key_size"><span data-i18n="lbl_u_size">キーサイズ (U)</span> <span id="v-u-size" class="val" data-target="u-size">1.0</span></label><input type="range" id="u-size" min="1.0" max="10.0" step="0.25" value="1.0"></div>
+            <div class="control-group" style="margin-top:5px; padding-top:5px; border-top:1px dashed #333;"><label data-hint="hint_stabilizer">スタビライザー (Stabilizer)</label><select id="stabilizer-type"><option value="auto">Auto (自動)</option><option value="custom">Custom (手動設定)</option></select><div id="stabilizer-custom-ui" style="display:none; margin-top:5px;"><label>Pitch (Center Offset) <span id="v-stabilizer-offset" class="val">0.0</span>mm</label><input type="range" id="stabilizer-offset" min="0" max="150" step="0.1" value="0"><div style="font-size:0.7em; color:#aaa;">※中心からステム中心までの距離</div></div></div>
+            <div class="control-group"><label data-i18n="lbl_profile" data-hint="hint_profile">プロファイル</label><select id="profile-select"><option value="cherry">Cherry Profile</option><option value="oem">OEM Profile</option><option value="sa">SA Profile</option><option value="xda">XDA Profile</option><option value="dsa">DSA Profile</option><option value="custom">Custom Profile (V64)</option></select></div>
+            <div id="custom-profile-panel" class="v60-sub-panel" style="display:none; border-color:#4caf50;">
+                <label style="color:#4caf50; font-weight:bold;">🆕 カスタムプロファイル設定</label>
+                <div class="control-group"><label>高さ <span id="v-custom-height" class="val">9.5</span>mm</label><input type="range" id="custom-height" min="5.0" max="20.0" step="0.5" value="9.5"></div>
+                <div class="control-group"><label>角度 <span id="v-custom-angle" class="val">3</span>°</label><input type="range" id="custom-angle" min="-15" max="15" step="1" value="3"></div>
+            </div>
+            <div class="control-group" id="row-group"><label data-i18n="lbl_row" data-hint="hint_row">行 (Row)</label><select id="row-select"><option value="R4">R4 (ESC/Num)</option><option value="R3">R3 (QWERTY)</option><option value="R2">R2 (ASDF)</option><option value="R1">R1 (ZXCV/Space)</option></select></div>
             
             <h3 id="sec-structure" data-i18n="h_structure">構造・ボッチ</h3>
-            <div class="control-group"><label style="color:#00e5ff; font-weight:bold;"><span data-i18n="lbl_round_corner">角の丸み (Fillet)</span> <span><span id="v-round-corner" class="val" data-target="round-corner">0.0</span>mm</span></label><input type="range" id="round-corner" min="0.0" max="7.0" step="0.1" value="0.0"><div style="font-size:0.7em; color:#aaa;" data-i18n="note_round">※Squircle Mapping (高速・安定)</div></div>
-            <div class="control-group"><label><span data-i18n="lbl_wall_thick">壁の厚み</span> <span><span id="v-wall-thick" class="val" data-target="wall-thick">1.5</span>mm</span></label><input type="range" id="wall-thick" min="0.8" max="4.0" step="0.1" value="1.5"></div>
-            <div class="control-group"><label style="color:#ff80ab;"><span data-i18n="lbl_rib_shorten">リブ短縮 (底上げ)</span> <span><span id="v-rib-shorten" class="val" data-target="rib-shorten">4.3</span>mm</span></label><input type="range" id="rib-shorten" min="0.0" max="10.0" step="0.1" value="4.3"></div>
-            <label class="toggle-switch"><input type="checkbox" id="enable-ribs" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_enable_ribs">補強リブ (十字)</span></label>
+            <div class="control-group"><label style="color:#00e5ff; font-weight:bold;" data-hint="hint_fillet"><span data-i18n="lbl_round_corner">角の丸み (Fillet)</span> <span><span id="v-round-corner" class="val" data-target="round-corner">0.0</span>mm</span></label><input type="range" id="round-corner" min="0.0" max="7.0" step="0.1" value="0.0"><div style="font-size:0.7em; color:#aaa;" data-i18n="note_round">※Squircle Mapping (高速・安定)</div></div>
+            <div class="control-group"><label data-hint="hint_wall_thick"><span data-i18n="lbl_wall_thick">壁の厚み</span> <span><span id="v-wall-thick" class="val" data-target="wall-thick">1.5</span>mm</span></label><input type="range" id="wall-thick" min="0.8" max="4.0" step="0.1" value="1.5"></div>
+            <div class="control-group"><label style="color:#ff80ab;" data-hint="hint_rib_shorten"><span data-i18n="lbl_rib_shorten">リブ短縮 (底上げ)</span> <span><span id="v-rib-shorten" class="val" data-target="rib-shorten">4.3</span>mm</span></label><input type="range" id="rib-shorten" min="0.0" max="10.0" step="0.1" value="4.3"></div>
+            <label class="toggle-switch" data-hint="hint_enable_ribs"><input type="checkbox" id="enable-ribs" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_enable_ribs">補強リブ (十字)</span></label>
             <div class="control-group" style="margin-top:5px; border-top:1px solid #333; padding-top:5px;">
-                <label class="toggle-switch"><input type="checkbox" id="homing-bump" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#ff4081;" data-i18n="lbl_homing_bump">ホームポジション突起</span></label>
-                <select id="homing-type" style="margin-bottom: 5px;"><option value="round" data-i18n="opt_bump_round">丸型 (Round)</option><option value="bar" data-i18n="opt_bump_bar">長方形 (Bar)</option></select>
+                <label class="toggle-switch" data-hint="hint_homing_bump"><input type="checkbox" id="homing-bump" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#ff4081;" data-i18n="lbl_homing_bump">ホームポジション突起</span></label>
+                <select id="homing-type" style="margin-bottom: 5px;" data-hint="hint_bump_type"><option value="round" data-i18n="opt_bump_round">丸型 (Round)</option><option value="bar" data-i18n="opt_bump_bar">長方形 (Bar)</option></select>
                 <div class="control-row"><div style="flex:1"><label><span data-i18n="lbl_pos_x">位置 X</span> <span id="v-bump-x" class="val" data-target="bump-x">0.0</span></label><input type="range" id="bump-x" min="-10" max="10" step="0.1" value="0.0"></div><div style="flex:1"><label><span data-i18n="lbl_pos_z">位置 Z</span> <span id="v-bump-z" class="val" data-target="bump-z">0.0</span></label><input type="range" id="bump-z" min="-10" max="10" step="0.1" value="0.0"></div></div>
                 <div class="control-group"><label><span data-i18n="lbl_bump_offset">高さ微調整 (Offset)</span> <span><span id="v-bump-offset-y" class="val" data-target="bump-offset-y">0.0</span>mm</span></label><input type="range" id="bump-offset-y" min="-5.0" max="5.0" step="0.1" value="0.0"></div>
             </div>
             
             <h3 id="sec-shape" data-i18n="h_shape">形状</h3>
-            <div class="control-group"><label><span data-i18n="lbl_top_scale">上面サイズ (Taper)</span> <span id="v-top-scale" class="val" data-target="top-scale">1.00</span></label><input type="range" id="top-scale" min="0.5" max="1.0" step="0.01" value="1.0"></div>
-            <div class="control-group"><label data-i18n="lbl_dish_type">上面形状 (Dish Type)</label><select id="dish-type"><option value="cylindrical" data-i18n="opt_dish_cyl">Cylindrical (円筒)</option><option value="spherical" data-i18n="opt_dish_sph">Spherical (球)</option><option value="flat" data-i18n="opt_dish_flat">Flat (平)</option></select></div>
+            <div class="v60-sub-panel" style="border-color:#ba68c8; margin-bottom:10px;">
+                <label style="color:#ba68c8; font-weight:bold;" data-i18n="lbl_key_shape_type" data-hint="hint_key_shape">🆕 キー形状タイプ (V64)</label>
+                <select id="key-shape-type" style="margin-top:5px;">
+                    <option value="rectangle" data-i18n="opt_shape_rect">四角形 (Rectangle)</option>
+                    <option value="rounded" data-i18n="opt_shape_round">角丸 (Rounded)</option>
+                    <option value="circle" data-i18n="opt_shape_circle">円形 (Circle)</option>
+                    <option value="polygon" data-i18n="opt_shape_polygon">多角形 (Polygon)</option>
+                    <option value="star" data-i18n="opt_shape_star">星形 (Star)</option>
+                    <option value="iso-enter" data-i18n="opt_shape_iso">ISO Enter (L字形)</option>
+                </select>
+                <div id="shape-polygon-options" style="display:none; margin-top:8px;">
+                    <label data-i18n="lbl_polygon_sides">辺の数</label> <span id="v-polygon-sides" class="val">6</span>
+                    <input type="range" id="polygon-sides" min="3" max="12" step="1" value="6">
+                </div>
+                <div id="shape-star-options" style="display:none; margin-top:8px;">
+                    <label data-i18n="lbl_star_points">頂点数</label> <span id="v-star-points" class="val">5</span>
+                    <input type="range" id="star-points" min="3" max="12" step="1" value="5">
+                    <label data-i18n="lbl_star_inner">内径比</label> <span id="v-star-inner" class="val">0.50</span>
+                    <input type="range" id="star-inner" min="0.2" max="0.8" step="0.05" value="0.5">
+                </div>
+                <div id="shape-iso-options" style="display:none; margin-top:8px;">
+                    <label style="color:#ff9800;" data-i18n="lbl_iso_settings">ISO/JIS Enter 設定</label>
+                    <div class="control-row">
+                        <div style="flex:1"><label data-i18n="lbl_iso_top_w">上部幅</label> <span id="v-iso-top-width" class="val">1.50</span>U<input type="range" id="iso-top-width" min="1.25" max="2.0" step="0.25" value="1.5"></div>
+                    </div>
+                    <div class="control-row">
+                        <div style="flex:1"><label data-i18n="lbl_iso_bottom_w">下部幅</label> <span id="v-iso-bottom-width" class="val">1.25</span>U<input type="range" id="iso-bottom-width" min="1.0" max="1.5" step="0.25" value="1.25"></div>
+                    </div>
+                    <div class="control-row">
+                        <div style="flex:1"><label data-i18n="lbl_iso_total_h">全体の高さ</label> <span id="v-iso-height" class="val">2.00</span>U<input type="range" id="iso-height" min="1.5" max="2.5" step="0.25" value="2.0"></div>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:5px;">
+                        <div style="flex:1"><label data-i18n="lbl_stem_x">ステムX</label> <span id="v-iso-stem-x" class="val">2.4</span><input type="range" id="iso-stem-x" min="-15" max="15" step="0.5" value="2.4"></div>
+                        <div style="flex:1"><label data-i18n="lbl_stem_z">ステムZ</label> <span id="v-iso-stem-z" class="val">0.0</span><input type="range" id="iso-stem-z" min="-20" max="25" step="0.5" value="0"></div>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:5px;">
+                        <div style="flex:1"><label data-i18n="lbl_stab_top_z">上スタビZ</label> <span id="v-iso-stab-top-z" class="val">-12.0</span><input type="range" id="iso-stab-top-z" min="-20" max="15" step="0.5" value="-12"></div>
+                        <div style="flex:1"><label data-i18n="lbl_stab_bottom_z">下スタビZ</label> <span id="v-iso-stab-bottom-z" class="val">12.0</span><input type="range" id="iso-stab-bottom-z" min="-5" max="25" step="0.5" value="12"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group"><label data-hint="hint_taper"><span data-i18n="lbl_top_scale">上面サイズ (Taper)</span> <span id="v-top-scale" class="val" data-target="top-scale">1.00</span></label><input type="range" id="top-scale" min="0.5" max="1.0" step="0.01" value="1.0"></div>
+            <div class="control-group"><label data-i18n="lbl_dish_type" data-hint="hint_dish_type">上面形状 (Dish Type)</label><select id="dish-type"><option value="cylindrical" data-i18n="opt_dish_cyl">Cylindrical (円筒)</option><option value="spherical" data-i18n="opt_dish_sph">Spherical (球)</option><option value="flat" data-i18n="opt_dish_flat">Flat (平)</option></select></div>
             
             <div class="v61-texture-panel">
-                <label style="color:#e91e63; font-weight:bold;" data-i18n="lbl_texture">表面プロシージャル (Procedural)</label>
+                <label style="color:#e91e63; font-weight:bold;" data-i18n="lbl_texture" data-hint="hint_texture">表面プロシージャル (Procedural)</label>
                 <select id="texture-type" style="margin-bottom:5px;">
                     <option value="none" data-i18n="opt_tex_none">None (なし)</option>
                     <option value="noise" data-i18n="opt_tex_noise">Noise (梨地/Sand)</option>
@@ -314,7 +397,7 @@
 
             <h3 id="sec-texture" data-i18n="h_texture_map" style="color:#ba68c8; border-color:#ba68c8;">画像テクスチャ (Image Map)</h3>
             <div class="v63-texture-map-panel">
-                <div class="file-upload"><label for="img-texture-input" class="file-upload-label" style="border-color:#ba68c8; color:#e1bee7;" data-i18n="btn_upload_img">📁 画像読込 (PNG/JPG)</label><input type="file" id="img-texture-input" accept="image/*"></div>
+                <div class="file-upload" data-hint="hint_img_upload"><label for="img-texture-input" class="file-upload-label" style="border-color:#ba68c8; color:#e1bee7;" data-i18n="btn_upload_img">📁 画像読込 (PNG/JPG)</label><input type="file" id="img-texture-input" accept="image/*"></div>
                 <div class="control-row" style="margin-top:5px; align-items:center;">
                     <label class="toggle-switch" style="flex:1; margin:0;"><input type="checkbox" id="img-texture-visible" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_visible">表示 (Visible)</span></label>
                     <button class="danger btn-small" id="btn-clear-img-texture" style="width:30px; margin:0;">×</button>
@@ -331,14 +414,14 @@
 
             <h3 id="sec-stem" data-i18n="h_stem">ステム設定</h3>
             <div class="control-group"><label style="color:#80deea;" data-i18n="lbl_stem_type">軸タイプ: Cherry MX (固定)</label></div>
-            <div class="control-group"><label style="color:#ffeb3b;"><span data-i18n="lbl_stem_diameter">ステム外径 (Diameter)</span> <span><span id="v-stem-diameter" class="val" data-target="stem-diameter">5.50</span>mm</span></label><input type="range" id="stem-diameter" min="5.0" max="7.0" step="0.05" value="5.50"></div>
-            <div class="control-group"><label style="color:#ffeb3b;"><span data-i18n="lbl_clearance">クリアランス</span> <span><span id="v-stem-clearance" class="val" data-target="stem-clearance">0.30</span>mm</span></label><input type="range" id="stem-clearance" min="0.0" max="1.0" step="0.01" value="0.30"></div>
+            <div class="control-group"><label style="color:#ffeb3b;" data-hint="hint_stem_diameter"><span data-i18n="lbl_stem_diameter">ステム外径 (Diameter)</span> <span><span id="v-stem-diameter" class="val" data-target="stem-diameter">5.50</span>mm</span></label><input type="range" id="stem-diameter" min="5.0" max="7.0" step="0.05" value="5.50"></div>
+            <div class="control-group"><label style="color:#ffeb3b;" data-hint="hint_clearance"><span data-i18n="lbl_clearance">クリアランス</span> <span><span id="v-stem-clearance" class="val" data-target="stem-clearance">0.30</span>mm</span></label><input type="range" id="stem-clearance" min="0.0" max="1.0" step="0.01" value="0.30"></div>
             <div class="control-group" style="border-top:1px solid #333; margin-top:5px; padding-top:5px;">
-                <label class="toggle-switch"><input type="checkbox" id="enable-stem-extension" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#80deea;">長さを拡張 (Stem Extension)</span></label>
+                <label class="toggle-switch" data-hint="hint_stem_ext"><input type="checkbox" id="enable-stem-extension" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#80deea;">長さを拡張 (Stem Extension)</span></label>
                 <div id="stem-ext-control" style="display:none; margin-top:5px;"><label>Extension <span id="v-stem-extension" class="val">1.0</span>mm</label><input type="range" id="stem-extension" min="0.0" max="5.0" step="0.1" value="1.0"></div>
             </div>
-            <label class="toggle-switch" style="margin-top:5px;"><input type="checkbox" id="box-stem" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#ffeb3b;">Box Stem (ボックス軸)</span></label>
-            <label class="toggle-switch"><input type="checkbox" id="lego-stud" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#ff5722;">Lego Stud (天面ポッチ)</span></label>
+            <label class="toggle-switch" style="margin-top:5px;" data-hint="hint_box_stem"><input type="checkbox" id="box-stem" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#ffeb3b;">Box Stem (ボックス軸)</span></label>
+            <label class="toggle-switch" data-hint="hint_lego_stud"><input type="checkbox" id="lego-stud" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" style="color:#ff5722;">Lego Stud (天面ポッチ)</span></label>
             <div id="lego-adj-panel" style="display:none; background:rgba(255,87,34,0.1); padding:5px; border-radius:4px; margin-bottom:5px; border:1px dashed #ff5722;">
                 <div class="control-row"><div style="flex:1"><label>Pos X <span id="v-lego-x" class="val">0.0</span></label><input type="range" id="lego-x" min="-10" max="10" step="0.1" value="0.0"></div><div style="flex:1"><label>Pos Z <span id="v-lego-z" class="val">0.0</span></label><input type="range" id="lego-z" min="-10" max="10" step="0.1" value="0.0"></div></div>
                 <div class="control-row"><div style="flex:1"><label>Pos Y <span id="v-lego-y" class="val">0.0</span></label><input type="range" id="lego-y" min="-5" max="5" step="0.1" value="0.0"></div><div style="flex:1"><label>Clearance <span id="v-lego-clear" class="val">0.0</span></label><input type="range" id="lego-clear" min="-0.5" max="0.5" step="0.05" value="0.0"></div></div>
@@ -347,36 +430,37 @@
             <div class="section-sep"></div>
             <h3 id="sec-utility" style="color:#00e5ff;">Utility</h3>
             <div class="control-group" style="display:flex; gap:5px; align-items:center;">
-                <button id="btn-random" class="accent" style="border-color:#e040fb; color:#e040fb; flex:1;">🎲 Randomizer</button>
-                <button id="btn-reset-params" class="danger btn-square" title="Reset Params to Default" style="width:40px; margin-top:5px;">×</button>
+                <button id="btn-random" class="accent" style="border-color:#e040fb; color:#e040fb; flex:1;" data-hint="hint_randomizer">🎲 Randomizer</button>
+                <button id="btn-reset-params" class="danger btn-square" title="Reset Params to Default" style="width:40px; margin-top:5px;" data-hint="hint_reset">×</button>
             </div>
             
             <h3 id="sec-import" style="color:#ff9800; margin-top:10px; border-bottom:1px solid #ff9800;" data-i18n="h_import">外部モデル (Import 3D)</h3>
             <div class="v60-import-panel">
                 <div class="control-group" style="display:flex; gap:5px; align-items: flex-end;">
-                    <div class="file-upload" style="flex:1;"><label for="model-file-input" class="file-upload-label" style="border-color:#ff9800; color:#ff9800;">📁 STLモデル読込</label><input type="file" id="model-file-input" accept=".stl"></div>
+                    <div class="file-upload" style="flex:1;" data-hint="hint_import_stl"><label for="model-file-input" class="file-upload-label" style="border-color:#ff9800; color:#ff9800;" data-i18n="btn_load_stl">📁 STLモデル読込</label><input type="file" id="model-file-input" accept=".stl"></div>
                     <button class="danger btn-square" id="btn-clear-model" title="モデル削除">×</button>
                 </div>
                 <label class="toggle-switch" style="margin-top:5px;"><input type="checkbox" id="model-visible" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_visible">表示 (Visible)</span></label>
-                <div class="control-group" style="margin-top:5px; background:rgba(0,0,0,0.2); padding:5px; border-radius:4px;"><label style="color:#ff9800;">合成モード (Operation)</label><select id="model-operation"><option value="union">Union (結合 - 追加)</option><option value="subtract">Subtract (型抜き - 彫刻)</option></select><div style="font-size:0.7em; color:#aaa; margin-top:2px;">※Subtractは処理に時間がかかります</div></div>
+                <div class="control-group" style="margin-top:5px; background:rgba(0,0,0,0.2); padding:5px; border-radius:4px;" data-hint="hint_import_op"><label style="color:#ff9800;">合成モード (Operation)</label><select id="model-operation"><option value="union">Union (結合 - 追加)</option><option value="subtract">Subtract (型抜き - 彫刻)</option></select><div style="font-size:0.7em; color:#aaa; margin-top:2px;">※Subtractは処理に時間がかかります</div></div>
                 <div class="control-group"><label>Pivot / Transform (位置/回転)</label><div class="control-row"><div style="flex:1"><label>Scale <span id="v-model-scale" class="val">1.0</span></label><input type="range" id="model-scale" min="0.1" max="5.0" step="0.1" value="1.0"></div></div><div class="control-row"><div style="flex:1"><label>X <span id="v-model-x" class="val">0.0</span></label><input type="range" id="model-x" min="-15" max="15" step="0.5" value="0"></div><div style="flex:1"><label>Z <span id="v-model-z" class="val">0.0</span></label><input type="range" id="model-z" min="-15" max="15" step="0.5" value="0"></div></div><div class="control-row"><div style="flex:1"><label>Y-Pos <span id="v-model-y" class="val">0.0</span></label><input type="range" id="model-y" min="-10" max="20" step="0.5" value="0"></div></div><div class="control-row"><div style="flex:1"><label>Rot X <span id="v-model-rx" class="val">0</span>°</label><input type="range" id="model-rx" min="-180" max="180" step="15" value="0"></div><div style="flex:1"><label>Rot Y <span id="v-model-ry" class="val">0</span>°</label><input type="range" id="model-ry" min="-180" max="180" step="15" value="0"></div><div style="flex:1"><label>Rot Z <span id="v-model-rz" class="val">0</span>°</label><input type="range" id="model-rz" min="-180" max="180" step="15" value="0"></div></div></div>
             </div>
 
             <h3 id="sec-text" data-i18n="h_text">文字設定</h3>
             <div class="control-group">
-                <label class="toggle-switch"><input type="checkbox" id="enable-text" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_enable_text">文字を生成する</span></label>
-                <textarea id="text-content" rows="2" placeholder="例: A&#13;&#10;{&#13;&#10;["></textarea><div style="font-size:0.7em; color:#aaa; text-align:right;" data-i18n="note_multiline">※改行で2段印字が可能</div>
+                <label class="toggle-switch" data-hint="hint_enable_text"><input type="checkbox" id="enable-text" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_enable_text">文字を生成する</span></label>
+                <textarea id="text-content" rows="2" placeholder="例: A&#13;&#10;{&#13;&#10;[" data-hint="hint_text_input"></textarea><div style="font-size:0.7em; color:#aaa; text-align:right;" data-i18n="note_multiline">※改行で2段印字が可能</div>
             </div>
             
-            <div class="control-group"><label data-i18n="lbl_font">フォント</label><select id="font-family" style="display:none;"><option value="helvetiker">Helvetiker</option><option value="helvetiker_bold">Helvetiker Bold</option><option value="optimer">Optimer</option><option value="optimer_bold">Optimer Bold</option><option value="gentilis">Gentilis</option><option value="gentilis_bold">Gentilis Bold</option><option value="droid_sans">Droid Sans</option><option value="droid_sans_bold">Droid Sans Bold</option><option value="droid_serif">Droid Serif</option><option value="droid_serif_bold">Droid Serif Bold</option></select><div class="custom-select-container" id="custom-font-ui"><div class="custom-select-head" id="custom-font-head">Helvetiker ▼</div><div class="custom-select-list" id="custom-font-list"></div></div></div>
-            <div class="control-group" style="border: 1px dashed #555; padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.3); margin-top: 5px;"><div class="info-link" data-i18n="note_font_upload">※.ttf などをそのまま読み込むことはできません。<br><a href="http://gero3.github.io/facetype.js/" target="_blank">Facetype.js</a> などでJSONに変換したファイルを使用してください。</div><div class="file-upload"><label for="font-file-input" class="file-upload-label" data-i18n="btn_upload_font">📁 カスタムフォント (.json)</label><input type="file" id="font-file-input" accept=".json"></div></div>
+            <div class="control-group" data-hint="hint_font"><label data-i18n="lbl_font">フォント</label><select id="font-family" style="display:none;"><option value="helvetiker">Helvetiker</option><option value="helvetiker_bold">Helvetiker Bold</option><option value="optimer">Optimer</option><option value="optimer_bold">Optimer Bold</option><option value="gentilis">Gentilis</option><option value="gentilis_bold">Gentilis Bold</option><option value="droid_sans">Droid Sans</option><option value="droid_sans_bold">Droid Sans Bold</option><option value="droid_serif">Droid Serif</option><option value="droid_serif_bold">Droid Serif Bold</option></select><div class="custom-select-container" id="custom-font-ui"><div class="custom-select-head" id="custom-font-head">Helvetiker ▼</div><div class="custom-select-list" id="custom-font-list"></div></div></div>
+            <div class="control-group" style="border: 1px dashed #555; padding: 8px; border-radius: 4px; background: rgba(0,0,0,0.3); margin-top: 5px;"><div class="info-link" data-i18n="note_font_upload">※.ttf などをそのまま読み込むことはできません。<br><a href="http://gero3.github.io/facetype.js/" target="_blank">Facetype.js</a> などでJSONに変換したファイルを使用してください。</div><div class="file-upload" data-hint="hint_custom_font"><label for="font-file-input" class="file-upload-label" data-i18n="btn_upload_font">📁 カスタムフォント (.json)</label><input type="file" id="font-file-input" accept=".json"></div></div>
 
-            <div class="control-group" style="background:rgba(0,229,255,0.1); padding:5px; border-radius:4px; margin-bottom:5px; margin-top:5px;">
+            <div class="control-group" style="background:rgba(0,229,255,0.1); padding:5px; border-radius:4px; margin-bottom:5px; margin-top:5px;" data-hint="hint_text_mode">
                 <label data-i18n="lbl_text_mode" style="color:#00e5ff; font-weight:bold;">生成モード (Mode)</label>
                 <select id="text-mode">
                     <option value="emboss" data-i18n="opt_mode_emboss">Emboss (浮き出し)</option>
                     <option value="engrave" data-i18n="opt_mode_engrave">Engrave (刻印/掘り込み)</option>
                     <option value="doubleshot" data-i18n="opt_mode_doubleshot">Double-Shot (埋め込み)</option>
+                    <option value="lithophane" data-i18n="opt_mode_lithophane">Lithophane (バックライト透過)</option>
                 </select>
                 <div style="font-size:0.7em; color:#aaa; margin-top:3px;" data-i18n="note_engrave">※Engraveは計算処理に時間がかかります</div>
             </div>
@@ -384,15 +468,15 @@
             <div class="control-group">
                 <div class="control-row">
                     <div style="flex:1"><label><span data-i18n="lbl_size">サイズ</span> <span id="v-font-size" class="val" data-target="font-size">8.0</span></label><input type="range" id="font-size" min="3" max="20" step="0.5" value="8.0"></div>
-                    <div style="flex:1">
+                    <div style="flex:1" data-hint="hint_text_height">
                         <label><span data-i18n="lbl_thickness">深さ/高さ</span> <span id="v-text-height" class="val" data-target="text-height">0.5</span></label>
                         <div style="display:flex; align-items:center; gap:5px;"><input type="range" id="text-height" min="0.1" max="5.0" step="0.1" value="0.5" disabled><label class="toggle-switch" style="margin:0; width:auto;" title="厚みを固定"><input type="checkbox" id="lock-thickness" checked class="toggle-input"><span class="toggle-knob" style="width:28px; height:14px;"></span></label></div>
                     </div>
                 </div>
             </div>
             
-            <label class="toggle-switch"><input type="checkbox" id="text-conform" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_conform">曲面に合わせる (Conform)</span></label>
-            <div class="control-group"><label data-i18n="lbl_align_preset">文字配置 (プリセット)</label>
+            <label class="toggle-switch" data-hint="hint_conform"><input type="checkbox" id="text-conform" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_conform">曲面に合わせる (Conform)</span></label>
+            <div class="control-group" data-hint="hint_align_preset"><label data-i18n="lbl_align_preset">文字配置 (プリセット)</label>
                 <div class="control-row" style="margin-bottom:2px;">
                     <button id="btn-align-tl" class="secondary btn-small" style="margin:0;" data-i18n="btn_align_tl">↖ TL</button>
                     <button id="btn-align-tr" class="secondary btn-small" style="margin:0;" data-i18n="btn_align_tr">↗ TR</button>
@@ -406,35 +490,36 @@
             <div class="control-group"><label data-i18n="lbl_pos_xz_fine">位置 X / Z (微調整)</label><div class="control-row"><input type="range" id="pos-x" min="-15" max="15" step="0.5" value="0" title="X Position"><input type="range" id="pos-z" min="-15" max="15" step="0.5" value="0" title="Z Position"></div><div style="display:flex; justify-content:space-between; font-size:0.7em; color:#aaa;"><span>X: <span id="v-pos-x">0.0</span></span><span>Z: <span id="v-pos-z">0.0</span></span></div></div>
             <div class="control-group"><label style="color:#aaa; font-size:0.7rem;"><span data-i18n="lbl_offset_y">高さ微調整 (Offset Y)</span> <span id="v-text-offset-y" class="val">0.0</span></label><input type="range" id="text-offset-y" min="-5.0" max="5.0" step="0.01" value="0.0"></div>
             <div class="v60-sub-panel">
-                <label class="toggle-switch"><input type="checkbox" id="enable-text2" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" class="v60-label">サブ文字 (Legend 2)</span></label>
-                <div class="control-group"><select id="text2-mode" style="margin-bottom:5px; font-size:0.75rem; padding:3px;"><option value="emboss">Emboss</option><option value="engrave">Engrave</option><option value="doubleshot">Double-Shot</option></select></div>
+                <label class="toggle-switch" data-hint="hint_text2"><input type="checkbox" id="enable-text2" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" class="v60-label">サブ文字 (Legend 2)</span></label>
+                <div class="control-group"><select id="text2-mode" style="margin-bottom:5px; font-size:0.75rem; padding:3px;"><option value="emboss">Emboss</option><option value="engrave">Engrave</option><option value="doubleshot">Double-Shot</option><option value="lithophane">Lithophane</option></select></div>
                 <textarea id="text2-content" rows="1" placeholder="例: あ / @" style="margin-bottom:5px;"></textarea>
                 <div class="control-row"><div style="flex:1"><label>Size <span id="v-text2-size" class="val">4.0</span></label><input type="range" id="text2-size" min="2" max="15" step="0.1" value="4.0"></div></div>
                 <div class="control-row"><div style="flex:1"><label>X <span id="v-text2-x" class="val">3.5</span></label><input type="range" id="text2-x" min="-10" max="10" step="0.1" value="3.5"></div><div style="flex:1"><label>Z <span id="v-text2-z" class="val">3.5</span></label><input type="range" id="text2-z" min="-10" max="10" step="0.1" value="3.5"></div></div>
             </div>
 
             <div class="v60-sub-panel">
-                <label class="toggle-switch"><input type="checkbox" id="enable-side" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" class="v60-label-side">サイド印字 (Side Print)</span></label>
-                <div class="control-group"><select id="side-mode" style="margin-bottom:5px; font-size:0.75rem; padding:3px;"><option value="emboss">Emboss</option><option value="engrave">Engrave</option><option value="doubleshot">Double-Shot</option></select></div>
+                <label class="toggle-switch" data-hint="hint_side_print"><input type="checkbox" id="enable-side" class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" class="v60-label-side">サイド印字 (Side Print)</span></label>
+                <div class="control-group"><select id="side-mode" style="margin-bottom:5px; font-size:0.75rem; padding:3px;"><option value="emboss">Emboss</option><option value="engrave">Engrave</option><option value="doubleshot">Double-Shot</option><option value="lithophane">Lithophane</option></select></div>
                 <input type="text" id="side-text" placeholder="FRONT TEXT" style="margin-bottom:5px;">
                 <div class="control-row"><div style="flex:1"><label>Size <span id="v-side-size" class="val">3.0</span></label><input type="range" id="side-size" min="1" max="10" step="0.1" value="3.0"></div><div style="flex:1"><label>Y-Ofs <span id="v-side-y" class="val">-2.0</span></label><input type="range" id="side-y" min="-10" max="5" step="0.1" value="-2.0"></div></div>
                 <div class="control-group"><label>Rotate X <span id="v-side-rot" class="val">0</span>°</label><input type="range" id="side-rot" min="-45" max="45" step="1" value="0"></div>
             </div>
 
             <h3 id="sec-svg" data-i18n="h_svg">SVG (アイコン) 設定</h3>
-            <div class="control-group" style="display:flex; gap:5px; align-items: flex-end;">
+            <div class="control-group" style="display:flex; gap:5px; align-items: flex-end;" data-hint="hint_svg_upload">
                 <div class="file-upload" style="flex:1;"><label for="svg-file-input" class="file-upload-label" style="border-color:#ffeb3b; color:#ffeb3b;" data-i18n="btn_upload_svg">📁 SVG読込</label><input type="file" id="svg-file-input" accept=".svg"></div>
                 <button class="danger btn-square" id="btn-clear-svg" title="SVGを削除">×</button>
             </div>
             
             <label class="toggle-switch" style="margin-top:5px;"><input type="checkbox" id="svg-visible" checked class="toggle-input"><span class="toggle-knob"></span><span class="toggle-label" data-i18n="lbl_visible">表示する</span></label>
             
-            <div class="control-group" style="background:rgba(0,229,255,0.1); padding:5px; border-radius:4px; margin-bottom:5px;">
+            <div class="control-group" style="background:rgba(0,229,255,0.1); padding:5px; border-radius:4px; margin-bottom:5px;" data-hint="hint_svg_mode">
                 <label data-i18n="lbl_text_mode" style="color:#00e5ff; font-weight:bold;">生成モード (Mode)</label>
                 <select id="svg-mode">
                     <option value="emboss">Emboss</option>
                     <option value="engrave">Engrave</option>
                     <option value="doubleshot">Double-Shot</option>
+                    <option value="lithophane">Lithophane</option>
                 </select>
             </div>
 
@@ -445,26 +530,57 @@
             <div class="control-group"><label style="color:#aaa; font-size:0.7rem;"><span data-i18n="lbl_offset_y">高さ微調整 (Offset Y)</span> <span id="v-svg-offset-y" class="val">0.0</span></label><input type="range" id="svg-offset-y" min="-5.0" max="5.0" step="0.01" value="0.0"></div>
 
             <h3 id="sec-color" data-i18n="h_colors">色設定</h3>
-            <div class="control-group"><label data-i18n="lbl_col_body">本体色</label><input type="color" id="col-body" value="#333333" class="color-input"><div class="palette-grid" id="palette-body"></div></div>
+            <div class="control-group" data-hint="hint_colors"><label data-i18n="lbl_col_body">本体色</label><input type="color" id="col-body" value="#333333" class="color-input"><div class="palette-grid" id="palette-body"></div></div>
             <div class="control-group" style="margin-top:15px;"><label data-i18n="lbl_col_text">文字・SVG色</label><input type="color" id="col-text" value="#00e5ff" class="color-input"><div class="palette-grid" id="palette-text"></div></div>
 
             <div class="section-sep"></div>
             <h3 id="sec-preset" data-i18n="h_preset">プリセット管理</h3>
-            <div class="control-group"><label data-i18n="lbl_browser_storage">ブラウザに保存 (Quick Save/Load)</label><div class="control-row"><button id="btn-quick-save" class="secondary btn-small" data-i18n="btn_quick_save">一時保存 (Save)</button><button id="btn-quick-load" class="secondary btn-small" data-i18n="btn_quick_load">復元 (Load)</button></div></div>
-            <div class="control-group"><label data-i18n="lbl_file_storage">ファイルに保存 (File I/O)</label><div class="control-row"><button id="btn-export-preset" class="secondary btn-small" data-i18n="btn_export_file">書き出し (.json)</button><div class="file-upload" style="flex:1;"><label for="preset-file-input" class="file-upload-label preset btn-small" data-i18n="btn_import_file">読み込み (.json)</label><input type="file" id="preset-file-input" accept=".json"></div></div></div>
+            <div class="v60-sub-panel" style="border-color:#4caf50; margin-bottom:10px;" data-hint="hint_url_share">
+                <label style="color:#4caf50; font-weight:bold;" data-i18n="lbl_url_share">🔗 URLで共有 (Share via URL)</label>
+                <div class="control-row" style="margin-top:5px;">
+                    <button id="btn-share-url" style="flex:1; border-color:#4caf50; color:#4caf50;" data-i18n="btn_share_url">📋 URLをコピー</button>
+                </div>
+                <div class="control-row" style="margin-top:5px;">
+                    <input type="text" id="url-import-input" placeholder="共有URLを貼り付け..." style="flex:1; font-size:0.75rem;" data-i18n-placeholder="placeholder_url_import">
+                    <button id="btn-import-url" style="width:80px; border-color:#4caf50; color:#4caf50; font-size:0.75rem;" data-i18n="btn_import_url">読み込み</button>
+                </div>
+            </div>
+            <div class="v60-sub-panel" style="border-color:#ff9800; margin-bottom:10px;">
+                <label style="color:#ff9800; font-weight:bold;" data-i18n="lbl_named_preset">🆕 名前付きプリセット保存 (V64)</label>
+                <input type="text" id="preset-save-name" placeholder="プリセット名を入力..." style="margin-top:5px;" data-i18n-placeholder="placeholder_preset_name">
+                <button id="btn-save-named-preset" style="border-color:#ff9800; color:#ff9800; margin-top:5px;" data-i18n="btn_save_named">💾 名前を付けて保存</button>
+            </div>
+            <div class="control-group" data-hint="hint_quick_save"><label data-i18n="lbl_browser_storage">ブラウザに保存 (Quick Save/Load)</label><div class="control-row"><button id="btn-quick-save" class="secondary btn-small" data-i18n="btn_quick_save">一時保存 (Save)</button><button id="btn-quick-load" class="secondary btn-small" data-i18n="btn_quick_load">復元 (Load)</button></div></div>
+            <div class="control-group" data-hint="hint_export_json"><label data-i18n="lbl_file_storage">ファイルに保存 (File I/O)</label><div class="control-row"><button id="btn-export-preset" class="secondary btn-small" data-i18n="btn_export_file">書き出し (.json)</button><div class="file-upload" style="flex:1;" data-hint="hint_import_json"><label for="preset-file-input" class="file-upload-label preset btn-small" data-i18n="btn_load_add">読み込み (追加)</label><input type="file" id="preset-file-input" accept=".json" multiple></div></div></div>
+            <div id="preset-switch-panel" style="display:none; margin-top:10px; background:rgba(255,152,0,0.1); padding:8px; border-radius:4px; border:1px solid #ff9800;">
+                <label style="color:#ff9800; font-size:0.8rem;" data-i18n="lbl_loaded_presets">📁 読み込んだプリセット:</label>
+                <div style="display:flex; gap:5px; align-items:center; margin-top:5px;">
+                    <select id="preset-switcher" style="flex:1;"></select>
+                    <button id="btn-remove-preset-ui" class="danger btn-small" style="width:28px; height:28px; padding:0;" title="Remove">×</button>
+                </div>
+                <div id="preset-preview-mini" style="margin-top:8px; font-size:0.7rem; color:#aaa; background:#000; padding:6px; border-radius:3px;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span data-i18n="pv_profile">Profile:</span><span id="pm-profile" style="color:#ff9800;">-</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span data-i18n="pv_size">Size:</span><span id="pm-size" style="color:#ff9800;">-</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span data-i18n="pv_shape">Shape:</span><span id="pm-shape" style="color:#ff9800;">-</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span data-i18n="pv_text">Text:</span><span id="pm-text" style="color:#ff9800;">-</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span data-i18n="pv_text2">Sub Text:</span><span id="pm-text2" style="color:#ff9800;">-</span></div>
+                    <div style="display:flex; justify-content:space-between; margin-bottom:2px;"><span data-i18n="pv_side">Side:</span><span id="pm-side" style="color:#ff9800;">-</span></div>
+                    <div style="display:flex; justify-content:space-between;"><span data-i18n="pv_svg">SVG:</span><span id="pm-svg" style="color:#ff9800;">-</span></div>
+                </div>
+            </div>
 
             <div class="section-sep"></div>
             <h3 id="sec-export" data-i18n="h_export">エクスポート (STL/OBJ/3MF)</h3>
-            <div class="control-group"><label>全体回転 (Print Orientation)</label><div class="control-row"><div style="flex:1"><label>Rot X</label><input type="range" id="global-rot-x" min="-180" max="180" step="15" value="0" title="Global Rot X"></div><div style="flex:1"><label>Rot Y</label><input type="range" id="global-rot-y" min="-180" max="180" step="15" value="0" title="Global Rot Y"></div></div></div>
+            <div class="control-group" data-hint="hint_print_orient"><label>全体回転 (Print Orientation)</label><div class="control-row"><div style="flex:1"><label>Rot X</label><input type="range" id="global-rot-x" min="-180" max="180" step="15" value="0" title="Global Rot X"></div><div style="flex:1"><label>Rot Y</label><input type="range" id="global-rot-y" min="-180" max="180" step="15" value="0" title="Global Rot Y"></div></div></div>
             <div class="control-group" style="margin-bottom:10px;"><label data-i18n="lbl_filename">ファイル名設定 (自動で[文字]が付与されます)</label><input type="text" id="export-name" value="keycap" style="text-align:left;"></div>
-            <button id="btn-export-all" data-i18n="btn_export_all">全体をSTLで保存</button>
-            <button id="btn-export-3mf" class="primary-3mf" style="margin-top:5px;" data-i18n="btn_export_3mf">全体を3MFで保存 (Color)</button>
+            <button id="btn-export-all" data-i18n="btn_export_all" data-hint="hint_export_stl">全体をSTLで保存</button>
+            <button id="btn-export-3mf" class="primary-3mf" style="margin-top:5px;" data-i18n="btn_export_3mf" data-hint="hint_export_3mf">全体を3MFで保存 (Color)</button>
             <button id="btn-export-obj" class="accent" style="margin-top:5px; color:#ff9800; border-color:#ff9800;" data-i18n="btn_export_obj">全体をOBJで保存 (Color)</button>
-            <div class="control-row"><button class="secondary" id="btn-export-body" data-i18n="btn_export_body">本体のみ (STL)</button><button class="secondary" id="btn-export-text" data-i18n="btn_export_text">文字のみ (STL)</button></div>
+            <div class="control-row" data-hint="hint_export_parts"><button class="secondary" id="btn-export-body" data-i18n="btn_export_body">本体のみ (STL)</button><button class="secondary" id="btn-export-text" data-i18n="btn_export_text">文字のみ (STL)</button></div>
 
             <div class="section-sep"></div>
             <h3 id="sec-batch" data-i18n="h_batch">バッチ出力 (Batch Export)</h3>
-            <div class="control-group"><label data-i18n="lbl_batch_list">文字リスト (カンマ/改行区切り)</label><textarea id="batch-list" rows="3" placeholder="Q,W,E,R,T,Y..."></textarea><div style="font-size:0.7em; color:#aaa; text-align:right;" data-i18n="note_batch">※現在の設定で連続生成します</div></div>
+            <div class="control-group" data-hint="hint_batch_list"><label data-i18n="lbl_batch_list">文字リスト (カンマ/改行区切り)</label><textarea id="batch-list" rows="3" placeholder="Q,W,E,R,T,Y..."></textarea><div style="font-size:0.7em; color:#aaa; text-align:right;" data-i18n="note_batch">※現在の設定で連続生成します</div></div>
             <div class="control-group">
                 <label data-i18n="lbl_batch_format">出力形式</label>
                 <select id="batch-format">
@@ -472,7 +588,7 @@
                     <option value="3mf">3MF (Color)</option>
                 </select>
             </div>
-            <button id="btn-batch-export" class="accent" data-i18n="btn_batch_run">一括生成</button>
+            <button id="btn-batch-export" class="accent" data-i18n="btn_batch_run" data-hint="hint_batch_run">一括生成</button>
         </div>
     </div>
 
@@ -690,6 +806,11 @@ import * as THREE from 'three';
                 lbl_pos_x: "位置 X", lbl_pos_z: "位置 Z", lbl_bump_offset: "高さ微調整 (Offset)",
                 lbl_round_corner: "角の丸み (Fillet)", note_round: "※Squircle Mapping (高速・安定)",
                 h_shape: "形状 (テーパー・Dish)", lbl_top_scale: "上面サイズ (Taper)", lbl_dish_type: "上面形状 (Dish Type)",
+                lbl_key_shape_type: "🆕 キー形状タイプ (V64)", opt_shape_rect: "四角形 (Rectangle)", opt_shape_round: "角丸 (Rounded)", 
+                opt_shape_circle: "円形 (Circle)", opt_shape_polygon: "多角形 (Polygon)", opt_shape_star: "星形 (Star)", opt_shape_iso: "ISO Enter (L字形)",
+                lbl_polygon_sides: "辺の数", lbl_star_points: "頂点数", lbl_star_inner: "内径比",
+                lbl_iso_settings: "ISO/JIS Enter 設定", lbl_iso_top_w: "上部幅", lbl_iso_bottom_w: "下部幅", lbl_iso_total_h: "全体の高さ",
+                lbl_stem_x: "ステムX", lbl_stem_z: "ステムZ", lbl_stab_top_z: "上スタビZ", lbl_stab_bottom_z: "下スタビZ",
                 opt_dish_cyl: "Cylindrical (円筒)", opt_dish_sph: "Spherical (球)", opt_dish_flat: "Flat (平)",
                 lbl_texture: "表面プロシージャル (Procedural)", opt_tex_none: "None (なし)", opt_tex_noise: "Noise (梨地/Sand)", opt_tex_grid: "Grid (グリップ/Studs)",
                 lbl_tex_scale: "Scale (細かさ)", lbl_tex_strength: "Strength (深さ)",
@@ -701,12 +822,18 @@ import * as THREE from 'three';
                 lbl_align_preset: "文字配置 (プリセット)", btn_align_center: "Center (中央)", btn_align_tl: "Top-Left (左上)",
                 btn_align_tr: "Top-Right (右上)", btn_align_bl: "Bottom-Left (左下)", btn_align_br: "Bottom-Right (右下)",
                 lbl_pos_xz_fine: "位置 X / Z (微調整)", lbl_offset_y: "高さ微調整 (Offset Y)",
-                lbl_text_mode: "生成モード (Mode)", opt_mode_emboss: "Emboss (浮き出し)", opt_mode_engrave: "Engrave (刻印/掘り込み)", opt_mode_doubleshot: "Double-Shot (埋め込み)",
+                lbl_text_mode: "生成モード (Mode)", opt_mode_emboss: "Emboss (浮き出し)", opt_mode_engrave: "Engrave (刻印/掘り込み)", opt_mode_doubleshot: "Double-Shot (埋め込み)", opt_mode_lithophane: "Lithophane (バックライト透過)",
                 note_engrave: "※Engraveは計算処理に時間がかかります",
                 h_svg: "SVG (アイコン) 設定", btn_upload_svg: "📁 SVG読込", lbl_visible: "表示 (Visible)", lbl_rotation: "回転 (XYZ)",
                 h_colors: "色設定", lbl_col_body: "本体色", lbl_col_text: "文字・SVG色",
                 h_preset: "プリセット管理", lbl_browser_storage: "ブラウザに保存 (Quick Save/Load)", btn_quick_save: "一時保存 (Save)", btn_quick_load: "復元 (Load)",
                 lbl_file_storage: "ファイルに保存 (File I/O)", btn_export_file: "書き出し (.json)", btn_import_file: "読み込み (.json)",
+                lbl_url_share: "🔗 URLで共有 (Share via URL)", btn_share_url: "📋 URLをコピー", btn_import_url: "読み込み", placeholder_url_import: "共有URLを貼り付け...",
+                lbl_named_preset: "🆕 名前付きプリセット保存", placeholder_preset_name: "プリセット名を入力...", btn_save_named: "💾 名前を付けて保存",
+                lbl_loaded_presets: "📁 読み込んだプリセット:", btn_load_add: "読み込み (追加)",
+                pv_profile: "プロファイル:", pv_size: "サイズ:", pv_shape: "形状:", pv_text: "文字:", pv_text2: "サブ文字:", pv_side: "サイド:", pv_svg: "SVG:",
+                msg_url_copied: "URLをクリップボードにコピーしました！", msg_url_invalid: "無効なURLです", msg_url_loaded: "URLからプリセットを読み込みました",
+                btn_prev: "◀ 前へ", btn_next: "次へ ▶", btn_clear_all: "全削除",
                 h_export: "エクスポート (STL/OBJ/3MF)", lbl_filename: "ファイル名設定 (自動で[文字]が付与されます)", btn_export_all: "全体をSTLで保存", btn_export_obj: "全体をOBJで保存 (Color)",
                 btn_export_3mf: "全体を3MFで保存 (Color)", btn_export_body: "本体のみ (STL)", btn_export_text: "文字のみ (STL)",
                 h_batch: "バッチ出力 (Batch Export)", lbl_batch_list: "文字リスト (カンマ/改行区切り)", pl_batch: "Q,W,E,R,T,Y...",
@@ -718,10 +845,67 @@ import * as THREE from 'three';
                 toast_generating: "メッシュを生成中...", toast_stl_exported: "STLをエクスポートしました！", 
                 toast_obj_exported: "OBJをエクスポートしました！", toast_3mf_exported: "3MFをエクスポートしました！",
                 toast_export_failed: "エクスポート失敗: ", toast_no_body: "エラー: ボディジオメトリが生成されませんでした",
-                h_import: "外部モデル (Import)", lbl_weight: "予想重量:", lbl_cost: "予想コスト:", 
+                h_import: "外部モデル (Import)", btn_load_stl: "📁 STLモデル読込", lbl_weight: "予想重量:", lbl_cost: "予想コスト:", 
                 lbl_vendor: "ベンダー:", lbl_material: "材料:", btn_details: "▼ 詳細 / 編集",
                 lbl_manual_override: "手動設定 (Manual Override)", lbl_price: "価格", lbl_spool: "リール(g)", lbl_density: "密度",
-                link_wiki: "Wikiへ移動", link_github: "GitHubへ移動"
+                link_wiki: "Wikiへ移動", link_github: "GitHubへ移動",
+                lbl_show_hints: "💡 ヒント表示",
+                // Hints
+                hint_lang: "表示言語を日本語または英語に切り替えます。",
+                hint_section_jump: "設定したい項目へ素早く移動します。",
+                hint_search: "設定項目名で検索し、該当箇所をハイライトします。",
+                hint_stats: "現在の設定に基づいた、フィラメントの概算重量とコストを表示します。クリックで材料設定を開閉できます。",
+                hint_unit_size: "1Uの基準サイズを設定します。通常は19.05mmですが、Choc系などは小さく設定します。",
+                hint_key_size: "キーキャップの横幅を設定します。1.0(通常)、2.0(BackSpace)、6.25(Space)など。",
+                hint_stabilizer: "2U以上のキーに付くスタビライザーの位置設定です。基本はAutoで問題ありませんが、特殊な配置の場合はCustomで調整します。",
+                hint_profile: "キーキャップの全体形状（プロファイル）を選択します。Cherry, OEM, SA, XDA, DSAに対応しています。",
+                hint_row: "キーの高さと傾斜角度（R1〜R4）を設定します。プロファイルによって形状が異なります。",
+                hint_fillet: "キーキャップの四隅を丸くします（Squircle形状）。値を大きくすると丸くなります。",
+                hint_wall_thick: "キーキャップ側面の厚みを設定します。薄すぎると強度が落ち、厚すぎるとスイッチと干渉する場合があります。",
+                hint_rib_shorten: "内部のリブ（補強）の下端をどのくらい持ち上げるか設定します。LEDとの干渉を防ぐ場合などに調整します。",
+                hint_enable_ribs: "内部に十字の補強壁を作成します。強度が向上し、反りを防ぎます。",
+                hint_homing_bump: "FキーやJキーに付いている、指の感触で位置を知るための突起を作成します。",
+                hint_bump_type: "突起の形状を『丸型』か『バー（長方形）』から選択します。",
+                hint_key_shape: "キーキャップの基本形状を選択します。四角形、角丸、円形、多角形、星形、ISO Enter（L字形）に対応しています。",
+                hint_taper: "キーキャップ天面の広さを調整します。値を小さくすると台形がきつくなります。",
+                hint_dish_type: "指を置く天面のくぼみ形状を設定します。円筒(Cylindrical)、球(Spherical)、平坦(Flat)から選べます。",
+                hint_texture: "表面にザラザラや模様などのテクスチャを自動生成します。",
+                hint_texture_global: "テクスチャを天面だけでなく、側面を含むキーキャップ全体に適用します。",
+                hint_twist: "キーキャップ全体をねじります。Artisanキーキャップ作成などに使えます。",
+                hint_tilt: "天面の傾きをX軸・Z軸方向へ手動で微調整します。",
+                hint_img_upload: "PNGまたはJPG画像をアップロードして、キーキャップの表面にテクスチャとして貼り付けます。好きな柄や写真をキーキャップの模様にできます。",
+                hint_custom_font: "Facetype.jsなどで変換した『JSON形式』のフォントファイルを読み込みます。※PCに入っているTTFやOTFファイルは直接使用できません。",
+                hint_stem_diameter: "スイッチに挿す軸の外側の太さを調整します。標準は5.5mmです。",
+                hint_clearance: "十字穴の隙間（公差）を設定します。きつくて入らない場合は値を大きくしてください。",
+                hint_stem_ext: "ステムだけを底面より長く伸ばします。特殊なスイッチや高さ調整に使用します。",
+                hint_box_stem: "十字ステムの周りを四角い壁で囲み、強度と防塵性を高めます（Kailh Boxスイッチ風）。",
+                hint_lego_stud: "天面にレゴブロック互換のポッチを追加します。",
+                hint_enable_text: "文字の生成をON/OFFします。",
+                hint_text_input: "刻印したい文字を入力します。改行すると2行になります。",
+                hint_font: "刻印に使用するフォントを選択します。",
+                hint_text_mode: "Emboss(浮き出し)、Engrave(彫り込み)、Double-Shot(別パーツ化)、Lithophane(バックライト透過)から選択します。",
+                hint_text_height: "文字の厚みを設定します。Double-Shotの場合は埋め込む深さになります。",
+                hint_conform: "キーキャップの天面のカーブに沿って文字を変形させます。",
+                hint_align_preset: "中央、左上、右下などの定位置へワンクリックで文字を移動させます。",
+                hint_text2: "メイン文字とは別に、右下などに小さな文字を追加します。",
+                hint_side_print: "キーキャップの手前側面（フロント）に文字を入れます。",
+                hint_svg_upload: "ベクター画像(.svg)を読み込んで刻印します。ロゴやアイコンに最適です。",
+                hint_svg_mode: "SVGの処理方法を選びます。Double-Shotにするとマルチカラー印刷用に別パーツとして出力できます。",
+                hint_colors: "プレビュー画面上の色を変更します。※STL出力には影響しませんが、OBJ/3MF出力時には反映されます。",
+                hint_url_share: "現在の設定をURLにエンコードしてコピーします。SNSなどで共有できます。",
+                hint_quick_save: "現在の設定をブラウザに一時的に保存します。",
+                hint_export_json: "設定をファイルとして保存します。後で読み込んだり、他の人と共有できます。",
+                hint_import_json: "保存した設定ファイルを読み込みます。複数ファイルをドラッグ＆ドロップすると一括でリストに追加されます。",
+                hint_print_orient: "3Dプリント時の向きに合わせて、モデル全体を回転させます。",
+                hint_export_stl: "一般的な3Dプリンター用の形式(.stl)で保存します。",
+                hint_export_3mf: "色情報を含んだ形式(.3mf)で保存します。Bambu Labなどのマルチカラー印刷に最適です。",
+                hint_export_parts: "パーツを個別にSTL出力します。異なる色のフィラメントで印刷する場合などに使います。",
+                hint_batch_list: "ここにカンマ区切り（A,B,C...）で文字を入れると、現在の設定で順番に自動生成します。",
+                hint_batch_run: "リストの文字を連続で生成し、まとめてダウンロードします。",
+                hint_randomizer: "すべてのパラメータをランダムに変更します。新しいアイデア探しに。",
+                hint_reset: "すべての設定を初期状態に戻します。",
+                hint_import_stl: "自作の3Dモデル(.stl)を読み込んで合成します。",
+                hint_import_op: "Union（結合）は盛り上げ、Subtract（型抜き）は彫り込みに使用します。※Subtractは処理時間がかかります。"
             },
             en: {
                 nav_jump: "--- Jump to Section ---", nav_basic: "Basic Size", nav_structure: "Structure", nav_shape: "Shape",
@@ -733,6 +917,11 @@ import * as THREE from 'three';
                 lbl_pos_x: "Pos X", lbl_pos_z: "Pos Z", lbl_bump_offset: "Bump Offset Y",
                 lbl_round_corner: "Round Corner (Fillet)", note_round: "*Squircle Mapping (Fast & Stable)",
                 h_shape: "Shape (Taper/Dish)", lbl_top_scale: "Top Scale (Taper)", lbl_dish_type: "Dish Type",
+                lbl_key_shape_type: "🆕 Key Shape Type (V64)", opt_shape_rect: "Rectangle", opt_shape_round: "Rounded", 
+                opt_shape_circle: "Circle", opt_shape_polygon: "Polygon", opt_shape_star: "Star", opt_shape_iso: "ISO Enter (L-Shape)",
+                lbl_polygon_sides: "Sides", lbl_star_points: "Points", lbl_star_inner: "Inner Ratio",
+                lbl_iso_settings: "ISO/JIS Enter Settings", lbl_iso_top_w: "Top Width", lbl_iso_bottom_w: "Bottom Width", lbl_iso_total_h: "Total Height",
+                lbl_stem_x: "Stem X", lbl_stem_z: "Stem Z", lbl_stab_top_z: "Top Stab Z", lbl_stab_bottom_z: "Bottom Stab Z",
                 opt_dish_cyl: "Cylindrical", opt_dish_sph: "Spherical", opt_dish_flat: "Flat",
                 lbl_texture: "Surface Procedural", opt_tex_none: "None", opt_tex_noise: "Noise (Sand)", opt_tex_grid: "Grid (Studs)",
                 lbl_tex_scale: "Scale", lbl_tex_strength: "Strength",
@@ -744,12 +933,18 @@ import * as THREE from 'three';
                 lbl_align_preset: "Alignment Presets", btn_align_center: "Center", btn_align_tl: "Top-Left",
                 btn_align_tr: "Top-Right", btn_align_bl: "Bottom-Left", btn_align_br: "Bottom-Right",
                 lbl_pos_xz_fine: "Position X / Z (Fine)", lbl_offset_y: "Y Offset (Fine)",
-                lbl_text_mode: "Generation Mode", opt_mode_emboss: "Emboss (Raised)", opt_mode_engrave: "Engrave (Inset)", opt_mode_doubleshot: "Double-Shot (Inlay)",
+                lbl_text_mode: "Generation Mode", opt_mode_emboss: "Emboss (Raised)", opt_mode_engrave: "Engrave (Inset)", opt_mode_doubleshot: "Double-Shot (Inlay)", opt_mode_lithophane: "Lithophane (Backlit)",
                 note_engrave: "*Engrave requires more processing time.",
                 h_svg: "SVG Icon Settings", btn_upload_svg: "📁 Load SVG", lbl_visible: "Visible", lbl_rotation: "Rotation (XYZ)",
                 h_colors: "Color Settings", lbl_col_body: "Body Color", lbl_col_text: "Text/SVG Color",
                 h_preset: "Preset Management", lbl_browser_storage: "Browser Storage (Quick)", btn_quick_save: "Quick Save", btn_quick_load: "Quick Load",
                 lbl_file_storage: "File Storage", btn_export_file: "Export (.json)", btn_import_file: "Import (.json)",
+                lbl_url_share: "🔗 Share via URL", btn_share_url: "📋 Copy URL", btn_import_url: "Load", placeholder_url_import: "Paste shared URL...",
+                lbl_named_preset: "🆕 Save Named Preset", placeholder_preset_name: "Enter preset name...", btn_save_named: "💾 Save with Name",
+                lbl_loaded_presets: "📁 Loaded Presets:", btn_load_add: "Load (Add)",
+                pv_profile: "Profile:", pv_size: "Size:", pv_shape: "Shape:", pv_text: "Text:", pv_text2: "Sub Text:", pv_side: "Side:", pv_svg: "SVG:",
+                msg_url_copied: "URL copied to clipboard!", msg_url_invalid: "Invalid URL", msg_url_loaded: "Preset loaded from URL",
+                btn_prev: "◀ Prev", btn_next: "Next ▶", btn_clear_all: "Clear All",
                 h_export: "Export (STL/OBJ/3MF)", lbl_filename: "File Name", btn_export_all: "Export All (STL)", btn_export_obj: "Export All (OBJ w/ Color)",
                 btn_export_3mf: "Export All (3MF w/ Color)", btn_export_body: "Body Only (STL)", btn_export_text: "Text Only (STL)",
                 h_batch: "Batch Export", lbl_batch_list: "Character List (comma/newline)", pl_batch: "Q,W,E,R,T,Y...",
@@ -761,10 +956,67 @@ import * as THREE from 'three';
                 toast_generating: "Generating mesh...", toast_stl_exported: "STL exported!", 
                 toast_obj_exported: "OBJ exported!", toast_3mf_exported: "3MF exported!",
                 toast_export_failed: "Export failed: ", toast_no_body: "Error: No body geometry generated",
-                h_import: "Import 3D", lbl_weight: "Est. Weight:", lbl_cost: "Est. Cost:", 
+                h_import: "Import 3D", btn_load_stl: "📁 Load STL Model", lbl_weight: "Est. Weight:", lbl_cost: "Est. Cost:", 
                 lbl_vendor: "Vendor:", lbl_material: "Material:", btn_details: "▼ Details / Edit",
                 lbl_manual_override: "Manual Override", lbl_price: "Price", lbl_spool: "Spool(g)", lbl_density: "Dens.",
-                link_wiki: "Go to Wiki", link_github: "Go to GitHub"
+                link_wiki: "Go to Wiki", link_github: "Go to GitHub",
+                lbl_show_hints: "💡 Show Hints",
+                // Hints
+                hint_lang: "Switch display language between Japanese and English.",
+                hint_section_jump: "Quickly jump to the section you want to configure.",
+                hint_search: "Search settings by name and highlight matches.",
+                hint_stats: "Shows estimated filament weight and cost based on current settings. Click to open/close material settings.",
+                hint_unit_size: "Set the base size for 1U. Usually 19.05mm, but smaller for Choc switches etc.",
+                hint_key_size: "Set the keycap width. 1.0 (normal), 2.0 (BackSpace), 6.25 (Space), etc.",
+                hint_stabilizer: "Position settings for stabilizers on 2U+ keys. Auto works for most cases, use Custom for special layouts.",
+                hint_profile: "Select the overall keycap shape (profile). Supports Cherry, OEM, SA, XDA, DSA.",
+                hint_row: "Set key height and tilt angle (R1-R4). Shape varies by profile.",
+                hint_fillet: "Round the four corners of the keycap (Squircle shape). Higher values = rounder.",
+                hint_wall_thick: "Set the side wall thickness. Too thin reduces strength, too thick may interfere with switches.",
+                hint_rib_shorten: "Set how much to raise the bottom of internal ribs. Adjust to prevent LED interference.",
+                hint_enable_ribs: "Create cross-shaped reinforcement walls inside. Improves strength and prevents warping.",
+                hint_homing_bump: "Create the tactile bump found on F and J keys for finger positioning.",
+                hint_bump_type: "Choose bump shape: Round or Bar (rectangle).",
+                hint_key_shape: "Select the base keycap shape. Supports rectangle, rounded, circle, polygon, star, and ISO Enter (L-shape).",
+                hint_taper: "Adjust the top surface size. Smaller values = steeper taper.",
+                hint_dish_type: "Set the dish shape for finger placement. Choose Cylindrical, Spherical, or Flat.",
+                hint_texture: "Auto-generate surface textures like sandpaper or patterns.",
+                hint_texture_global: "Apply texture to the entire keycap including sides, not just the top.",
+                hint_twist: "Twist the entire keycap. Useful for artisan keycaps.",
+                hint_tilt: "Fine-tune the top surface tilt in X and Z directions.",
+                hint_img_upload: "Upload PNG or JPG images to apply as a texture on the keycap surface. Turn your favorite patterns or photos into keycap designs.",
+                hint_custom_font: "Load font files converted to JSON format using tools like Facetype.js. *TTF or OTF files from your PC cannot be used directly.",
+                hint_stem_diameter: "Adjust the outer diameter of the switch stem. Standard is 5.5mm.",
+                hint_clearance: "Set the cross-hole tolerance. Increase if too tight to fit.",
+                hint_stem_ext: "Extend only the stem below the bottom. For special switches or height adjustment.",
+                hint_box_stem: "Add square walls around the cross stem for strength and dust protection (Kailh Box style).",
+                hint_lego_stud: "Add LEGO-compatible studs on the top surface.",
+                hint_enable_text: "Turn text generation ON/OFF.",
+                hint_text_input: "Enter the character to engrave. Use line breaks for multiple lines.",
+                hint_font: "Select the font for engraving.",
+                hint_text_mode: "Choose Emboss (raised), Engrave (inset), Double-Shot (separate part), or Lithophane (backlit).",
+                hint_text_height: "Set text thickness. For Double-Shot, this is the embed depth.",
+                hint_conform: "Deform text to follow the keycap's top surface curve.",
+                hint_align_preset: "One-click positioning to center, top-left, bottom-right, etc.",
+                hint_text2: "Add a secondary smaller text, typically in the bottom-right corner.",
+                hint_side_print: "Add text on the front side of the keycap.",
+                hint_svg_upload: "Load vector images (.svg) for engraving. Perfect for logos and icons.",
+                hint_svg_mode: "Choose SVG processing method. Double-Shot exports as separate parts for multi-color printing.",
+                hint_colors: "Change preview colors. *Does not affect STL output, but reflects in OBJ/3MF.",
+                hint_url_share: "Encode current settings into a URL and copy. Share on social media.",
+                hint_quick_save: "Temporarily save current settings in browser storage.",
+                hint_export_json: "Save settings as a file. Load later or share with others.",
+                hint_import_json: "Load saved setting files. Drag & drop multiple files to add to list.",
+                hint_print_orient: "Rotate the entire model to match 3D print orientation.",
+                hint_export_stl: "Save in standard 3D printer format (.stl).",
+                hint_export_3mf: "Save with color information (.3mf). Ideal for Bambu Lab multi-color printing.",
+                hint_export_parts: "Export parts separately as STL. Useful for printing with different filament colors.",
+                hint_batch_list: "Enter comma-separated characters (A,B,C...) to auto-generate with current settings.",
+                hint_batch_run: "Generate all characters in the list and download together.",
+                hint_randomizer: "Randomly change all parameters. Great for finding new ideas.",
+                hint_reset: "Reset all settings to defaults.",
+                hint_import_stl: "Load custom 3D models (.stl) to combine.",
+                hint_import_op: "Union adds geometry, Subtract carves out. *Subtract requires more processing time."
             }
         };
         let currentLang = 'ja';
@@ -829,15 +1081,23 @@ import * as THREE from 'three';
             renderMode: 'standard', 
             modelVisible: true, modelScale: 1.0, modelX: 0, modelY: 0, modelZ: 0, modelRX: 0, modelRY: 0, modelRZ: 0, modelOperation: 'union', 
             globalRotX: 0, globalRotY: 0,
-            svgContent: null, svgVisible: true, svgScale: 1.0, svgThickness: 0.6, svgMode: 'emboss', svgConform: true, 
+            svgContent: null, svgName: null, svgVisible: true, svgScale: 1.0, svgThickness: 0.6, svgMode: 'emboss', svgConform: true, 
             svgRotX: 0, svgRotY: 0, svgRotZ: 0, svgOffsetY: 0.0, svgPosX: 0, svgPosZ: 0,
-            colBody: '#333333', colText: '#00e5ff'
+            colBody: '#333333', colText: '#00e5ff',
+            // V64 新機能
+            keyShapeType: 'rectangle', polygonSides: 6, starPoints: 5, starInner: 0.5,
+            isoTopWidth: 1.5, isoBottomWidth: 1.25, isoHeight: 2.0,
+            isoStemX: 2.4, isoStemZ: 0, isoStabTopZ: -12, isoStabBottomZ: 12,
+            customHeight: 9.5, customAngle: 3
         };
         let state = JSON.parse(JSON.stringify(initialState));
         let importedModelBuffer = null;
         const csgEvaluator = new Evaluator();
         const history = [JSON.parse(JSON.stringify(initialState))];
         let historyIndex = 0;
+        // V64: 複数プリセット管理
+        let loadedPresets = [];
+        let currentPresetIndex = -1;
 
         const paramMap = {
             'u-size':'uSize', 'wall-thick':'wallThickness', 'rib-shorten':'ribShorten', 'top-scale':'topScale',
@@ -859,7 +1119,12 @@ import * as THREE from 'three';
             'twist-factor': 'twist', 'tilt-x': 'tiltX', 'tilt-z': 'tiltZ', 'unit-size-select': 'unitSize', 'round-corner': 'roundCorner',
             'stem-diameter': 'stemDiameter', 'text-mode': 'textMode', 'text2-mode': 'text2Mode', 'side-mode': 'sideMode', 'svg-mode': 'svgMode',
             'img-scale': 'imgScale', 'img-pos-x': 'imgPosX', 'img-pos-y': 'imgPosY', 'img-rot': 'imgRot',
-            'lego-x': 'legoX', 'lego-y': 'legoY', 'lego-z': 'legoZ', 'lego-clear': 'legoClear'
+            'lego-x': 'legoX', 'lego-y': 'legoY', 'lego-z': 'legoZ', 'lego-clear': 'legoClear',
+            // V64 新パラメータ
+            'polygon-sides': 'polygonSides', 'star-points': 'starPoints', 'star-inner': 'starInner',
+            'iso-top-width': 'isoTopWidth', 'iso-bottom-width': 'isoBottomWidth', 'iso-height': 'isoHeight',
+            'iso-stem-x': 'isoStemX', 'iso-stem-z': 'isoStemZ', 'iso-stab-top-z': 'isoStabTopZ', 'iso-stab-bottom-z': 'isoStabBottomZ',
+            'custom-height': 'customHeight', 'custom-angle': 'customAngle'
         };
         const boolMap = { 
             'enable-ribs':'enableRibs', 'homing-bump':'homingBump', 'enable-text':'enableText', 'svg-visible':'svgVisible', 
@@ -875,12 +1140,23 @@ import * as THREE from 'three';
         function updateHistoryBtns() { document.getElementById('btn-undo').disabled = historyIndex === 0; document.getElementById('btn-redo').disabled = historyIndex === history.length - 1; }
         
         function syncUI() {
-            for (const [id, key] of Object.entries(paramMap)) { const el = document.getElementById(id); if(el) { el.value = state[key]; const span = document.getElementById('v-' + id); if(span) span.textContent = typeof state[key] === 'number' ? state[key].toFixed(2) : state[key]; if(id === 'tex-scale') if(span) span.textContent = parseInt(state[key]); } }
+            for (const [id, key] of Object.entries(paramMap)) { const el = document.getElementById(id); if(el) { el.value = state[key]; const span = document.getElementById('v-' + id); if(span) span.textContent = typeof state[key] === 'number' ? state[key].toFixed(2) : state[key]; if(id === 'tex-scale' || id === 'polygon-sides' || id === 'star-points') if(span) span.textContent = parseInt(state[key]); } }
             for (const [id, key] of Object.entries(boolMap)) { const el = document.getElementById(id); if(el) el.checked = state[key]; }
             const tHeight = document.getElementById('text-height'); if(tHeight) tHeight.disabled = state.textThicknessLocked;
             document.getElementById('stem-ext-control').style.display = state.enableStemExtension ? 'block' : 'none';
             document.getElementById('stabilizer-custom-ui').style.display = state.stabilizerType === 'custom' ? 'block' : 'none';
             document.getElementById('lego-adj-panel').style.display = state.legoStud ? 'block' : 'none';
+            // V64: 新しいUI要素の表示/非表示
+            const customProfilePanel = document.getElementById('custom-profile-panel');
+            if(customProfilePanel) customProfilePanel.style.display = state.profile === 'custom' ? 'block' : 'none';
+            const shapePolygon = document.getElementById('shape-polygon-options');
+            if(shapePolygon) shapePolygon.style.display = state.keyShapeType === 'polygon' ? 'block' : 'none';
+            const shapeStar = document.getElementById('shape-star-options');
+            if(shapeStar) shapeStar.style.display = state.keyShapeType === 'star' ? 'block' : 'none';
+            const shapeIso = document.getElementById('shape-iso-options');
+            if(shapeIso) shapeIso.style.display = state.keyShapeType === 'iso-enter' ? 'block' : 'none';
+            const keyShapeSelect = document.getElementById('key-shape-type');
+            if(keyShapeSelect) keyShapeSelect.value = state.keyShapeType;
             const colB = document.getElementById('col-body'); if(colB) colB.value = state.colBody;
             const colT = document.getElementById('col-text'); if(colT) colT.value = state.colText;
             const txt = document.getElementById('text-content'); if(txt) txt.value = state.text;
@@ -967,7 +1243,7 @@ import * as THREE from 'three';
             });
         }
         
-        const PROFILES = { cherry: { R4: {h:11.5, a:6}, R3: {h:9.5, a:3}, R2: {h:8.5, a:-3}, R1: {h:9.5, a:-6}, dish:'cylindrical' }, oem: { R4: {h:12.5, a:8}, R3: {h:11.0, a:4}, R2: {h:10.0, a:-4}, R1: {h:11.0, a:-8}, dish:'cylindrical' }, sa: { R4: {h:16.5, a:7}, R3: {h:14.0, a:0}, R2: {h:14.0, a:0}, R1: {h:14.0, a:-7}, dish:'spherical' }, xda: { all:{h:9.0, a:0}, dish:'spherical' }, dsa: { all:{h:7.5, a:0}, dish:'spherical' } };
+        const PROFILES = { cherry: { R4: {h:11.5, a:6}, R3: {h:9.5, a:3}, R2: {h:8.5, a:-3}, R1: {h:9.5, a:-6}, dish:'cylindrical' }, oem: { R4: {h:12.5, a:8}, R3: {h:11.0, a:4}, R2: {h:10.0, a:-4}, R1: {h:11.0, a:-8}, dish:'cylindrical' }, sa: { R4: {h:16.5, a:7}, R3: {h:14.0, a:0}, R2: {h:14.0, a:0}, R1: {h:14.0, a:-7}, dish:'spherical' }, xda: { all:{h:9.0, a:0}, dish:'spherical' }, dsa: { all:{h:7.5, a:0}, dish:'spherical' }, custom: { all:{h:9.5, a:3}, dish:'cylindrical' } };
         const HTML_COLORS = ['#000000','#333333','#666666','#ffffff','#ff0000','#ff8000','#ffff00','#00ff00','#00ffff','#0000ff','#8000ff','#ff00ff','#800000','#008000','#000080','#808000'];
         const container = document.getElementById('canvas-container'); const scene = new THREE.Scene(); scene.background = new THREE.Color(0x121212);
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth/container.clientHeight, 0.1, 1000); camera.position.set(20, 30, 30);
@@ -976,11 +1252,39 @@ import * as THREE from 'three';
         scene.add(new THREE.AmbientLight(0xffffff, 0.4)); const dl = new THREE.DirectionalLight(0xffffff, 1.0); dl.position.set(10,50,20); dl.castShadow=true; scene.add(dl); const bl = new THREE.DirectionalLight(0x00bcd4, 0.5); bl.position.set(0,-20,0); scene.add(bl); scene.add(new THREE.GridHelper(200, 200, 0x444444, 0x222222));
         const mainGroup = new THREE.Group(); scene.add(mainGroup); const fontLoader = new FontLoader(); const loadedFonts = {}; const textureLoader = new THREE.TextureLoader();
 
-        function getParams() { const p = PROFILES[state.profile]; const r = p.all ? p.all : p[state.row]; const unit = parseFloat(state.unitSize) || 19.05; return { h: r.h, angle: r.a, baseW: (unit * state.uSize) - 0.5, baseD: unit - 0.5 }; }
+        function getParams() { 
+            const p = PROFILES[state.profile]; 
+            let r;
+            if (state.profile === 'custom') {
+                r = { h: state.customHeight, a: state.customAngle };
+            } else {
+                r = p.all ? p.all : p[state.row]; 
+            }
+            const unit = parseFloat(state.unitSize) || 19.05;
+            
+            // V64: ISO Enterの場合はサイズを調整し、角度を0に固定
+            if(state.keyShapeType === 'iso-enter') {
+                const fullW = (unit * state.isoTopWidth) - 0.5;  // 上部の全幅（広い方: 1.5u）
+                const totalH = (unit * state.isoHeight) - 0.5;      // 全高さ
+                return { h: r.h, angle: 0, baseW: fullW, baseD: totalH };
+            }
+            
+            return { h: r.h, angle: r.a, baseW: (unit * state.uSize) - 0.5, baseD: unit - 0.5 }; 
+        }
         function getStabilizerOffset(u) { if (state.stabilizerType === 'custom') return state.stabilizerOffset; if (u < 2.0) return 0; if (u < 3.0) return 11.9; if (u < 6.0) return 19.05; if (u == 6.25) return 50.0; if (u >= 7.0) return 57.15; return 38.1; }
         const DISH_DEPTH = 0.8; 
         function getDishOffset(x, z, p) { const wHalf = p.baseW * state.topScale * 0.5; const dHalf = p.baseD * state.topScale * 0.5; const nx = x / (wHalf || 1); const nz = z / (dHalf || 1); let offset = 0; const type = state.dishType; if(type === 'flat') offset = 0; else if(type === 'cylindrical') { if(Math.abs(nx) < 2.0) offset = DISH_DEPTH * (Math.pow(nx, 2) - 1.0); } else { const dist = Math.sqrt(nx*nx + nz*nz); if(dist < 2.0) offset = DISH_DEPTH * (Math.pow(dist, 2) - 1.0); } return offset; }
-        function getSurfaceHeight(x, z, p) { const tiltXRad = THREE.MathUtils.degToRad(state.tiltX); const tiltZRad = THREE.MathUtils.degToRad(state.tiltZ); const baseTilt = Math.tan(THREE.MathUtils.degToRad(p.angle)) * z; const customTilt = (Math.tan(tiltXRad) * z) + (Math.tan(tiltZRad) * x); return (p.h - baseTilt - customTilt) + getDishOffset(x, z, p); }
+        function getSurfaceHeight(x, z, p) { 
+            // ISO Enterの場合は傾斜とDishを適用しない（上面をフラットに）
+            if(state.keyShapeType === 'iso-enter') {
+                return p.h;  // Dishも適用しない
+            }
+            const tiltXRad = THREE.MathUtils.degToRad(state.tiltX); 
+            const tiltZRad = THREE.MathUtils.degToRad(state.tiltZ); 
+            const baseTilt = Math.tan(THREE.MathUtils.degToRad(p.angle)) * z; 
+            const customTilt = (Math.tan(tiltXRad) * z) + (Math.tan(tiltZRad) * x); 
+            return (p.h - baseTilt - customTilt) + getDishOffset(x, z, p); 
+        }
         
         function safeMerge(geometries) { const clean = []; geometries.forEach(g => { if(g) { if(g.index) g = g.toNonIndexed(); clean.push(g); } }); if(clean.length === 0) return null; return BufferGeometryUtils.mergeGeometries(clean, false); }
         
@@ -1061,11 +1365,219 @@ import * as THREE from 'three';
             return {x, z}; 
         }
         
+        // V64: キー形状生成関数
+        function createKeyShape(p, isInner = false, wallThick = 0) {
+            const shape = new THREE.Shape();
+            const w = p.baseW, d = p.baseD, hw = w / 2, hd = d / 2;
+            const offset = isInner ? wallThick : 0;
+            
+            switch(state.keyShapeType) {
+                case 'circle':
+                    const r = Math.min(hw, hd) - offset;
+                    if(r > 0) shape.absarc(0, 0, r, 0, Math.PI * 2, false);
+                    return shape;
+                    
+                case 'polygon':
+                    const sides = state.polygonSides;
+                    const pr = Math.min(hw, hd) - offset;
+                    if(pr > 0) {
+                        for(let i = 0; i < sides; i++) {
+                            const angle = (i / sides) * Math.PI * 2 - Math.PI / 2;
+                            const px = Math.cos(angle) * pr;
+                            const py = Math.sin(angle) * pr;
+                            if(i === 0) shape.moveTo(px, py);
+                            else shape.lineTo(px, py);
+                        }
+                        shape.closePath();
+                    }
+                    return shape;
+                    
+                case 'star':
+                    const points = state.starPoints;
+                    const outer = Math.min(hw, hd) - offset;
+                    const inner = outer * state.starInner;
+                    if(outer > 0) {
+                        for(let i = 0; i < points * 2; i++) {
+                            const angle = (i / (points * 2)) * Math.PI * 2 - Math.PI / 2;
+                            const rad = i % 2 === 0 ? outer : inner;
+                            const sx = Math.cos(angle) * rad;
+                            const sy = Math.sin(angle) * rad;
+                            if(i === 0) shape.moveTo(sx, sy);
+                            else shape.lineTo(sx, sy);
+                        }
+                        shape.closePath();
+                    }
+                    return shape;
+                    
+                case 'iso-enter':
+                    // ISO Enter (L字) 座標計算
+                    // isoTopWidth: 上部幅（広い方）= 1.5u
+                    // isoBottomWidth: 下部幅（狭い方）= 1.25u
+                    const unit = parseFloat(state.unitSize) || 19.05;
+                    const isoFullW = (unit * state.isoTopWidth) - 0.5;      // 上部幅（広い方）
+                    const isoNarrowW = (unit * state.isoBottomWidth) - 0.5; // 下部幅（狭い方）
+                    const isoTotalH = (unit * state.isoHeight) - 0.5;
+                    
+                    const ihw = isoFullW / 2;
+                    const ihh = isoTotalH / 2;
+                    
+                    // くびれ位置 (L字の内角) - 上から1u下がった位置
+                    const cornerY = ihh - (unit - 0.5);
+                    // 右端揃え: 上部と下部の右端が揃う
+                    const cornerX = ihw - isoNarrowW;
+
+                    if (!isInner) {
+                        // 外枠 (CCW: 反時計回り)
+                        shape.moveTo(-ihw, ihh);
+                        shape.lineTo(-ihw, cornerY);
+                        shape.lineTo(cornerX, cornerY);
+                        shape.lineTo(cornerX, -ihh);
+                        shape.lineTo(ihw, -ihh);
+                        shape.lineTo(ihw, ihh);
+                        shape.closePath();
+                    } else {
+                        // 内枠 (CW: 時計回り)
+                        const t = wallThick;
+                        
+                        const inLeft = -ihw + t;
+                        const inRight = ihw - t;
+                        const inTop = ihh - t;
+                        const inBottom = -ihh + t;
+                        
+                        // L字の内角（凹んでいる角）は壁厚を外側（右および上）にずらす
+                        const inCornerX = cornerX + t;
+                        const inCornerY = cornerY + t;
+
+                        shape.moveTo(inLeft, inTop);
+                        shape.lineTo(inRight, inTop);
+                        shape.lineTo(inRight, inBottom);
+                        shape.lineTo(inCornerX, inBottom);
+                        shape.lineTo(inCornerX, inCornerY);
+                        shape.lineTo(inLeft, inCornerY);
+                        shape.closePath();
+                    }
+                    return shape;
+                    
+                case 'rounded':
+                    const hwi = hw - offset;
+                    const hdi = hd - offset;
+                    const rad = Math.min(state.roundCorner, Math.min(hwi, hdi) * 0.5);
+                    if(hwi > 0 && hdi > 0) {
+                        if(rad > 0.1) {
+                            shape.moveTo(-hwi + rad, -hdi);
+                            shape.lineTo(hwi - rad, -hdi);
+                            shape.quadraticCurveTo(hwi, -hdi, hwi, -hdi + rad);
+                            shape.lineTo(hwi, hdi - rad);
+                            shape.quadraticCurveTo(hwi, hdi, hwi - rad, hdi);
+                            shape.lineTo(-hwi + rad, hdi);
+                            shape.quadraticCurveTo(-hwi, hdi, -hwi, hdi - rad);
+                            shape.lineTo(-hwi, -hdi + rad);
+                            shape.quadraticCurveTo(-hwi, -hdi, -hwi + rad, -hdi);
+                        } else {
+                            shape.moveTo(-hwi, -hdi);
+                            shape.lineTo(hwi, -hdi);
+                            shape.lineTo(hwi, hdi);
+                            shape.lineTo(-hwi, hdi);
+                            shape.closePath();
+                        }
+                    }
+                    return shape;
+                    
+                default: // rectangle
+                    const hwj = hw - offset;
+                    const hdj = hd - offset;
+                    if(hwj > 0 && hdj > 0) {
+                        shape.moveTo(-hwj, -hdj);
+                        shape.lineTo(hwj, -hdj);
+                        shape.lineTo(hwj, hdj);
+                        shape.lineTo(-hwj, hdj);
+                        shape.closePath();
+                    }
+                    return shape;
+            }
+        }
+
         function createBodyParts(p, useCSG = false) {
             const thick = state.wallThickness; 
             const segXZ = 32;  
             const segY = 32;   
             
+            // V64: 非矩形形状の場合
+            const isNonRectangular = state.keyShapeType === 'circle' || 
+                                     state.keyShapeType === 'polygon' || 
+                                     state.keyShapeType === 'star' ||
+                                     state.keyShapeType === 'iso-enter' ||
+                                     (state.keyShapeType === 'rounded' && state.roundCorner > 0.1);
+            
+            if(isNonRectangular) {
+                // 外枠を取得 (CCW)
+                const outerShape = createKeyShape(p, false, 0);
+                // 内枠を取得 (CW)
+                const innerShape = createKeyShape(p, true, thick);
+                
+                // 方法: ソリッドからホローをCSGでくり抜く
+                // ソリッド: 外枠を全高さで押し出し
+                let solidGeo = new THREE.ExtrudeGeometry(outerShape, {
+                    depth: p.h,
+                    bevelEnabled: false,
+                    curveSegments: 48
+                });
+                solidGeo.rotateX(-Math.PI / 2);
+                // 結果: Y=0からY=p.hまで
+                
+                // ホロー: 内枠を底面から天面厚み分下まで押し出し
+                let holeGeo = new THREE.ExtrudeGeometry(innerShape, {
+                    depth: p.h - thick + 0.1,  // 底面を貫通させるため少し長め
+                    bevelEnabled: false,
+                    curveSegments: 48
+                });
+                holeGeo.rotateX(-Math.PI / 2);
+                holeGeo.translate(0, -0.05, 0);  // 底面より少し下から開始
+                // 結果: Y=-0.05からY=p.h-thick+0.05まで
+                
+                // CSGでくり抜き
+                let resultGeo;
+                try {
+                    const solidBrush = new Brush(solidGeo);
+                    solidBrush.updateMatrixWorld();
+                    const holeBrush = new Brush(holeGeo);
+                    holeBrush.updateMatrixWorld();
+                    const result = csgEvaluator.evaluate(solidBrush, holeBrush, SUBTRACTION);
+                    resultGeo = result.geometry;
+                    resultGeo = BufferGeometryUtils.mergeVertices(resultGeo, 0.001);
+                } catch(e) {
+                    console.warn("CSG failed, using merge method:", e);
+                    // フォールバック: マージ方式
+                    outerShape.holes.push(innerShape);
+                    const wallH = p.h - thick;
+                    let wallGeo = new THREE.ExtrudeGeometry(outerShape, {
+                        depth: wallH,
+                        bevelEnabled: false,
+                        curveSegments: 48
+                    });
+                    wallGeo.rotateX(-Math.PI / 2);
+                    
+                    const capShape = createKeyShape(p, false, 0);
+                    let topGeo = new THREE.ExtrudeGeometry(capShape, {
+                        depth: thick,
+                        bevelEnabled: false,
+                        curveSegments: 48
+                    });
+                    topGeo.rotateX(-Math.PI / 2);
+                    topGeo.translate(0, wallH, 0);
+                    
+                    resultGeo = safeMerge([wallGeo, topGeo]);
+                }
+                
+                // deform適用（Taper、フィレット対応）
+                // ISO Enterにもテーパーを適用可能にする
+                if(resultGeo && !useCSG) {
+                    deformMesh(resultGeo, p);
+                }
+                return resultGeo;
+            }
+            
+            // 従来の矩形処理
             const topBox = new THREE.BoxGeometry(p.baseW, thick, p.baseD, segXZ, 2, segXZ); 
             topBox.translate(0, p.h - thick/2, 0);
             
@@ -1100,7 +1612,8 @@ import * as THREE from 'three';
             for(let i=0; i<pos.count; i++){
                 v.fromBufferAttribute(pos, i);
                 
-                if (Math.abs(state.twist) > 0.1) { 
+                // Twist処理（ISO Enterでは適用しない）
+                if (Math.abs(state.twist) > 0.1 && state.keyShapeType !== 'iso-enter') { 
                     const angle = twistPerUnit * v.y; 
                     const sinA = Math.sin(angle); const cosA = Math.cos(angle); 
                     const tx = v.x * cosA - v.z * sinA; 
@@ -1117,7 +1630,7 @@ import * as THREE from 'three';
                     v.z *= currentScale; 
                 }
                 
-                if (hasFillet) { 
+                if (hasFillet && state.keyShapeType === 'rectangle') { 
                     const currentW = p.baseW * currentScale; 
                     const currentD = p.baseD * currentScale; 
                     const scaledR = filletR * currentScale; 
@@ -1169,18 +1682,96 @@ import * as THREE from 'three';
         function createStemUnit(height, rOuter, clear) { const shape = new THREE.Shape(); shape.absarc(0,0, rOuter, 0, Math.PI*2); const w = (1.15 + clear)/2; const l = (4.1 + clear)/2; const hole = new THREE.Path(); hole.moveTo(-w,-l); hole.lineTo(w,-l); hole.lineTo(w,-w); hole.lineTo(l,-w); hole.lineTo(l,w); hole.lineTo(w,w); hole.lineTo(w,l); hole.lineTo(-w,l); hole.lineTo(-w,w); hole.lineTo(-l,w); hole.lineTo(-l,-w); hole.lineTo(-w,-w); hole.lineTo(-w,-l); shape.holes.push(hole); const geo = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled:false, curveSegments:24 }); geo.rotateX(Math.PI/2); geo.translate(0, height, 0); return geo; }
 
         function createStemAndRibs(p, useCSG = false) {
-            const thick = state.wallThickness; const rawH = p.h; const clear = state.stemClearance; const ext = state.enableStemExtension ? state.stemExtension : 0.0; const totalStemH = rawH + ext; const rOuter = state.stemDiameter / 2;
-            const stemGeos = []; const cStem = createStemUnit(totalStemH, rOuter, clear); if (ext > 0) cStem.translate(0, -ext, 0);
-            if (state.boxStem) { const boxSize = 5.6 + clear; const boxH = totalStemH * 0.8; const wWall = 0.8; const bS = boxSize + wWall*2; const front = new THREE.BoxGeometry(bS, boxH, wWall); front.translate(0, boxH/2-ext, boxSize/2+wWall/2); const back = new THREE.BoxGeometry(bS, boxH, wWall); back.translate(0, boxH/2-ext, -(boxSize/2+wWall/2)); const left = new THREE.BoxGeometry(wWall, boxH, boxSize); left.translate(-(boxSize/2+wWall/2), boxH/2-ext, 0); const right = new THREE.BoxGeometry(wWall, boxH, boxSize); right.translate(boxSize/2+wWall/2, boxH/2-ext, 0); stemGeos.push(front, back, left, right); }
-            stemGeos.push(cStem); const stabOffset = getStabilizerOffset(state.uSize);
-            if(stabOffset > 0) { const sL = createStemUnit(totalStemH, rOuter, clear); if(ext > 0) sL.translate(0, -ext, 0); sL.translate(-stabOffset, 0, 0); const sR = createStemUnit(totalStemH, rOuter, clear); if(ext > 0) sR.translate(0, -ext, 0); sR.translate(stabOffset, 0, 0); stemGeos.push(sL, sR); }
+            const thick = state.wallThickness; 
+            const rawH = p.h; 
+            const clear = state.stemClearance; 
+            const ext = state.enableStemExtension ? state.stemExtension : 0.0; 
+            const totalStemH = rawH + ext; 
+            const rOuter = state.stemDiameter / 2;
+            const stemGeos = []; 
+            
+            // --- ステム生成 ---
+            if(state.keyShapeType === 'iso-enter') {
+                // ISO Enter用ステム高さの調整
+                const isoStemH = (rawH - thick) + ext;
+                
+                // UIスライダーから位置を取得
+                const stemX = state.isoStemX;
+                const switchZ = state.isoStemZ;
+                const stabTopZ = state.isoStabTopZ;
+                const stabBottomZ = state.isoStabBottomZ;
+                
+                // メインスイッチ生成
+                const mainStem = createStemUnit(isoStemH, rOuter, clear);
+                if(ext > 0) mainStem.translate(0, -ext, 0);
+                mainStem.translate(stemX, 0, switchZ); 
+                stemGeos.push(mainStem);
+                
+                // スタビライザー(奥 / Top)
+                const stabTop = createStemUnit(isoStemH, rOuter, clear);
+                if(ext > 0) stabTop.translate(0, -ext, 0);
+                stabTop.translate(stemX, 0, stabTopZ);
+                stemGeos.push(stabTop);
+
+                // スタビライザー(手前 / Bottom)
+                const stabBottom = createStemUnit(isoStemH, rOuter, clear);
+                if(ext > 0) stabBottom.translate(0, -ext, 0);
+                stabBottom.translate(stemX, 0, stabBottomZ);
+                stemGeos.push(stabBottom);
+
+            } else {
+                // 通常キー
+                const cStem = createStemUnit(totalStemH, rOuter, clear); 
+                if (ext > 0) cStem.translate(0, -ext, 0);
+                if (state.boxStem) { 
+                    const boxSize = 5.6 + clear; const boxH = totalStemH * 0.8; const wWall = 0.8; const bS = boxSize + wWall*2; 
+                    const front = new THREE.BoxGeometry(bS, boxH, wWall); front.translate(0, boxH/2-ext, boxSize/2+wWall/2); 
+                    const back = new THREE.BoxGeometry(bS, boxH, wWall); back.translate(0, boxH/2-ext, -(boxSize/2+wWall/2)); 
+                    const left = new THREE.BoxGeometry(wWall, boxH, boxSize); left.translate(-(boxSize/2+wWall/2), boxH/2-ext, 0); 
+                    const right = new THREE.BoxGeometry(wWall, boxH, boxSize); right.translate(boxSize/2+wWall/2, boxH/2-ext, 0); 
+                    stemGeos.push(front, back, left, right); 
+                }
+                stemGeos.push(cStem);
+
+                const stabOffset = getStabilizerOffset(state.uSize);
+                if(stabOffset > 0) { 
+                    const sL = createStemUnit(totalStemH, rOuter, clear); if(ext > 0) sL.translate(0, -ext, 0); sL.translate(-stabOffset, 0, 0); 
+                    const sR = createStemUnit(totalStemH, rOuter, clear); if(ext > 0) sR.translate(0, -ext, 0); sR.translate(stabOffset, 0, 0); 
+                    stemGeos.push(sL, sR); 
+                }
+            }
+            
+            // --- リブ生成 ---
             const ribGeos = [];
-            if(state.enableRibs && !state.boxStem) {
-                const shorten = state.ribShorten; const ribH = rawH - shorten; const ribY = shorten; const ribThick = 1.2;
+            
+            const isNonRectangularNoRib = state.keyShapeType === 'circle' || 
+                                          state.keyShapeType === 'polygon' || 
+                                          state.keyShapeType === 'star' ||
+                                          state.keyShapeType === 'iso-enter' ||
+                                          (state.keyShapeType === 'rounded' && state.roundCorner > 0.1);
+
+            if(state.enableRibs && !state.boxStem && !isNonRectangularNoRib) {
+                const shorten = state.ribShorten; 
+                const ribH = rawH - shorten; 
+                const ribY = shorten; 
+                const ribThick = 1.2;
                 const overlap = useCSG ? 0.8 : 0.4;
+                
                 if(ribH > 0.1) {
-                    const endX = (p.baseW/2)-thick+0.5; const lx = (endX + overlap) - (rOuter - overlap); if(lx>0) { const rX = new THREE.BoxGeometry(lx, ribH, ribThick); const cx = (rOuter - overlap) + lx/2; const r1 = rX.clone(); r1.translate(cx, ribY+ribH/2, 0); const r2 = rX.clone(); r2.translate(-cx, ribY+ribH/2, 0); ribGeos.push(r1, r2); }
-                    const endZ = (p.baseD/2)-thick+0.5; const lz = (endZ + overlap) - (rOuter - overlap); if(lz>0) { const rZ = new THREE.BoxGeometry(ribThick, ribH, lz); const cz = (rOuter - overlap) + lz/2; const r3 = rZ.clone(); r3.translate(0, ribY+ribH/2, cz); const r4 = rZ.clone(); r4.translate(0, ribY+ribH/2, -cz); ribGeos.push(r3, r4); }
+                    const endX = (p.baseW/2)-thick+0.5; const lx = (endX + overlap) - (rOuter - overlap); 
+                    if(lx>0) { 
+                        const rX = new THREE.BoxGeometry(lx, ribH, ribThick); const cx = (rOuter - overlap) + lx/2; 
+                        const r1 = rX.clone(); r1.translate(cx, ribY+ribH/2, 0); 
+                        const r2 = rX.clone(); r2.translate(-cx, ribY+ribH/2, 0); 
+                        ribGeos.push(r1, r2); 
+                    }
+                    const endZ = (p.baseD/2)-thick+0.5; const lz = (endZ + overlap) - (rOuter - overlap); 
+                    if(lz>0) { 
+                        const rZ = new THREE.BoxGeometry(ribThick, ribH, lz); const cz = (rOuter - overlap) + lz/2; 
+                        const r3 = rZ.clone(); r3.translate(0, ribY+ribH/2, cz); 
+                        const r4 = rZ.clone(); r4.translate(0, ribY+ribH/2, -cz); 
+                        ribGeos.push(r3, r4); 
+                    }
                 }
             }
             
@@ -1196,7 +1787,50 @@ import * as THREE from 'three';
                 merged = safeMerge([...stemGeos, ...ribGeos]);
             }
             
-            if(merged && !useCSG) { const pos = merged.attributes.position; const v = new THREE.Vector3(); merged.computeBoundingBox(); const maxY = merged.boundingBox.max.y; const twistRad = THREE.MathUtils.degToRad(state.twist); const twistPerUnit = twistRad / p.h; for(let i=0; i<pos.count; i++){ v.fromBufferAttribute(pos, i); if (Math.abs(state.twist) > 0.1) { const angle = twistPerUnit * v.y; const sinA = Math.sin(angle); const cosA = Math.cos(angle); const tx = v.x * cosA - v.z * sinA; const tz = v.x * sinA + v.z * cosA; v.x = tx; v.z = tz; } const ratioY = Math.max(0, v.y / p.h); const dist = Math.sqrt(v.x*v.x + v.z*v.z); if(dist > rOuter + 0.5) { const taper = THREE.MathUtils.lerp(1.0, state.topScale, ratioY); v.x *= taper; v.z *= taper; } if(v.y > maxY - 1.0) { const sy = getSurfaceHeight(v.x, v.z, p); v.y = sy - thick; } pos.setXYZ(i, v.x, v.y, v.z); } merged.computeVertexNormals(); }
+            // 変形処理
+            if(merged && !useCSG) { 
+                const pos = merged.attributes.position; 
+                const v = new THREE.Vector3(); 
+                merged.computeBoundingBox(); 
+                const maxY = merged.boundingBox.max.y; 
+                const twistRad = THREE.MathUtils.degToRad(state.twist); 
+                const twistPerUnit = twistRad / p.h; 
+                
+                for(let i=0; i<pos.count; i++){ 
+                    v.fromBufferAttribute(pos, i); 
+                    
+                    // Twist処理（ISO Enterでは適用しない）
+                    if (Math.abs(state.twist) > 0.1 && state.keyShapeType !== 'iso-enter') { 
+                        const angle = twistPerUnit * v.y; 
+                        const sinA = Math.sin(angle); 
+                        const cosA = Math.cos(angle); 
+                        const tx = v.x * cosA - v.z * sinA; 
+                        const tz = v.x * sinA + v.z * cosA; 
+                        v.x = tx; 
+                        v.z = tz; 
+                    } 
+                    
+                    const ratioY = Math.max(0, v.y / p.h); 
+                    const dist = Math.sqrt(v.x*v.x + v.z*v.z); 
+                    
+                    // テーパー処理（ISO Enterも含む）
+                    // ステム部分（内側）にはテーパーを適用しない
+                    if(dist > rOuter + 0.5) { 
+                        const taper = THREE.MathUtils.lerp(1.0, state.topScale, ratioY); 
+                        v.x *= taper; 
+                        v.z *= taper; 
+                    } 
+                    
+                    // 天面処理（ISO Enterでは適用しない）
+                    if(state.keyShapeType !== 'iso-enter' && v.y > maxY - 1.0) { 
+                        const sy = getSurfaceHeight(v.x, v.z, p); 
+                        v.y = sy - thick; 
+                    } 
+                    
+                    pos.setXYZ(i, v.x, v.y, v.z); 
+                } 
+                merged.computeVertexNormals(); 
+            }
             return merged;
         }
 
@@ -1209,11 +1843,23 @@ import * as THREE from 'three';
             let yEmbedOffset = 0;
 
             if (mode === 'engrave') {
+                // 彫刻: 上面から下に掘り込む
                 genHeight = state.textHeight + 5.0;
                 yEmbedOffset = -state.textHeight;
             } else if (mode === 'doubleshot') {
-                yEmbedOffset = -state.textHeight + 0.02;
+                // ダブルショット: 文字の表面を天面と同じ高さにし、内部に貫通
+                // genHeight = 貫通深さ（壁厚 + 余裕）
+                genHeight = state.wallThickness + 0.5;
+                // 文字の表面(v.z=genHeight)が天面(surfY)に来るようにオフセット
+                yEmbedOffset = -genHeight + 0.02;
+            } else if (mode === 'lithophane') {
+                // Lithophane: 底面を極薄（0.3mm）に残してバックライト透過
+                // 天面から壁厚-0.3mmの深さまで削る
+                const thinLayer = 0.3;
+                genHeight = state.wallThickness - thinLayer + 0.5;
+                yEmbedOffset = -(state.wallThickness - thinLayer);
             }
+            // emboss: デフォルト（genHeight = textHeight, yEmbedOffset = 0）
             
             yEmbedOffset += state.textOffsetY;
 
@@ -1630,6 +2276,9 @@ import * as THREE from 'three';
                 } else if (mode === 'doubleshot') {
                     textGeos.push(geo);
                     engraveGeos.push(geo.clone());
+                } else if (mode === 'lithophane') {
+                    // Lithophane: 底面を薄く残してくり抜く（engraveと同じ処理）
+                    engraveGeos.push(geo);
                 }
             };
             
@@ -1958,7 +2607,7 @@ import * as THREE from 'three';
                 
                 let modelXml = `<?xml version="1.0" encoding="UTF-8"?>
 <model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:m="http://schemas.microsoft.com/3dmanufacturing/material/2015/02">
-  <metadata name="Application">Keycap Generator V63.3.1</metadata>
+  <metadata name="Application">Keycap Generator V64.0</metadata>
   <resources>
     <m:basematerials id="1">
       <m:base name="Body" displaycolor="#${state.colBody.slice(1).toUpperCase()}" />
@@ -2107,7 +2756,23 @@ ${buildItems}
             });
             
             document.getElementById('unit-size-select').addEventListener('change', (e) => { state.unitSize = parseFloat(e.target.value); requestUpdate(); });
-            document.getElementById('profile-select').addEventListener('change', (e) => { state.profile = e.target.value; requestUpdate(); });
+            document.getElementById('profile-select').addEventListener('change', (e) => { 
+                state.profile = e.target.value; 
+                // V64: カスタムプロファイルパネルの表示/非表示
+                const customPanel = document.getElementById('custom-profile-panel');
+                if(customPanel) customPanel.style.display = e.target.value === 'custom' ? 'block' : 'none';
+                requestUpdate(); 
+            });
+            
+            // V64: キー形状タイプのイベントリスナー
+            document.getElementById('key-shape-type').addEventListener('change', (e) => {
+                state.keyShapeType = e.target.value;
+                document.getElementById('shape-polygon-options').style.display = e.target.value === 'polygon' ? 'block' : 'none';
+                document.getElementById('shape-star-options').style.display = e.target.value === 'star' ? 'block' : 'none';
+                document.getElementById('shape-iso-options').style.display = e.target.value === 'iso-enter' ? 'block' : 'none';
+                requestUpdate();
+            });
+            
             document.getElementById('row-select').addEventListener('change', (e) => { state.row = e.target.value; requestUpdate(); });
             document.getElementById('texture-type').addEventListener('change', (e) => { state.textureType = e.target.value; requestUpdate(); });
             document.getElementById('text-mode').addEventListener('change', (e) => { state.textMode = e.target.value; requestUpdate(); });
@@ -2319,6 +2984,7 @@ ${buildItems}
             const reader = new FileReader();
             reader.onload = function(e) {
                 state.svgContent = e.target.result;
+                state.svgName = file.name.replace(/\.svg$/i, ''); // SVG名を保存
                 updateModel();
             };
             reader.readAsText(file);
@@ -2326,6 +2992,7 @@ ${buildItems}
         const bClearSvg = document.getElementById('btn-clear-svg');
         if(bClearSvg) bClearSvg.addEventListener('click', () => {
             state.svgContent = null;
+            state.svgName = null;
             if(sInput) sInput.value = '';
             updateModel();
         });
@@ -2429,23 +3096,414 @@ ${buildItems}
             const blob = new Blob([JSON.stringify(state, null, 2)], {type: "application/json"});
             saveBlob(blob, "keycap_preset.json");
         });
-        document.getElementById('preset-file-input').addEventListener('change', (e) => {
-            const file = e.target.files[0]; if(!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                try {
-                    state = JSON.parse(ev.target.result);
+        
+        // V64: 名前付きプリセット保存
+        document.getElementById('btn-save-named-preset').addEventListener('click', () => {
+            const name = document.getElementById('preset-save-name').value || 'Preset_' + Date.now();
+            const presetData = { name: name, data: {...state, svgName: state.svgName || null}, version: 'V64' };
+            const blob = new Blob([JSON.stringify(presetData, null, 2)], {type: "application/json"});
+            saveBlob(blob, `${name}.json`);
+            showToast(translations[currentLang].msg_save_ok);
+        });
+        
+        // V64: URLで共有機能
+        document.getElementById('btn-share-url').addEventListener('click', () => {
+            try {
+                // 差分のみをエンコード（デフォルト値と異なるものだけ）
+                const diffState = {};
+                for(const key in state) {
+                    if(JSON.stringify(state[key]) !== JSON.stringify(initialState[key])) {
+                        diffState[key] = state[key];
+                    }
+                }
+                const json = JSON.stringify(diffState);
+                const compressed = LZString.compressToEncodedURIComponent(json);
+                const url = window.location.origin + window.location.pathname + '?s=' + compressed;
+                
+                if(url.length > 8000) {
+                    showToast('URLが長すぎます。設定を減らしてください。', true);
+                    return;
+                }
+                
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast(translations[currentLang].msg_url_copied || 'URLをコピーしました！');
+                });
+            } catch(e) {
+                console.error('URL share error:', e);
+                showToast('エラーが発生しました', true);
+            }
+        });
+        
+        // V64: URLから読み込み
+        document.getElementById('btn-import-url').addEventListener('click', () => {
+            const input = document.getElementById('url-import-input');
+            const urlStr = input.value.trim();
+            if(!urlStr) return;
+            
+            try {
+                // 複数URLに対応（改行区切り）
+                const urls = urlStr.split(/[\n\r]+/).filter(u => u.trim());
+                let loaded = 0;
+                
+                urls.forEach((u, idx) => {
+                    const url = new URL(u.trim());
+                    const encoded = url.searchParams.get('s');
+                    if(encoded) {
+                        const json = LZString.decompressFromEncodedURIComponent(encoded);
+                        const data = JSON.parse(json);
+                        
+                        // プリセットとして追加
+                        const presetName = 'URL_' + (Date.now() + idx);
+                        loadedPresets.push({ name: presetName, data: {...initialState, ...data}, version: 'V64' });
+                        loaded++;
+                    }
+                });
+                
+                if(loaded > 0) {
+                    currentPresetIndex = loadedPresets.length - 1;
+                    updatePresetFloatPanel();
+                    updatePresetSwitcher();
+                    applyPresetByIndex(currentPresetIndex);
+                    showToast((translations[currentLang].msg_url_loaded || 'URLから読み込みました') + ` (${loaded}件)`);
+                    input.value = '';
+                } else {
+                    showToast(translations[currentLang].msg_url_invalid || '無効なURLです', true);
+                }
+            } catch(e) {
+                console.error('URL import error:', e);
+                showToast(translations[currentLang].msg_url_invalid || '無効なURLです', true);
+            }
+        });
+        
+        // V64: URLパラメータからの自動読み込み（ページ読み込み時）
+        function loadFromURLParams() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const encoded = urlParams.get('s');
+                if(encoded) {
+                    const json = LZString.decompressFromEncodedURIComponent(encoded);
+                    const data = JSON.parse(json);
+                    Object.assign(state, data);
                     syncUI();
                     updateCustomDropdown();
                     requestUpdate();
                     commitHistory();
-                } catch(err) {
-                    showToast(translations[currentLang].msg_import_err, true);
+                    showToast('URLからプリセットを読み込みました');
+                    // URLパラメータをクリア（ブラウザ履歴を汚さないため）
+                    window.history.replaceState({}, document.title, window.location.pathname);
                 }
-                e.target.value = '';
-            };
-            reader.readAsText(file);
+            } catch(e) {
+                console.error('Auto URL load error:', e);
+            }
+        }
+        setTimeout(loadFromURLParams, 500); // 初期化後に実行
+        
+        // V64: プリセットボタンのクリックでドロップダウン表示/非表示
+        document.getElementById('btn-show-presets').addEventListener('click', () => {
+            const dropdown = document.getElementById('preset-dropdown');
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
         });
+        
+        // V64: 選択中のプリセットを削除
+        document.getElementById('btn-remove-preset').addEventListener('click', removeCurrentPreset);
+        document.getElementById('btn-remove-preset-ui').addEventListener('click', removeCurrentPreset);
+        
+        function removeCurrentPreset() {
+            if(loadedPresets.length === 0 || currentPresetIndex < 0) return;
+            loadedPresets.splice(currentPresetIndex, 1);
+            if(loadedPresets.length === 0) {
+                currentPresetIndex = -1;
+            } else if(currentPresetIndex >= loadedPresets.length) {
+                currentPresetIndex = loadedPresets.length - 1;
+            }
+            updatePresetFloatPanel();
+            updatePresetSwitcher();
+            if(currentPresetIndex >= 0) {
+                applyPresetByIndex(currentPresetIndex);
+            }
+            showToast('プリセットを削除しました');
+        }
+        
+        // V64: 全プリセットをクリア
+        document.getElementById('btn-clear-all-presets').addEventListener('click', () => {
+            if(loadedPresets.length === 0) return;
+            if(confirm('すべてのプリセットをクリアしますか？')) {
+                loadedPresets = [];
+                currentPresetIndex = -1;
+                updatePresetFloatPanel();
+                updatePresetSwitcher();
+                showToast('すべてのプリセットをクリアしました');
+            }
+        });
+        
+        // V64: 前へ/次へボタン
+        document.getElementById('btn-prev-preset').addEventListener('click', () => {
+            if(loadedPresets.length > 0 && currentPresetIndex > 0) {
+                currentPresetIndex--;
+                applyPresetByIndex(currentPresetIndex);
+            }
+        });
+        
+        document.getElementById('btn-next-preset').addEventListener('click', () => {
+            if(loadedPresets.length > 0 && currentPresetIndex < loadedPresets.length - 1) {
+                currentPresetIndex++;
+                applyPresetByIndex(currentPresetIndex);
+            }
+        });
+        
+        function applyPresetByIndex(idx) {
+            if(idx < 0 || idx >= loadedPresets.length) return;
+            Object.assign(state, loadedPresets[idx].data);
+            syncUI();
+            updateCustomDropdown();
+            requestUpdate();
+            commitHistory();
+            document.getElementById('preset-switcher-float').value = idx;
+            updatePresetFloatPreview(idx);
+            // UIパネル内のスイッチャーも同期
+            const uiSwitcher = document.getElementById('preset-switcher');
+            if(uiSwitcher) uiSwitcher.value = idx;
+            updatePresetPreview(idx);
+        }
+        
+        // V64: 複数プリセット読み込み（既存リストに追加）
+        document.getElementById('preset-file-input').addEventListener('change', async (e) => {
+            const files = e.target.files;
+            if(!files || files.length === 0) return;
+            
+            let addedCount = 0;
+            
+            for(const file of files) {
+                try {
+                    const text = await file.text();
+                    const json = JSON.parse(text);
+                    
+                    if(json.data && json.name) {
+                        // V64形式: 名前付きプリセット
+                        loadedPresets.push({ name: json.name, data: json.data });
+                    } else {
+                        // 従来形式: 直接stateデータ
+                        loadedPresets.push({ name: file.name.replace('.json',''), data: json });
+                    }
+                    addedCount++;
+                } catch(err) {
+                    console.warn('Failed to load preset:', file.name, err);
+                }
+            }
+            
+            if(addedCount > 0) {
+                // 最初に追加したプリセットを選択（既存があれば最初の新規追加分）
+                if(currentPresetIndex < 0) {
+                    currentPresetIndex = 0;
+                    Object.assign(state, loadedPresets[0].data);
+                    syncUI();
+                    updateCustomDropdown();
+                    requestUpdate();
+                    commitHistory();
+                }
+                updatePresetFloatPanel();
+                updatePresetSwitcher();
+                showToast(addedCount + '個のプリセットを追加しました（合計: ' + loadedPresets.length + '）');
+            } else {
+                showToast(translations[currentLang].msg_import_err, true);
+            }
+            
+            e.target.value = '';
+        });
+        
+        // V64: フローティングプリセット切り替え
+        document.getElementById('preset-switcher-float').addEventListener('change', (e) => {
+            const idx = parseInt(e.target.value);
+            if(idx >= 0 && idx < loadedPresets.length) {
+                currentPresetIndex = idx;
+                applyPresetByIndex(idx);
+            }
+        });
+        
+        // V64: プリセットスイッチャー更新関数（フローティングパネル用）
+        function updatePresetFloatPanel() {
+            const switcher = document.getElementById('preset-switcher-float');
+            const btn = document.getElementById('btn-show-presets');
+            const countSpan = document.getElementById('preset-count');
+            switcher.innerHTML = '';
+            
+            if(loadedPresets.length === 0) {
+                btn.style.display = 'none';
+                document.getElementById('preset-dropdown').style.display = 'none';
+                return;
+            }
+            
+            btn.style.display = 'block';
+            countSpan.textContent = loadedPresets.length;
+            
+            loadedPresets.forEach((preset, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = (idx + 1) + '. ' + (preset.name || `Preset ${idx + 1}`);
+                switcher.appendChild(opt);
+            });
+            
+            if(currentPresetIndex >= 0 && currentPresetIndex < loadedPresets.length) {
+                switcher.value = currentPresetIndex;
+                updatePresetFloatPreview(currentPresetIndex);
+            }
+        }
+        
+        function updatePresetFloatPreview(idx) {
+            if(idx < 0 || idx >= loadedPresets.length) return;
+            const preset = loadedPresets[idx].data;
+            const shapeNames = {
+                'rectangle': '四角形', 'rounded': '角丸', 'circle': '円形',
+                'polygon': '多角形', 'star': '星形', 'iso-enter': 'ISO Enter'
+            };
+            document.getElementById('pf-profile').textContent = preset.profile || 'cherry';
+            document.getElementById('pf-size').textContent = (preset.uSize || 1) + 'U';
+            document.getElementById('pf-shape').textContent = shapeNames[preset.keyShapeType] || '四角形';
+            document.getElementById('pf-text').textContent = preset.text || '-';
+        }
+        
+        // V64: 旧プリセットスイッチャー（UIパネル内）も更新
+        document.getElementById('preset-switcher').addEventListener('change', (e) => {
+            const idx = parseInt(e.target.value);
+            if(idx >= 0 && idx < loadedPresets.length) {
+                currentPresetIndex = idx;
+                applyPresetByIndex(idx);
+            }
+        });
+        
+        // V64: プリセットスイッチャー更新関数
+        function updatePresetSwitcher() {
+            const switcher = document.getElementById('preset-switcher');
+            const panel = document.getElementById('preset-switch-panel');
+            switcher.innerHTML = '';
+            
+            if(loadedPresets.length === 0) {
+                panel.style.display = 'none';
+                return;
+            }
+            
+            panel.style.display = 'block';
+            loadedPresets.forEach((preset, idx) => {
+                const opt = document.createElement('option');
+                opt.value = idx;
+                opt.textContent = (idx + 1) + '. ' + (preset.name || `Preset ${idx + 1}`);
+                switcher.appendChild(opt);
+            });
+            
+            if(currentPresetIndex >= 0 && currentPresetIndex < loadedPresets.length) {
+                switcher.value = currentPresetIndex;
+                updatePresetPreview(currentPresetIndex);
+            }
+        }
+        
+        function updatePresetPreview(idx) {
+            const preview = document.getElementById('preset-preview-mini');
+            if(idx < 0 || idx >= loadedPresets.length) {
+                // プリセットがない場合はN/A表示
+                const els = ['pm-profile', 'pm-size', 'pm-shape', 'pm-text', 'pm-text2', 'pm-side', 'pm-svg'];
+                els.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '-'; });
+                return;
+            }
+            const preset = loadedPresets[idx].data;
+            
+            // Profile
+            const pmProfile = document.getElementById('pm-profile');
+            if(pmProfile) pmProfile.textContent = preset.profile || 'cherry';
+            
+            // Size
+            const pmSize = document.getElementById('pm-size');
+            if(pmSize) pmSize.textContent = (preset.uSize || 1) + 'U';
+            
+            // Shape
+            const pmShape = document.getElementById('pm-shape');
+            if(pmShape) pmShape.textContent = preset.keyShapeType || 'rectangle';
+            
+            // Text (enableTextがoffならN/A)
+            const pmText = document.getElementById('pm-text');
+            if(pmText) {
+                if(preset.enableText === false) {
+                    pmText.textContent = 'N/A';
+                } else {
+                    pmText.textContent = preset.text || '-';
+                }
+            }
+            
+            // Sub Text (enableText2がoffならN/A)
+            const pmText2 = document.getElementById('pm-text2');
+            if(pmText2) {
+                if(preset.enableText2 === false) {
+                    pmText2.textContent = 'N/A';
+                } else {
+                    pmText2.textContent = preset.text2 || '-';
+                }
+            }
+            
+            // Side (enableSideがoffならN/A)
+            const pmSide = document.getElementById('pm-side');
+            if(pmSide) {
+                if(preset.enableSide === false) {
+                    pmSide.textContent = 'N/A';
+                } else {
+                    pmSide.textContent = preset.sideText || '-';
+                }
+            }
+            
+            // SVG (svgVisibleがoffまたはsvgContentがなければN/A)
+            const pmSvg = document.getElementById('pm-svg');
+            if(pmSvg) {
+                if(preset.svgVisible === false || !preset.svgContent) {
+                    pmSvg.textContent = 'N/A';
+                } else {
+                    // SVG名を取得（svgNameがあれば使用、なければ「Loaded」）
+                    pmSvg.textContent = preset.svgName || 'Loaded';
+                }
+            }
+            
+            // フローティングパネルのプレビューも更新
+            updateFloatPreview(preset);
+        }
+        
+        function updateFloatPreview(preset) {
+            const pfProfile = document.getElementById('pf-profile');
+            const pfSize = document.getElementById('pf-size');
+            const pfShape = document.getElementById('pf-shape');
+            const pfText = document.getElementById('pf-text');
+            const pfText2 = document.getElementById('pf-text2');
+            const pfSide = document.getElementById('pf-side');
+            const pfSvg = document.getElementById('pf-svg');
+            
+            if(pfProfile) pfProfile.textContent = preset.profile || 'cherry';
+            if(pfSize) pfSize.textContent = (preset.uSize || 1) + 'U';
+            if(pfShape) pfShape.textContent = preset.keyShapeType || 'rectangle';
+            if(pfText) {
+                if(preset.enableText === false) {
+                    pfText.textContent = 'N/A';
+                } else {
+                    pfText.textContent = preset.text || '-';
+                }
+            }
+            if(pfText2) {
+                if(preset.enableText2 === false) {
+                    pfText2.textContent = 'N/A';
+                } else {
+                    pfText2.textContent = preset.text2 || '-';
+                }
+            }
+            if(pfSide) {
+                if(preset.enableSide === false) {
+                    pfSide.textContent = 'N/A';
+                } else {
+                    pfSide.textContent = preset.sideText || '-';
+                }
+            }
+            if(pfSvg) {
+                if(preset.svgVisible === false || !preset.svgContent) {
+                    pfSvg.textContent = 'N/A';
+                } else {
+                    pfSvg.textContent = preset.svgName || 'Loaded';
+                }
+            }
+        }
         
         async function runBatchExport() {
             const t = translations[currentLang];
@@ -2540,7 +3598,7 @@ ${buildItems}
             
             let modelXml = `<?xml version="1.0" encoding="UTF-8"?>
 <model unit="millimeter" xml:lang="en-US" xmlns="http://schemas.microsoft.com/3dmanufacturing/core/2015/02" xmlns:m="http://schemas.microsoft.com/3dmanufacturing/material/2015/02">
-  <metadata name="Application">Keycap Generator V63.3.1</metadata>
+  <metadata name="Application">Keycap Generator V64.0</metadata>
   <resources>
     <m:basematerials id="1">
       <m:base name="Body" displaycolor="#${state.colBody.slice(1).toUpperCase()}" />
@@ -2640,6 +3698,73 @@ ${buildItems}
             document.getElementById('loading').style.display='none';
             requestUpdate();
         });
+        
+        // ===== ツールチップ（ヒント）機能 =====
+        (function initTooltipHints() {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'hint-tooltip';
+            tooltip.id = 'hint-tooltip';
+            document.body.appendChild(tooltip);
+            
+            let hintEnabled = true;
+            let hideTimeout = null;
+            
+            const enableHintsCheckbox = document.getElementById('enable-hints');
+            if(enableHintsCheckbox) {
+                enableHintsCheckbox.addEventListener('change', (e) => {
+                    hintEnabled = e.target.checked;
+                    if(!hintEnabled) {
+                        tooltip.classList.remove('visible');
+                    }
+                });
+            }
+            
+            function showTooltip(el, e) {
+                if(!hintEnabled) return;
+                
+                const hintKey = el.getAttribute('data-hint');
+                if(!hintKey) return;
+                
+                const t = translations[currentLang];
+                const hintText = t[hintKey];
+                if(!hintText) return;
+                
+                tooltip.textContent = hintText;
+                
+                // 3Dプレビューエリアの左下に固定表示（設定タブの右側）
+                const tooltipWidth = 320;
+                const uiPanel = document.getElementById('ui-panel');
+                const uiPanelRect = uiPanel ? uiPanel.getBoundingClientRect() : { right: 0 };
+                
+                // UIパネルの右端 + 20pxの位置に配置
+                let left = (uiPanelRect.right || 500) + 20;
+                
+                // 画面下部に固定
+                let top = window.innerHeight - 100;
+                
+                tooltip.style.left = left + 'px';
+                tooltip.style.top = top + 'px';
+                tooltip.style.transform = 'translateY(0)';
+                tooltip.style.maxWidth = tooltipWidth + 'px';
+                
+                clearTimeout(hideTimeout);
+                tooltip.classList.add('visible');
+            }
+            
+            function hideTooltip() {
+                hideTimeout = setTimeout(() => {
+                    tooltip.classList.remove('visible');
+                }, 100);
+            }
+            
+            // data-hint属性を持つすべての要素にイベントを追加
+            document.querySelectorAll('[data-hint]').forEach(el => {
+                el.addEventListener('mouseenter', (e) => showTooltip(el, e));
+                el.addEventListener('mouseleave', hideTooltip);
+                el.addEventListener('focus', (e) => showTooltip(el, e));
+                el.addEventListener('blur', hideTooltip);
+            });
+        })();
         
         init();
     </script>
