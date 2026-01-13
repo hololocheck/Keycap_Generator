@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-64.0-orange.svg)
+![Version](https://img.shields.io/badge/version-64.1-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
