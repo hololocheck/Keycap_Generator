@@ -111,7 +111,6 @@
         .toggle-input:checked + .toggle-knob::after { left: 20px; background: black; }
         .toggle-label { color: #e0f7fa; font-size: 0.8rem; user-select: none; }
 
-        /* Tooltip hint system */
         .hint-tooltip { position: fixed; background: rgba(0, 40, 45, 0.95); border: 1px solid var(--accent); color: #e0f7fa; padding: 10px 14px; border-radius: 6px; font-size: 0.75rem; max-width: 280px; z-index: 9999; pointer-events: none; box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3); opacity: 0; transform: translateY(5px); transition: opacity 0.3s ease, transform 0.3s ease; line-height: 1.5; }
         .hint-tooltip.visible { opacity: 1; transform: translateY(0); }
         .hint-tooltip::before { content: '💡'; margin-right: 6px; }
@@ -850,7 +849,6 @@ import * as THREE from 'three';
                 lbl_manual_override: "手動設定 (Manual Override)", lbl_price: "価格", lbl_spool: "リール(g)", lbl_density: "密度",
                 link_wiki: "Wikiへ移動", link_github: "GitHubへ移動",
                 lbl_show_hints: "💡 ヒント表示",
-                // Hints
                 hint_lang: "表示言語を日本語または英語に切り替えます。",
                 hint_section_jump: "設定したい項目へ素早く移動します。",
                 hint_search: "設定項目名で検索し、該当箇所をハイライトします。",
@@ -1084,7 +1082,6 @@ import * as THREE from 'three';
             svgContent: null, svgName: null, svgVisible: true, svgScale: 1.0, svgThickness: 0.6, svgMode: 'emboss', svgConform: true, 
             svgRotX: 0, svgRotY: 0, svgRotZ: 0, svgOffsetY: 0.0, svgPosX: 0, svgPosZ: 0,
             colBody: '#333333', colText: '#00e5ff',
-            // V64 新機能
             keyShapeType: 'rectangle', polygonSides: 6, starPoints: 5, starInner: 0.5,
             isoTopWidth: 1.5, isoBottomWidth: 1.25, isoHeight: 2.0,
             isoStemX: 2.4, isoStemZ: 0, isoStabTopZ: -12, isoStabBottomZ: 12,
@@ -1095,7 +1092,6 @@ import * as THREE from 'three';
         const csgEvaluator = new Evaluator();
         const history = [JSON.parse(JSON.stringify(initialState))];
         let historyIndex = 0;
-        // V64: 複数プリセット管理
         let loadedPresets = [];
         let currentPresetIndex = -1;
 
@@ -1120,7 +1116,6 @@ import * as THREE from 'three';
             'stem-diameter': 'stemDiameter', 'text-mode': 'textMode', 'text2-mode': 'text2Mode', 'side-mode': 'sideMode', 'svg-mode': 'svgMode',
             'img-scale': 'imgScale', 'img-pos-x': 'imgPosX', 'img-pos-y': 'imgPosY', 'img-rot': 'imgRot',
             'lego-x': 'legoX', 'lego-y': 'legoY', 'lego-z': 'legoZ', 'lego-clear': 'legoClear',
-            // V64 新パラメータ
             'polygon-sides': 'polygonSides', 'star-points': 'starPoints', 'star-inner': 'starInner',
             'iso-top-width': 'isoTopWidth', 'iso-bottom-width': 'isoBottomWidth', 'iso-height': 'isoHeight',
             'iso-stem-x': 'isoStemX', 'iso-stem-z': 'isoStemZ', 'iso-stab-top-z': 'isoStabTopZ', 'iso-stab-bottom-z': 'isoStabBottomZ',
@@ -1146,7 +1141,6 @@ import * as THREE from 'three';
             document.getElementById('stem-ext-control').style.display = state.enableStemExtension ? 'block' : 'none';
             document.getElementById('stabilizer-custom-ui').style.display = state.stabilizerType === 'custom' ? 'block' : 'none';
             document.getElementById('lego-adj-panel').style.display = state.legoStud ? 'block' : 'none';
-            // V64: 新しいUI要素の表示/非表示
             const customProfilePanel = document.getElementById('custom-profile-panel');
             if(customProfilePanel) customProfilePanel.style.display = state.profile === 'custom' ? 'block' : 'none';
             const shapePolygon = document.getElementById('shape-polygon-options');
@@ -1262,10 +1256,9 @@ import * as THREE from 'three';
             }
             const unit = parseFloat(state.unitSize) || 19.05;
             
-            // V64: ISO Enterの場合はサイズを調整し、角度を0に固定
             if(state.keyShapeType === 'iso-enter') {
-                const fullW = (unit * state.isoTopWidth) - 0.5;  // 上部の全幅（広い方: 1.5u）
-                const totalH = (unit * state.isoHeight) - 0.5;      // 全高さ
+                const fullW = (unit * state.isoTopWidth) - 0.5;
+                const totalH = (unit * state.isoHeight) - 0.5;
                 return { h: r.h, angle: 0, baseW: fullW, baseD: totalH };
             }
             
@@ -1275,9 +1268,8 @@ import * as THREE from 'three';
         const DISH_DEPTH = 0.8; 
         function getDishOffset(x, z, p) { const wHalf = p.baseW * state.topScale * 0.5; const dHalf = p.baseD * state.topScale * 0.5; const nx = x / (wHalf || 1); const nz = z / (dHalf || 1); let offset = 0; const type = state.dishType; if(type === 'flat') offset = 0; else if(type === 'cylindrical') { if(Math.abs(nx) < 2.0) offset = DISH_DEPTH * (Math.pow(nx, 2) - 1.0); } else { const dist = Math.sqrt(nx*nx + nz*nz); if(dist < 2.0) offset = DISH_DEPTH * (Math.pow(dist, 2) - 1.0); } return offset; }
         function getSurfaceHeight(x, z, p) { 
-            // ISO Enterの場合は傾斜とDishを適用しない（上面をフラットに）
             if(state.keyShapeType === 'iso-enter') {
-                return p.h;  // Dishも適用しない
+                return p.h;
             }
             const tiltXRad = THREE.MathUtils.degToRad(state.tiltX); 
             const tiltZRad = THREE.MathUtils.degToRad(state.tiltZ); 
@@ -1342,7 +1334,7 @@ import * as THREE from 'three';
                 } 
             }
             else if (absX > innerW) {
-                const edgeDist = absZ / innerD; // 0～1
+                const edgeDist = absZ / innerD;
                 if (edgeDist > 0.9) {
                     const blend = (edgeDist - 0.9) / 0.1;
                     const maxX = halfW - (1 - Math.sqrt(1 - blend*blend)) * r * 0.1;
@@ -1365,7 +1357,6 @@ import * as THREE from 'three';
             return {x, z}; 
         }
         
-        // V64: キー形状生成関数
         function createKeyShape(p, isInner = false, wallThick = 0) {
             const shape = new THREE.Shape();
             const w = p.baseW, d = p.baseD, hw = w / 2, hd = d / 2;
@@ -1410,24 +1401,18 @@ import * as THREE from 'three';
                     return shape;
                     
                 case 'iso-enter':
-                    // ISO Enter (L字) 座標計算
-                    // isoTopWidth: 上部幅（広い方）= 1.5u
-                    // isoBottomWidth: 下部幅（狭い方）= 1.25u
                     const unit = parseFloat(state.unitSize) || 19.05;
-                    const isoFullW = (unit * state.isoTopWidth) - 0.5;      // 上部幅（広い方）
-                    const isoNarrowW = (unit * state.isoBottomWidth) - 0.5; // 下部幅（狭い方）
+                    const isoFullW = (unit * state.isoTopWidth) - 0.5;
+                    const isoNarrowW = (unit * state.isoBottomWidth) - 0.5;
                     const isoTotalH = (unit * state.isoHeight) - 0.5;
                     
                     const ihw = isoFullW / 2;
                     const ihh = isoTotalH / 2;
                     
-                    // くびれ位置 (L字の内角) - 上から1u下がった位置
                     const cornerY = ihh - (unit - 0.5);
-                    // 右端揃え: 上部と下部の右端が揃う
                     const cornerX = ihw - isoNarrowW;
 
                     if (!isInner) {
-                        // 外枠 (CCW: 反時計回り)
                         shape.moveTo(-ihw, ihh);
                         shape.lineTo(-ihw, cornerY);
                         shape.lineTo(cornerX, cornerY);
@@ -1436,7 +1421,6 @@ import * as THREE from 'three';
                         shape.lineTo(ihw, ihh);
                         shape.closePath();
                     } else {
-                        // 内枠 (CW: 時計回り)
                         const t = wallThick;
                         
                         const inLeft = -ihw + t;
@@ -1444,7 +1428,6 @@ import * as THREE from 'three';
                         const inTop = ihh - t;
                         const inBottom = -ihh + t;
                         
-                        // L字の内角（凹んでいる角）は壁厚を外側（右および上）にずらす
                         const inCornerX = cornerX + t;
                         const inCornerY = cornerY + t;
 
@@ -1483,7 +1466,7 @@ import * as THREE from 'three';
                     }
                     return shape;
                     
-                default: // rectangle
+                default:
                     const hwj = hw - offset;
                     const hdj = hd - offset;
                     if(hwj > 0 && hdj > 0) {
@@ -1502,7 +1485,6 @@ import * as THREE from 'three';
             const segXZ = 32;  
             const segY = 32;   
             
-            // V64: 非矩形形状の場合
             const isNonRectangular = state.keyShapeType === 'circle' || 
                                      state.keyShapeType === 'polygon' || 
                                      state.keyShapeType === 'star' ||
@@ -1510,32 +1492,24 @@ import * as THREE from 'three';
                                      (state.keyShapeType === 'rounded' && state.roundCorner > 0.1);
             
             if(isNonRectangular) {
-                // 外枠を取得 (CCW)
                 const outerShape = createKeyShape(p, false, 0);
-                // 内枠を取得 (CW)
                 const innerShape = createKeyShape(p, true, thick);
                 
-                // 方法: ソリッドからホローをCSGでくり抜く
-                // ソリッド: 外枠を全高さで押し出し
                 let solidGeo = new THREE.ExtrudeGeometry(outerShape, {
                     depth: p.h,
                     bevelEnabled: false,
                     curveSegments: 48
                 });
                 solidGeo.rotateX(-Math.PI / 2);
-                // 結果: Y=0からY=p.hまで
                 
-                // ホロー: 内枠を底面から天面厚み分下まで押し出し
                 let holeGeo = new THREE.ExtrudeGeometry(innerShape, {
-                    depth: p.h - thick + 0.1,  // 底面を貫通させるため少し長め
+                    depth: p.h - thick + 0.1,
                     bevelEnabled: false,
                     curveSegments: 48
                 });
                 holeGeo.rotateX(-Math.PI / 2);
-                holeGeo.translate(0, -0.05, 0);  // 底面より少し下から開始
-                // 結果: Y=-0.05からY=p.h-thick+0.05まで
+                holeGeo.translate(0, -0.05, 0);
                 
-                // CSGでくり抜き
                 let resultGeo;
                 try {
                     const solidBrush = new Brush(solidGeo);
@@ -1547,7 +1521,6 @@ import * as THREE from 'three';
                     resultGeo = BufferGeometryUtils.mergeVertices(resultGeo, 0.001);
                 } catch(e) {
                     console.warn("CSG failed, using merge method:", e);
-                    // フォールバック: マージ方式
                     outerShape.holes.push(innerShape);
                     const wallH = p.h - thick;
                     let wallGeo = new THREE.ExtrudeGeometry(outerShape, {
@@ -1569,15 +1542,12 @@ import * as THREE from 'three';
                     resultGeo = safeMerge([wallGeo, topGeo]);
                 }
                 
-                // deform適用（Taper、フィレット対応）
-                // ISO Enterにもテーパーを適用可能にする
                 if(resultGeo && !useCSG) {
                     deformMesh(resultGeo, p);
                 }
                 return resultGeo;
             }
             
-            // 従来の矩形処理
             const topBox = new THREE.BoxGeometry(p.baseW, thick, p.baseD, segXZ, 2, segXZ); 
             topBox.translate(0, p.h - thick/2, 0);
             
@@ -1612,7 +1582,6 @@ import * as THREE from 'three';
             for(let i=0; i<pos.count; i++){
                 v.fromBufferAttribute(pos, i);
                 
-                // Twist処理（ISO Enterでは適用しない）
                 if (Math.abs(state.twist) > 0.1 && state.keyShapeType !== 'iso-enter') { 
                     const angle = twistPerUnit * v.y; 
                     const sinA = Math.sin(angle); const cosA = Math.cos(angle); 
@@ -1690,37 +1659,30 @@ import * as THREE from 'three';
             const rOuter = state.stemDiameter / 2;
             const stemGeos = []; 
             
-            // --- ステム生成 ---
             if(state.keyShapeType === 'iso-enter') {
-                // ISO Enter用ステム高さの調整
                 const isoStemH = (rawH - thick) + ext;
                 
-                // UIスライダーから位置を取得
                 const stemX = state.isoStemX;
                 const switchZ = state.isoStemZ;
                 const stabTopZ = state.isoStabTopZ;
                 const stabBottomZ = state.isoStabBottomZ;
                 
-                // メインスイッチ生成
                 const mainStem = createStemUnit(isoStemH, rOuter, clear);
                 if(ext > 0) mainStem.translate(0, -ext, 0);
                 mainStem.translate(stemX, 0, switchZ); 
                 stemGeos.push(mainStem);
                 
-                // スタビライザー(奥 / Top)
                 const stabTop = createStemUnit(isoStemH, rOuter, clear);
                 if(ext > 0) stabTop.translate(0, -ext, 0);
                 stabTop.translate(stemX, 0, stabTopZ);
                 stemGeos.push(stabTop);
 
-                // スタビライザー(手前 / Bottom)
                 const stabBottom = createStemUnit(isoStemH, rOuter, clear);
                 if(ext > 0) stabBottom.translate(0, -ext, 0);
                 stabBottom.translate(stemX, 0, stabBottomZ);
                 stemGeos.push(stabBottom);
 
             } else {
-                // 通常キー
                 const cStem = createStemUnit(totalStemH, rOuter, clear); 
                 if (ext > 0) cStem.translate(0, -ext, 0);
                 if (state.boxStem) { 
@@ -1741,7 +1703,6 @@ import * as THREE from 'three';
                 }
             }
             
-            // --- リブ生成 ---
             const ribGeos = [];
             
             const isNonRectangularNoRib = state.keyShapeType === 'circle' || 
@@ -1787,7 +1748,6 @@ import * as THREE from 'three';
                 merged = safeMerge([...stemGeos, ...ribGeos]);
             }
             
-            // 変形処理
             if(merged && !useCSG) { 
                 const pos = merged.attributes.position; 
                 const v = new THREE.Vector3(); 
@@ -1799,7 +1759,6 @@ import * as THREE from 'three';
                 for(let i=0; i<pos.count; i++){ 
                     v.fromBufferAttribute(pos, i); 
                     
-                    // Twist処理（ISO Enterでは適用しない）
                     if (Math.abs(state.twist) > 0.1 && state.keyShapeType !== 'iso-enter') { 
                         const angle = twistPerUnit * v.y; 
                         const sinA = Math.sin(angle); 
@@ -1813,15 +1772,12 @@ import * as THREE from 'three';
                     const ratioY = Math.max(0, v.y / p.h); 
                     const dist = Math.sqrt(v.x*v.x + v.z*v.z); 
                     
-                    // テーパー処理（ISO Enterも含む）
-                    // ステム部分（内側）にはテーパーを適用しない
                     if(dist > rOuter + 0.5) { 
                         const taper = THREE.MathUtils.lerp(1.0, state.topScale, ratioY); 
                         v.x *= taper; 
                         v.z *= taper; 
                     } 
                     
-                    // 天面処理（ISO Enterでは適用しない）
                     if(state.keyShapeType !== 'iso-enter' && v.y > maxY - 1.0) { 
                         const sy = getSurfaceHeight(v.x, v.z, p); 
                         v.y = sy - thick; 
@@ -1843,23 +1799,16 @@ import * as THREE from 'three';
             let yEmbedOffset = 0;
 
             if (mode === 'engrave') {
-                // 彫刻: 上面から下に掘り込む
                 genHeight = state.textHeight + 5.0;
                 yEmbedOffset = -state.textHeight;
             } else if (mode === 'doubleshot') {
-                // ダブルショット: 文字の表面を天面と同じ高さにし、内部に貫通
-                // genHeight = 貫通深さ（壁厚 + 余裕）
                 genHeight = state.wallThickness + 0.5;
-                // 文字の表面(v.z=genHeight)が天面(surfY)に来るようにオフセット
                 yEmbedOffset = -genHeight + 0.02;
             } else if (mode === 'lithophane') {
-                // Lithophane: 底面を極薄（0.3mm）に残してバックライト透過
-                // 天面から壁厚-0.3mmの深さまで削る
                 const thinLayer = 0.3;
                 genHeight = state.wallThickness - thinLayer + 0.5;
                 yEmbedOffset = -(state.wallThickness - thinLayer);
             }
-            // emboss: デフォルト（genHeight = textHeight, yEmbedOffset = 0）
             
             yEmbedOffset += state.textOffsetY;
 
@@ -2277,7 +2226,6 @@ import * as THREE from 'three';
                     textGeos.push(geo);
                     engraveGeos.push(geo.clone());
                 } else if (mode === 'lithophane') {
-                    // Lithophane: 底面を薄く残してくり抜く（engraveと同じ処理）
                     engraveGeos.push(geo);
                 }
             };
@@ -2758,13 +2706,11 @@ ${buildItems}
             document.getElementById('unit-size-select').addEventListener('change', (e) => { state.unitSize = parseFloat(e.target.value); requestUpdate(); });
             document.getElementById('profile-select').addEventListener('change', (e) => { 
                 state.profile = e.target.value; 
-                // V64: カスタムプロファイルパネルの表示/非表示
                 const customPanel = document.getElementById('custom-profile-panel');
                 if(customPanel) customPanel.style.display = e.target.value === 'custom' ? 'block' : 'none';
                 requestUpdate(); 
             });
             
-            // V64: キー形状タイプのイベントリスナー
             document.getElementById('key-shape-type').addEventListener('change', (e) => {
                 state.keyShapeType = e.target.value;
                 document.getElementById('shape-polygon-options').style.display = e.target.value === 'polygon' ? 'block' : 'none';
@@ -2984,7 +2930,7 @@ ${buildItems}
             const reader = new FileReader();
             reader.onload = function(e) {
                 state.svgContent = e.target.result;
-                state.svgName = file.name.replace(/\.svg$/i, ''); // SVG名を保存
+                state.svgName = file.name.replace(/\.svg$/i, '');
                 updateModel();
             };
             reader.readAsText(file);
@@ -3097,7 +3043,6 @@ ${buildItems}
             saveBlob(blob, "keycap_preset.json");
         });
         
-        // V64: 名前付きプリセット保存
         document.getElementById('btn-save-named-preset').addEventListener('click', () => {
             const name = document.getElementById('preset-save-name').value || 'Preset_' + Date.now();
             const presetData = { name: name, data: {...state, svgName: state.svgName || null}, version: 'V64' };
@@ -3106,10 +3051,8 @@ ${buildItems}
             showToast(translations[currentLang].msg_save_ok);
         });
         
-        // V64: URLで共有機能
         document.getElementById('btn-share-url').addEventListener('click', () => {
             try {
-                // 差分のみをエンコード（デフォルト値と異なるものだけ）
                 const diffState = {};
                 for(const key in state) {
                     if(JSON.stringify(state[key]) !== JSON.stringify(initialState[key])) {
@@ -3134,14 +3077,12 @@ ${buildItems}
             }
         });
         
-        // V64: URLから読み込み
         document.getElementById('btn-import-url').addEventListener('click', () => {
             const input = document.getElementById('url-import-input');
             const urlStr = input.value.trim();
             if(!urlStr) return;
             
             try {
-                // 複数URLに対応（改行区切り）
                 const urls = urlStr.split(/[\n\r]+/).filter(u => u.trim());
                 let loaded = 0;
                 
@@ -3152,7 +3093,6 @@ ${buildItems}
                         const json = LZString.decompressFromEncodedURIComponent(encoded);
                         const data = JSON.parse(json);
                         
-                        // プリセットとして追加
                         const presetName = 'URL_' + (Date.now() + idx);
                         loadedPresets.push({ name: presetName, data: {...initialState, ...data}, version: 'V64' });
                         loaded++;
@@ -3175,7 +3115,6 @@ ${buildItems}
             }
         });
         
-        // V64: URLパラメータからの自動読み込み（ページ読み込み時）
         function loadFromURLParams() {
             try {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -3189,22 +3128,19 @@ ${buildItems}
                     requestUpdate();
                     commitHistory();
                     showToast('URLからプリセットを読み込みました');
-                    // URLパラメータをクリア（ブラウザ履歴を汚さないため）
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             } catch(e) {
                 console.error('Auto URL load error:', e);
             }
         }
-        setTimeout(loadFromURLParams, 500); // 初期化後に実行
+        setTimeout(loadFromURLParams, 500);
         
-        // V64: プリセットボタンのクリックでドロップダウン表示/非表示
         document.getElementById('btn-show-presets').addEventListener('click', () => {
             const dropdown = document.getElementById('preset-dropdown');
             dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
         });
         
-        // V64: 選択中のプリセットを削除
         document.getElementById('btn-remove-preset').addEventListener('click', removeCurrentPreset);
         document.getElementById('btn-remove-preset-ui').addEventListener('click', removeCurrentPreset);
         
@@ -3224,7 +3160,6 @@ ${buildItems}
             showToast('プリセットを削除しました');
         }
         
-        // V64: 全プリセットをクリア
         document.getElementById('btn-clear-all-presets').addEventListener('click', () => {
             if(loadedPresets.length === 0) return;
             if(confirm('すべてのプリセットをクリアしますか？')) {
@@ -3236,7 +3171,6 @@ ${buildItems}
             }
         });
         
-        // V64: 前へ/次へボタン
         document.getElementById('btn-prev-preset').addEventListener('click', () => {
             if(loadedPresets.length > 0 && currentPresetIndex > 0) {
                 currentPresetIndex--;
@@ -3260,13 +3194,11 @@ ${buildItems}
             commitHistory();
             document.getElementById('preset-switcher-float').value = idx;
             updatePresetFloatPreview(idx);
-            // UIパネル内のスイッチャーも同期
             const uiSwitcher = document.getElementById('preset-switcher');
             if(uiSwitcher) uiSwitcher.value = idx;
             updatePresetPreview(idx);
         }
         
-        // V64: 複数プリセット読み込み（既存リストに追加）
         document.getElementById('preset-file-input').addEventListener('change', async (e) => {
             const files = e.target.files;
             if(!files || files.length === 0) return;
@@ -3279,10 +3211,8 @@ ${buildItems}
                     const json = JSON.parse(text);
                     
                     if(json.data && json.name) {
-                        // V64形式: 名前付きプリセット
                         loadedPresets.push({ name: json.name, data: json.data });
                     } else {
-                        // 従来形式: 直接stateデータ
                         loadedPresets.push({ name: file.name.replace('.json',''), data: json });
                     }
                     addedCount++;
@@ -3292,7 +3222,6 @@ ${buildItems}
             }
             
             if(addedCount > 0) {
-                // 最初に追加したプリセットを選択（既存があれば最初の新規追加分）
                 if(currentPresetIndex < 0) {
                     currentPresetIndex = 0;
                     Object.assign(state, loadedPresets[0].data);
@@ -3311,7 +3240,6 @@ ${buildItems}
             e.target.value = '';
         });
         
-        // V64: フローティングプリセット切り替え
         document.getElementById('preset-switcher-float').addEventListener('change', (e) => {
             const idx = parseInt(e.target.value);
             if(idx >= 0 && idx < loadedPresets.length) {
@@ -3320,7 +3248,6 @@ ${buildItems}
             }
         });
         
-        // V64: プリセットスイッチャー更新関数（フローティングパネル用）
         function updatePresetFloatPanel() {
             const switcher = document.getElementById('preset-switcher-float');
             const btn = document.getElementById('btn-show-presets');
@@ -3362,7 +3289,6 @@ ${buildItems}
             document.getElementById('pf-text').textContent = preset.text || '-';
         }
         
-        // V64: 旧プリセットスイッチャー（UIパネル内）も更新
         document.getElementById('preset-switcher').addEventListener('change', (e) => {
             const idx = parseInt(e.target.value);
             if(idx >= 0 && idx < loadedPresets.length) {
@@ -3371,7 +3297,6 @@ ${buildItems}
             }
         });
         
-        // V64: プリセットスイッチャー更新関数
         function updatePresetSwitcher() {
             const switcher = document.getElementById('preset-switcher');
             const panel = document.getElementById('preset-switch-panel');
@@ -3399,26 +3324,21 @@ ${buildItems}
         function updatePresetPreview(idx) {
             const preview = document.getElementById('preset-preview-mini');
             if(idx < 0 || idx >= loadedPresets.length) {
-                // プリセットがない場合はN/A表示
                 const els = ['pm-profile', 'pm-size', 'pm-shape', 'pm-text', 'pm-text2', 'pm-side', 'pm-svg'];
                 els.forEach(id => { const el = document.getElementById(id); if(el) el.textContent = '-'; });
                 return;
             }
             const preset = loadedPresets[idx].data;
             
-            // Profile
             const pmProfile = document.getElementById('pm-profile');
             if(pmProfile) pmProfile.textContent = preset.profile || 'cherry';
             
-            // Size
             const pmSize = document.getElementById('pm-size');
             if(pmSize) pmSize.textContent = (preset.uSize || 1) + 'U';
             
-            // Shape
             const pmShape = document.getElementById('pm-shape');
             if(pmShape) pmShape.textContent = preset.keyShapeType || 'rectangle';
             
-            // Text (enableTextがoffならN/A)
             const pmText = document.getElementById('pm-text');
             if(pmText) {
                 if(preset.enableText === false) {
@@ -3428,7 +3348,6 @@ ${buildItems}
                 }
             }
             
-            // Sub Text (enableText2がoffならN/A)
             const pmText2 = document.getElementById('pm-text2');
             if(pmText2) {
                 if(preset.enableText2 === false) {
@@ -3438,7 +3357,6 @@ ${buildItems}
                 }
             }
             
-            // Side (enableSideがoffならN/A)
             const pmSide = document.getElementById('pm-side');
             if(pmSide) {
                 if(preset.enableSide === false) {
@@ -3448,18 +3366,15 @@ ${buildItems}
                 }
             }
             
-            // SVG (svgVisibleがoffまたはsvgContentがなければN/A)
             const pmSvg = document.getElementById('pm-svg');
             if(pmSvg) {
                 if(preset.svgVisible === false || !preset.svgContent) {
                     pmSvg.textContent = 'N/A';
                 } else {
-                    // SVG名を取得（svgNameがあれば使用、なければ「Loaded」）
                     pmSvg.textContent = preset.svgName || 'Loaded';
                 }
             }
             
-            // フローティングパネルのプレビューも更新
             updateFloatPreview(preset);
         }
         
@@ -3699,7 +3614,6 @@ ${buildItems}
             requestUpdate();
         });
         
-        // ===== ツールチップ（ヒント）機能 =====
         (function initTooltipHints() {
             const tooltip = document.createElement('div');
             tooltip.className = 'hint-tooltip';
@@ -3731,15 +3645,12 @@ ${buildItems}
                 
                 tooltip.textContent = hintText;
                 
-                // 3Dプレビューエリアの左下に固定表示（設定タブの右側）
                 const tooltipWidth = 320;
                 const uiPanel = document.getElementById('ui-panel');
                 const uiPanelRect = uiPanel ? uiPanel.getBoundingClientRect() : { right: 0 };
                 
-                // UIパネルの右端 + 20pxの位置に配置
                 let left = (uiPanelRect.right || 500) + 20;
                 
-                // 画面下部に固定
                 let top = window.innerHeight - 100;
                 
                 tooltip.style.left = left + 'px';
@@ -3757,7 +3668,6 @@ ${buildItems}
                 }, 100);
             }
             
-            // data-hint属性を持つすべての要素にイベントを追加
             document.querySelectorAll('[data-hint]').forEach(el => {
                 el.addEventListener('mouseenter', (e) => showTooltip(el, e));
                 el.addEventListener('mouseleave', hideTooltip);
