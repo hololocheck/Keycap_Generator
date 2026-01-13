@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-63.3.1-orange.svg)
+![Version](https://img.shields.io/badge/version-64.0-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
@@ -30,8 +30,12 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V63.3.1)
-- **非多様体エッジエラーの軽減**: エクスポート時やスライサーソフト（Bambu Studio, Cura等）への読み込み時に発生する可能性のある形状エラー（Non-Manifold Edges）を軽減するよう、ジオメトリ生成ロジックを改善しました。これによりプリントの安定性が向上します。
+### 📝 アップデート情報 (V64.0)
+- **キー形状の変更**: 従来の四角形に加え、**ISOエンター（L字型）**、円形、多角形、星型などの特殊形状に対応しました。
+- **カスタムプロファイル**: 高さ（5mm-20mm）や角度（-15°~15°）を数値指定して、独自のプロファイルを作成可能になりました。
+- **リトフェインモード**: 文字やSVGをバックライトで浮かび上がらせる「Lithophane」生成モードを追加しました。
+- **設定共有・管理**: 設定内容を埋め込んだ**URLの発行**、名前付きプリセット保存機能を追加しました。
+- **ヒントシステム**: 各パラメータにカーソルを合わせると解説が表示されるヒント機能を追加しました。
 
 ---
 
@@ -56,8 +60,12 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V63.3.1)
-- **Reduced Non-Manifold Edge Errors**: Improved geometry processing logic to mitigate "Non-Manifold Edge" errors that could occur during export or when importing models into slicing software. This ensures better compatibility and print stability.
+### 📝 Update Notes (V64.0)
+- **Key Shape Types**: Support for **ISO Enter (L-shape)**, Circle, Polygon, and Star shapes alongside the standard rectangle.
+- **Custom Profile**: Create your own profiles by specifying height (5mm-20mm) and angle (-15°~15°).
+- **Lithophane Mode**: Added a mode to generate text and SVGs optimized for backlight transmission.
+- **Sharing & Management**: Added **URL Sharing** to encode settings into links, and Named Preset saving.
+- **Hint System**: Implemented tooltips that display detailed explanations when hovering over parameters.
 
 ---
 
