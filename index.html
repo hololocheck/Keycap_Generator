@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="E2yuICa6eKYqirbpWGXo9DtwvVG9mlCf_g56Qzpse2M" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keycap Generator V64.1</title>
+    <title>Keycap Generator V65</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 306.06 217.55'%3E%3Cstyle%3E.a%7Bstroke:%23ccc;stroke-miterlimit:10;fill:none%7D.b%7Bfill:aqua;stroke:aqua;stroke-miterlimit:10%7D.c%7Bstroke:aqua;stroke-miterlimit:10;fill:none;stroke-width:4px%7D.d%7Bfill:%23b3b3b3%7D%3C/style%3E%3Cpolygon class='d' points='273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92'/%3E%3Cpolygon class='d' points='273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92'/%3E%3Cpolygon class='d' points='151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26'/%3E%3Cline class='a' x1='35.16' y1='29.06' x2='.61' y2='135.77'/%3E%3Cline class='a' x1='.25' y1='136.62' x2='148.91' y2='216.18'/%3E%3Cline class='a' x1='151.25' y1='80.26' x2='35.16' y2='29.06'/%3E%3Cline class='a' x1='148.91' y1='216.18' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='273.2' y1='41.92' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='305.59' y1='144.63' x2='273.2' y2='41.92'/%3E%3Cpolyline class='a' points='148.91 217.1 149.26 216.93 305.59 144.63'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='273.2' y2='41.92'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='35.16' y2='29.06'/%3E%3Cline class='c' x1='86.1' y1='30.23' x2='119.97' y2='22'/%3E%3Cline class='c' x1='155.68' y1='60.92' x2='86.1' y2='30.23'/%3E%3Cline class='c' x1='224.32' y1='40.72' x2='154.45' y2='60.92'/%3E%3Cline class='c' x1='224.32' y1='41.22' x2='198.07' y2='32.19'/%3E%3Cpath class='b' d='M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z'/%3E%3Cpath class='b' d='M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z'/%3E%3Cpath class='b' d='M134.59,37.59s-10.53-2.15-15.09,0,4.12-3.16,1.67-4.79c-2.44-1.63,6.19,2.8,12.48.1,6.29-2.7-6.94,3.03.94,4.69Z'/%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -111,9 +111,16 @@
         .toggle-input:checked + .toggle-knob::after { left: 20px; background: black; }
         .toggle-label { color: #e0f7fa; font-size: 0.8rem; user-select: none; }
 
-        .hint-tooltip { position: fixed; background: rgba(0, 40, 45, 0.95); border: 1px solid var(--accent); color: #e0f7fa; padding: 10px 14px; border-radius: 6px; font-size: 0.75rem; max-width: 280px; z-index: 9999; pointer-events: none; box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3); opacity: 0; transform: translateY(5px); transition: opacity 0.3s ease, transform 0.3s ease; line-height: 1.5; }
+        .hint-tooltip { position: fixed; bottom: 20px; background: rgba(0, 40, 45, 0.95); border: 1px solid var(--accent); color: #e0f7fa; padding: 10px 14px; border-radius: 6px; font-size: 0.75rem; max-width: 320px; z-index: 9999; pointer-events: auto; box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3); opacity: 0; transform: translateY(5px); transition: opacity 0.3s ease, transform 0.3s ease; line-height: 1.5; }
         .hint-tooltip.visible { opacity: 1; transform: translateY(0); }
-        .hint-tooltip::before { content: '💡'; margin-right: 6px; }
+        .hint-tooltip .hint-text::before { content: '💡'; margin-right: 6px; }
+        .hint-tooltip .hint-text { display: block; }
+        .hint-tooltip .hint-video-area { display: none; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(0, 229, 255, 0.3); }
+        .hint-tooltip.show-video .hint-video-area { display: block; animation: fadeIn 0.3s ease; }
+        .hint-tooltip .hint-video-placeholder { width: 100%; height: 120px; background: rgba(0, 0, 0, 0.5); border: 1px dashed rgba(0, 229, 255, 0.5); border-radius: 4px; display: flex; justify-content: center; align-items: center; color: #80deea; font-size: 0.7rem; text-align: center; }
+        .hint-tooltip .hint-video-placeholder video, .hint-tooltip .hint-video-placeholder img { width: 100%; height: 100%; object-fit: contain; border-radius: 4px; }
+        .hint-tooltip .hint-f1-notice { margin-top: 8px; font-size: 0.65rem; color: #80deea; opacity: 0.8; text-align: right; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         [data-hint] { position: relative; }
         [data-hint].hint-highlight { background: rgba(0, 229, 255, 0.1); border-radius: 4px; transition: background 0.3s; }
 
@@ -282,7 +289,7 @@
                     <svg id="app-logo" onclick="location.reload()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55">
                          <defs><style>.cls-1{stroke:#ccc;}.cls-1,.cls-2,.cls-3{stroke-miterlimit:10;}.cls-1,.cls-3{fill:none;}.cls-2{fill:aqua;}.cls-2,.cls-3{stroke:aqua;}.cls-3{stroke-width:4px;}.cls-4{fill:#b3b3b3;}</style></defs><g><g><polygon class="cls-4" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon class="cls-4" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon class="cls-4" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/></g><g><line class="cls-1" x1="35.16" y1="29.06" x2=".61" y2="135.77"/><line class="cls-1" x1=".25" y1="136.62" x2="148.91" y2="216.18"/><line class="cls-1" x1="151.25" y1="80.26" x2="35.16" y2="29.06"/><line class="cls-1" x1="148.91" y1="216.18" x2="151.25" y2="80.26"/><line class="cls-1" x1="273.2" y1="41.92" x2="151.25" y2="80.26"/><line class="cls-1" x1="305.59" y1="144.63" x2="273.2" y2="41.92"/><polyline class="cls-1" points="148.91 217.1 149.26 216.93 305.59 144.63"/><line class="cls-1" x1="152.73" y1=".49" x2="273.2" y2="41.92"/><line class="cls-1" x1="152.73" y1=".49" x2="35.16" y2="29.06"/></g></g><g><line class="cls-3" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line class="cls-3" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><line class="cls-3" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/><line class="cls-3" x1="224.32" y1="41.22" x2="198.07" y2="32.19"/><path class="cls-2" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/><path class="cls-2" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/></g>
                     </svg>
-                    <div><h2>Keycap Gen</h2><span class="ver">V64.1</span></div>
+                    <div><h2>Keycap Gen</h2><span class="ver">V65</span></div>
                 </div>
                 <div style="display:flex; align-items:center;">
                     <div class="social-links">
@@ -538,6 +545,7 @@
                 <label style="color:#4caf50; font-weight:bold;" data-i18n="lbl_url_share">🔗 URLで共有 (Share via URL)</label>
                 <div class="control-row" style="margin-top:5px;">
                     <button id="btn-share-url" style="flex:1; border-color:#4caf50; color:#4caf50;" data-i18n="btn_share_url">📋 URLをコピー</button>
+                    <button id="btn-share-x" style="flex:1; border-color:#1DA1F2; color:#1DA1F2;" data-i18n="btn_share_x">𝕏 シェア</button>
                 </div>
                 <div class="control-row" style="margin-top:5px;">
                     <input type="text" id="url-import-input" placeholder="共有URLを貼り付け..." style="flex:1; font-size:0.75rem;" data-i18n-placeholder="placeholder_url_import">
@@ -827,11 +835,12 @@ import * as THREE from 'three';
                 h_colors: "色設定", lbl_col_body: "本体色", lbl_col_text: "文字・SVG色",
                 h_preset: "プリセット管理", lbl_browser_storage: "ブラウザに保存 (Quick Save/Load)", btn_quick_save: "一時保存 (Save)", btn_quick_load: "復元 (Load)",
                 lbl_file_storage: "ファイルに保存 (File I/O)", btn_export_file: "書き出し (.json)", btn_import_file: "読み込み (.json)",
-                lbl_url_share: "🔗 URLで共有 (Share via URL)", btn_share_url: "📋 URLをコピー", btn_import_url: "読み込み", placeholder_url_import: "共有URLを貼り付け...",
+                lbl_url_share: "🔗 URLで共有 (Share via URL)", btn_share_url: "📋 URLをコピー", btn_share_x: "𝕏 シェア", btn_import_url: "読み込み", placeholder_url_import: "共有URLを貼り付け...",
                 lbl_named_preset: "🆕 名前付きプリセット保存", placeholder_preset_name: "プリセット名を入力...", btn_save_named: "💾 名前を付けて保存",
                 lbl_loaded_presets: "📁 読み込んだプリセット:", btn_load_add: "読み込み (追加)",
                 pv_profile: "プロファイル:", pv_size: "サイズ:", pv_shape: "形状:", pv_text: "文字:", pv_text2: "サブ文字:", pv_side: "サイド:", pv_svg: "SVG:",
-                msg_url_copied: "URLをクリップボードにコピーしました！", msg_url_invalid: "無効なURLです", msg_url_loaded: "URLからプリセットを読み込みました",
+                msg_url_copied: "URLをクリップボードにコピーしました！", msg_url_invalid: "無効なURLです", msg_url_loaded: "URLからプリセットを読み込みました", msg_x_shared: "X(Twitter)の投稿画面を開きました",
+                hint_f1_notice: "F1キー: Wikiで詳しく見る",
                 btn_prev: "◀ 前へ", btn_next: "次へ ▶", btn_clear_all: "全削除",
                 h_export: "エクスポート (STL/OBJ/3MF)", lbl_filename: "ファイル名設定 (自動で[文字]が付与されます)", btn_export_all: "全体をSTLで保存", btn_export_obj: "全体をOBJで保存 (Color)",
                 btn_export_3mf: "全体を3MFで保存 (Color)", btn_export_body: "本体のみ (STL)", btn_export_text: "文字のみ (STL)",
@@ -937,11 +946,12 @@ import * as THREE from 'three';
                 h_colors: "Color Settings", lbl_col_body: "Body Color", lbl_col_text: "Text/SVG Color",
                 h_preset: "Preset Management", lbl_browser_storage: "Browser Storage (Quick)", btn_quick_save: "Quick Save", btn_quick_load: "Quick Load",
                 lbl_file_storage: "File Storage", btn_export_file: "Export (.json)", btn_import_file: "Import (.json)",
-                lbl_url_share: "🔗 Share via URL", btn_share_url: "📋 Copy URL", btn_import_url: "Load", placeholder_url_import: "Paste shared URL...",
+                lbl_url_share: "🔗 Share via URL", btn_share_url: "📋 Copy URL", btn_share_x: "𝕏 Share", btn_import_url: "Load", placeholder_url_import: "Paste shared URL...",
                 lbl_named_preset: "🆕 Save Named Preset", placeholder_preset_name: "Enter preset name...", btn_save_named: "💾 Save with Name",
                 lbl_loaded_presets: "📁 Loaded Presets:", btn_load_add: "Load (Add)",
                 pv_profile: "Profile:", pv_size: "Size:", pv_shape: "Shape:", pv_text: "Text:", pv_text2: "Sub Text:", pv_side: "Side:", pv_svg: "SVG:",
-                msg_url_copied: "URL copied to clipboard!", msg_url_invalid: "Invalid URL", msg_url_loaded: "Preset loaded from URL",
+                msg_url_copied: "URL copied to clipboard!", msg_url_invalid: "Invalid URL", msg_url_loaded: "Preset loaded from URL", msg_x_shared: "Opened X (Twitter) compose window",
+                hint_f1_notice: "F1: View details on Wiki",
                 btn_prev: "◀ Prev", btn_next: "Next ▶", btn_clear_all: "Clear All",
                 h_export: "Export (STL/OBJ/3MF)", lbl_filename: "File Name", btn_export_all: "Export All (STL)", btn_export_obj: "Export All (OBJ w/ Color)",
                 btn_export_3mf: "Export All (3MF w/ Color)", btn_export_body: "Body Only (STL)", btn_export_text: "Text Only (STL)",
@@ -1208,20 +1218,25 @@ import * as THREE from 'three';
         function resetParams() { if(confirm("Reset all parameters?")) { state = JSON.parse(JSON.stringify(initialState)); syncUI(); updateModel(); } }
 
         let committedFont = state.font;
+        let customDropdownInitialized = false;
         function setupCustomDropdown() {
             const head = document.getElementById('custom-font-head'); const list = document.getElementById('custom-font-list'); const hiddenSelect = document.getElementById('font-family');
             if(!head || !list || !hiddenSelect) return;
             function populate() {
                 list.innerHTML = ''; Array.from(hiddenSelect.options).forEach(opt => {
+                    if(!loadedFonts[opt.value]) return;
                     const div = document.createElement('div'); div.className = 'custom-option'; div.textContent = opt.text; if(opt.value === state.font) div.classList.add('selected');
                     div.addEventListener('mouseenter', () => { state.font = opt.value; requestUpdate(); });
                     div.addEventListener('click', () => { committedFont = opt.value; state.font = committedFont; hiddenSelect.value = committedFont; list.classList.remove('open'); updateCustomDropdownHead(); commitHistory(); requestUpdate(); });
                     list.appendChild(div);
                 });
             }
-            head.addEventListener('click', () => { if(!list.classList.contains('open')) { committedFont = state.font; populate(); list.classList.add('open'); } else { list.classList.remove('open'); } });
-            list.addEventListener('mouseleave', () => { state.font = committedFont; requestUpdate(); });
-            document.addEventListener('click', (e) => { const ui = document.getElementById('custom-font-ui'); if(ui && !ui.contains(e.target) && list.classList.contains('open')) { list.classList.remove('open'); state.font = committedFont; requestUpdate(); } });
+            if(!customDropdownInitialized) {
+                head.addEventListener('click', () => { if(!list.classList.contains('open')) { committedFont = state.font; populate(); list.classList.add('open'); } else { list.classList.remove('open'); } });
+                list.addEventListener('mouseleave', () => { state.font = committedFont; requestUpdate(); });
+                document.addEventListener('click', (e) => { const ui = document.getElementById('custom-font-ui'); if(ui && !ui.contains(e.target) && list.classList.contains('open')) { list.classList.remove('open'); state.font = committedFont; requestUpdate(); } });
+                customDropdownInitialized = true;
+            }
             updateCustomDropdownHead();
         }
         function updateCustomDropdown() { committedFont = state.font; updateCustomDropdownHead(); }
@@ -3076,6 +3091,54 @@ ${buildItems}
             }
         });
         
+        document.getElementById('btn-share-x').addEventListener('click', () => {
+            try {
+                const diffState = {};
+                for(const key in state) {
+                    if(JSON.stringify(state[key]) !== JSON.stringify(initialState[key])) {
+                        diffState[key] = state[key];
+                    }
+                }
+                const json = JSON.stringify(diffState);
+                const compressed = LZString.compressToEncodedURIComponent(json);
+                const shareUrl = window.location.origin + window.location.pathname + '?s=' + compressed;
+                
+                if(shareUrl.length > 8000) {
+                    showToast('URLが長すぎます。設定を減らしてください。', true);
+                    return;
+                }
+                
+                const profileNames = { cherry: 'CHERRY', oem: 'OEM', sa: 'SA', xda: 'XDA', dsa: 'DSA', custom: 'CUSTOM' };
+                const shapeNames = { rectangle: 'rectangle', rounded: 'rounded', circle: 'circle', polygon: 'polygon', star: 'star', 'iso-enter': 'iso-enter' };
+                
+                const profileDisplay = profileNames[state.profile] || state.profile.toUpperCase();
+                const shapeDisplay = shapeNames[state.keyShapeType] || state.keyShapeType;
+                const rowDisplay = state.row;
+                
+                let tweetText;
+                if(currentLang === 'en') {
+                    tweetText = `I generated my own keycap in 3D! ⌨️✨
+🔹Profile: ${profileDisplay} 🔹Shape: ${shapeDisplay} 🔹Row: ${rowDisplay}
+3D modeling tool that runs in your browser 👇
+${shareUrl}
+#KCGN #CustomKeyboard #3DPrinting`;
+                } else {
+                    tweetText = `自分だけのキーキャップを3D生成しました!⌨️✨
+🔹Profile: ${profileDisplay} 🔹Shape: ${shapeDisplay} 🔹Row: ${rowDisplay}
+ブラウザで動く3Dモデリングツール 👇
+${shareUrl}
+#KCGN #自作キーボード #3Dプリンター`;
+                }
+                
+                const xUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(tweetText);
+                window.open(xUrl, '_blank', 'width=550,height=420');
+                showToast(translations[currentLang].msg_x_shared || 'X(Twitter)の投稿画面を開きました');
+            } catch(e) {
+                console.error('X share error:', e);
+                showToast('エラーが発生しました', true);
+            }
+        });
+        
         document.getElementById('btn-import-url').addEventListener('click', () => {
             const input = document.getElementById('url-import-input');
             const urlStr = input.value.trim();
@@ -3617,17 +3680,68 @@ ${buildItems}
             const tooltip = document.createElement('div');
             tooltip.className = 'hint-tooltip';
             tooltip.id = 'hint-tooltip';
+            tooltip.innerHTML = `
+                <div class="hint-video-area">
+                    <div class="hint-video-placeholder">
+                        <span>📹 テスト画面 / Test Video</span>
+                    </div>
+                </div>
+                <span class="hint-text"></span>
+                <div class="hint-f1-notice"></div>
+            `;
             document.body.appendChild(tooltip);
             
             let hintEnabled = true;
             let hideTimeout = null;
+            let videoDelayTimeout = null;
+            let currentHintKey = null;
+            const VIDEO_DELAY = 1500;
+            
+            const hintVideos = {
+                hint_unit_size: { type: 'video', src: 'videos/基本ピッチ.mp4' },
+                hint_key_size: { type: 'video', src: 'videos/キーサイズ.mp4' },
+                hint_stabilizer: { type: 'video', src: 'videos/スタビライザー.mp4' },
+                hint_profile: { type: 'video', src: 'videos/プロファイル.mp4' },
+                hint_row: { type: 'video', src: 'videos/行.mp4' },
+                hint_fillet: { type: 'video', src: 'videos/フィレット.mp4' },
+                hint_wall_thick: { type: 'video', src: 'videos/壁の厚み.mp4' },
+                hint_rib_shorten: { type: 'video', src: 'videos/リブ短縮.mp4' },
+                hint_enable_ribs: { type: 'video', src: 'videos/補強リブ.mp4' },
+                hint_homing_bump: { type: 'video', src: 'videos/ホームポジション突起.mp4' },
+                hint_bump_type: { type: 'video', src: 'videos/ホームポジション突起選択.mp4' },
+                hint_key_shape: { type: 'video', src: 'videos/キー形状タイプ.mp4' },
+                hint_taper: { type: 'video', src: 'videos/上面サイズ.mp4' },
+                hint_dish_type: { type: 'video', src: 'videos/上面形状.mp4' },
+                hint_texture: { type: 'video', src: 'videos/表面プロシージャル.mp4' },
+                hint_img_upload: { type: 'video', src: 'videos/画像テクスチャ.mp4' },
+                hint_stem_diameter: { type: 'video', src: 'videos/ステム外径.mp4' },
+                hint_clearance: { type: 'video', src: 'videos/クリアランス.mp4' },
+                hint_stem_ext: { type: 'video', src: 'videos/長さを拡張.mp4' },
+                hint_box_stem: { type: 'video', src: 'videos/boxstem.mp4' },
+                hint_lego_stud: { type: 'video', src: 'videos/レゴスタッド.mp4' },
+                hint_randomizer: { type: 'video', src: 'videos/ランダマイザ.mp4' },
+                hint_import_stl: { type: 'video', src: 'videos/stl読み込み.mp4' },
+                hint_enable_text: { type: 'video', src: 'videos/文字を生成する.mp4' },
+                hint_text_input: { type: 'video', src: 'videos/文字テキストボックス.mp4' },
+                hint_font: { type: 'video', src: 'videos/フォント.mp4' },
+                hint_custom_font: { type: 'video', src: 'videos/カスタムフォント.mp4' },
+                hint_text_mode: { type: 'video', src: 'videos/文字生成モード.mp4' },
+                hint_align_preset: { type: 'video', src: 'videos/文字配置プリセットボタン.mp4' },
+                hint_text2: { type: 'video', src: 'videos/サブ文字スイッチ.mp4' },
+                hint_side_print: { type: 'video', src: 'videos/サイド印字スイッチ.mp4' },
+                hint_svg_upload: { type: 'video', src: 'videos/SVG読み込み.mp4' },
+                hint_svg_mode: { type: 'video', src: 'videos/文字生成モード.mp4' },
+                hint_colors: { type: 'video', src: 'videos/色設定.mp4' },
+                hint_import_json: { type: 'video', src: 'videos/プリセット読み込み.mp4' }
+            };
             
             const enableHintsCheckbox = document.getElementById('enable-hints');
             if(enableHintsCheckbox) {
                 enableHintsCheckbox.addEventListener('change', (e) => {
                     hintEnabled = e.target.checked;
                     if(!hintEnabled) {
-                        tooltip.classList.remove('visible');
+                        tooltip.classList.remove('visible', 'show-video');
+                        currentHintKey = null;
                     }
                 });
             }
@@ -3642,7 +3756,43 @@ ${buildItems}
                 const hintText = t[hintKey];
                 if(!hintText) return;
                 
-                tooltip.textContent = hintText;
+                currentHintKey = hintKey;
+                
+                tooltip.querySelector('.hint-text').textContent = hintText;
+                
+                const f1Notice = tooltip.querySelector('.hint-f1-notice');
+                f1Notice.textContent = t.hint_f1_notice || 'F1キー: Wikiで詳しく見る';
+                
+                tooltip.classList.remove('show-video');
+                clearTimeout(videoDelayTimeout);
+                
+                const noVideoHints = ['hint_export_stl', 'hint_export_3mf', 'hint_export_parts', 'hint_batch_run', 'hint_url_share', 'hint_quick_save', 'hint_export_json', 'hint_conform'];
+                const showVideoForHint = !noVideoHints.includes(hintKey);
+                
+                const videoArea = tooltip.querySelector('.hint-video-area');
+                const videoPlaceholder = tooltip.querySelector('.hint-video-placeholder');
+                
+                if(showVideoForHint) {
+                    if(hintVideos[hintKey]) {
+                        const videoData = hintVideos[hintKey];
+                        if(videoData.type === 'video') {
+                            videoPlaceholder.innerHTML = `<video src="${videoData.src}" autoplay loop muted playsinline></video>`;
+                        } else if(videoData.type === 'gif') {
+                            videoPlaceholder.innerHTML = `<img src="${videoData.src}" alt="Hint animation">`;
+                        }
+                    } else {
+                        videoPlaceholder.innerHTML = `<span>📹 テスト画面 / Test Video</span>`;
+                    }
+                    videoArea.style.display = '';
+                    
+                    videoDelayTimeout = setTimeout(() => {
+                        if(tooltip.classList.contains('visible')) {
+                            tooltip.classList.add('show-video');
+                        }
+                    }, VIDEO_DELAY);
+                } else {
+                    videoArea.style.display = 'none';
+                }
                 
                 const tooltipWidth = 320;
                 const uiPanel = document.getElementById('ui-panel');
@@ -3650,10 +3800,9 @@ ${buildItems}
                 
                 let left = (uiPanelRect.right || 500) + 20;
                 
-                let top = window.innerHeight - 100;
-                
                 tooltip.style.left = left + 'px';
-                tooltip.style.top = top + 'px';
+                tooltip.style.top = 'auto';
+                tooltip.style.bottom = '20px';
                 tooltip.style.transform = 'translateY(0)';
                 tooltip.style.maxWidth = tooltipWidth + 'px';
                 
@@ -3663,9 +3812,21 @@ ${buildItems}
             
             function hideTooltip() {
                 hideTimeout = setTimeout(() => {
-                    tooltip.classList.remove('visible');
+                    tooltip.classList.remove('visible', 'show-video');
+                    clearTimeout(videoDelayTimeout);
+                    currentHintKey = null;
                 }, 100);
             }
+            
+            document.addEventListener('keydown', (e) => {
+                if(e.key === 'F1' && tooltip.classList.contains('visible') && currentHintKey) {
+                    e.preventDefault();
+                    const wikiBaseUrl = currentLang === 'en' 
+                        ? 'https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9'
+                        : 'https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9';
+                    window.open(wikiBaseUrl, '_blank');
+                }
+            });
             
             document.querySelectorAll('[data-hint]').forEach(el => {
                 el.addEventListener('mouseenter', (e) => showTooltip(el, e));
