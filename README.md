@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-64.1-orange.svg)
+![Version](https://img.shields.io/badge/version-65.0-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
@@ -30,12 +30,11 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V64.0)
-- **キー形状の変更**: 従来の四角形に加え、**ISOエンター（L字型）**、円形、多角形、星型などの特殊形状に対応しました。
-- **カスタムプロファイル**: 高さ（5mm-20mm）や角度（-15°~15°）を数値指定して、独自のプロファイルを作成可能になりました。
-- **リトフェインモード**: 文字やSVGをバックライトで浮かび上がらせる「Lithophane」生成モードを追加しました。
-- **設定共有・管理**: 設定内容を埋め込んだ**URLの発行**、名前付きプリセット保存機能を追加しました。
-- **ヒントシステム**: 各パラメータにカーソルを合わせると解説が表示されるヒント機能を追加しました。
+### 📝 アップデート情報 (V65.0)
+- **ビデオヒント機能**: パラメータにカーソルを合わせると、機能の効果を解説する短い**動画(Video/GIF)**がツールチップ内で自動再生されるようになりました。
+- **X (Twitter) シェア**: 現在のデザイン設定を埋め込んだURLを、ワンクリックでXへ投稿・共有できるボタンを追加しました。
+- **新テクスチャ追加**: 表面加工に「Ripple (波紋)」「Wood (木目)」「Hammered (打痕)」などの新パターンを追加しました。
+- **バグ修正**: カスタムフォントを読み込んだ際、既存のプリセットフォントが選択できなくなる問題を修正しました。
 
 ---
 
@@ -60,12 +59,11 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V64.0)
-- **Key Shape Types**: Support for **ISO Enter (L-shape)**, Circle, Polygon, and Star shapes alongside the standard rectangle.
-- **Custom Profile**: Create your own profiles by specifying height (5mm-20mm) and angle (-15°~15°).
-- **Lithophane Mode**: Added a mode to generate text and SVGs optimized for backlight transmission.
-- **Sharing & Management**: Added **URL Sharing** to encode settings into links, and Named Preset saving.
-- **Hint System**: Implemented tooltips that display detailed explanations when hovering over parameters.
+### 📝 Update Notes (V65.0)
+- **Video Hints**: Tooltips now include **Video/GIF** demonstrations that automatically play on hover, visually explaining parameter effects.
+- **Share to X (Twitter)**: Added a button to instantly post and share your design URL to X with a single click.
+- **New Textures**: Added new surface procedural patterns such as "Ripple", "Wood", and "Hammered".
+- **Bug Fix**: Resolved an issue where loading a custom font would make existing preset fonts unavailable.
 
 ---
 
