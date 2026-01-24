@@ -442,7 +442,7 @@
                 <div class="nav-row" style="justify-content:flex-start; padding:2px 0;"><label class="toggle-switch" style="width:auto; margin:0;"><input type="checkbox" id="enable-hints" class="toggle-input" checked><span class="toggle-knob" style="width:28px; height:14px;"></span><span class="toggle-label" style="font-size:0.7rem;" data-i18n="lbl_show_hints">💡 ヒント表示</span></label></div>
                 <!-- V66: Simple Mode Toggle -->
                 <div class="nav-row" style="justify-content:flex-start; padding:2px 0; margin-top:5px; border-top:1px dashed #4caf50; padding-top:8px;">
-                    <label class="toggle-switch" style="width:auto; margin:0;" data-hint="hint_simple_mode">
+                    <label class="toggle-switch" style="width:auto; margin:0;">
                         <input type="checkbox" id="enable-simple-mode" class="toggle-input">
                         <span class="toggle-knob" style="width:28px; height:14px;"></span>
                         <span class="toggle-label" style="font-size:0.7rem; color:#4caf50; font-weight:bold;" data-i18n="lbl_simple_mode">🌱 簡単モード</span>
@@ -4903,10 +4903,13 @@ ${buildItems}
                         // Stem
                         hint_clearance: 'stem', hint_stem_diameter: 'stem', hint_stem_ext: 'stem',
                         hint_box_stem: 'stem', hint_lego_stud: 'stem',
+                        // Engineering (Tolerance Test & Sprue Kit)
+                        hint_tolerance_test: 'engineering', hint_sprue_kit: 'engineering',
                         // Utility
-                        hint_tolerance_test: 'utility', hint_stock_icons: 'utility', hint_visual_presets: 'utility',
-                        hint_sprue_kit: 'utility', hint_dimension_lines: 'utility', hint_layer_color: 'utility',
-                        hint_simple_mode: 'utility', hint_simple_key_size: 'utility',
+                        hint_stock_icons: 'utility', hint_visual_presets: 'utility',
+                        hint_dimension_lines: 'utility', hint_layer_color: 'utility',
+                        // Simple Mode
+                        hint_simple_mode: 'simple', hint_simple_key_size: 'simple', hint_simple_icon: 'simple',
                         // Import
                         hint_import_stl: 'import', hint_import_op: 'import',
                         // Text
@@ -4922,7 +4925,7 @@ ${buildItems}
                         // Export
                         hint_export_stl: 'export', hint_export_obj: 'export', hint_export_3mf: 'export',
                         // Batch
-                        hint_batch: 'batch'
+                        hint_batch: 'batch', hint_batch_list: 'batch', hint_batch_run: 'batch'
                     };
                     
                     const section = hintToSection[currentHintKey] || '';
