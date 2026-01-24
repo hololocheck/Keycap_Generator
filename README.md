@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-65.0-orange.svg)
+![Version](https://img.shields.io/badge/version-66.0-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
@@ -30,11 +30,12 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V65.0)
-- **ビデオヒント機能**: パラメータにカーソルを合わせると、機能の効果を解説する短い**動画(Video/GIF)**がツールチップ内で自動再生されるようになりました。
-- **X (Twitter) シェア**: 現在のデザイン設定を埋め込んだURLを、ワンクリックでXへ投稿・共有できるボタンを追加しました。
-- **新テクスチャ追加**: 表面加工に「Ripple (波紋)」「Wood (木目)」「Hammered (打痕)」などの新パターンを追加しました。
-- **バグ修正**: カスタムフォントを読み込んだ際、既存のプリセットフォントが選択できなくなる問題を修正しました。
+### 📝 アップデート情報 (V66.0)
+過去最大級の大型アップデートです。初心者向けの簡易モードと、上級者向けのエンジニアリング機能を同時に追加しました。
+- **簡単モード & プリセット**: 複雑な設定を隠して直感的に作れる「Simple Mode」と、定番レイアウトをワンクリックで呼べる「Visual Presets」を搭載。
+- **エンジニアリング・スイート**: プリンターの公差を測定する「ステムテストキット」、プラモデルのような枠付きで出力する「スプルー生成」、3Dビュー上の「寸法線表示」機能を追加。
+- **内蔵アイコン (Stock Icons)**: 矢印やメディアキーなど、頻繁に使うアイコンを標準搭載。外部ファイルを探す手間がなくなりました。
+- **ユーザビリティ向上**: ツールチップ表示中に `F1` キーでWikiの該当項目へジャンプする機能や、エクスポート時の確認ダイアログを追加。
 
 ---
 
@@ -59,11 +60,12 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V65.0)
-- **Video Hints**: Tooltips now include **Video/GIF** demonstrations that automatically play on hover, visually explaining parameter effects.
-- **Share to X (Twitter)**: Added a button to instantly post and share your design URL to X with a single click.
-- **New Textures**: Added new surface procedural patterns such as "Ripple", "Wood", and "Hammered".
-- **Bug Fix**: Resolved an issue where loading a custom font would make existing preset fonts unavailable.
+### 📝 Update Notes (V66.0)
+The biggest update ever, introducing features for both beginners and engineering professionals.
+- **Simple Mode & Presets**: Introduced "Simple Mode" for intuitive creation and "Visual Presets" to select common layouts with a single click.
+- **Engineering Suite**: Added "Tolerance Test Kit" for printer calibration, "Sprue Generation" for runners, and real-time "Dimension Lines" in the 3D view.
+- **Stock Icons**: Built-in library of commonly used icons (Arrows, Media keys, etc.), eliminating the need to search for external SVGs.
+- **Enhanced Usability**: Added "Smart F1 Navigation" to jump to specific Wiki sections from tooltips, and an export confirmation dialog to prevent errors.
 
 ---
 
