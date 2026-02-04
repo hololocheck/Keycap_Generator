@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-66.0-orange.svg)
+![Version](https://img.shields.io/badge/version-67.0-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
@@ -30,12 +30,14 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V66.0)
-過去最大級の大型アップデートです。初心者向けの簡易モードと、上級者向けのエンジニアリング機能を同時に追加しました。
-- **簡単モード & プリセット**: 複雑な設定を隠して直感的に作れる「Simple Mode」と、定番レイアウトをワンクリックで呼べる「Visual Presets」を搭載。
-- **エンジニアリング・スイート**: プリンターの公差を測定する「ステムテストキット」、プラモデルのような枠付きで出力する「スプルー生成」、3Dビュー上の「寸法線表示」機能を追加。
-- **内蔵アイコン (Stock Icons)**: 矢印やメディアキーなど、頻繁に使うアイコンを標準搭載。外部ファイルを探す手間がなくなりました。
-- **ユーザビリティ向上**: ツールチップ表示中に `F1` キーでWikiの該当項目へジャンプする機能や、エクスポート時の確認ダイアログを追加。
+### 📝 アップデート情報 (V67.0)
+**"Visual Mastery & Manufacturing" Update**
+3D空間での直感操作と、製造品質を極めるための大型アップデートです。
+- **ビジュアル・操作革命**: 「フローティングHUD」を一新。「ガムボール」による直感的なパーツ移動、「ビューキューブ」による視点切り替え、設定を瞬時に保存・復元できる「ギャラリー機能」を搭載。
+- **エンジニアリング (CSK)**: 従来のランナー生成を進化させた「Custom Sprue Kit (CSK)」を実装。ギャラリーからD&Dで配置し、サイコロ型UI（Dice UI）で印刷向きを直感的に指定してキット化できます。
+- **製造品質の向上**: 独自ライブラリ `MeshFixLib` による非多様体エッジの自動修復機能、および多種ステム（Alps / Kailh Choc / Topre）の生成に対応。
+- **AMS完全連携**: Bambu Lab AMSに最適化されたカラーシステムを採用。スライサー画面のキャプチャによる色設定の取り込みや、3MFエクスポート時のカラー同期を実現しました。
+- **システム改善**: レスポンシブUI対応、エクスポートボタンの統合、F5キーによるデバッグモードの実装。
 
 ---
 
@@ -60,18 +62,20 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V66.0)
-The biggest update ever, introducing features for both beginners and engineering professionals.
-- **Simple Mode & Presets**: Introduced "Simple Mode" for intuitive creation and "Visual Presets" to select common layouts with a single click.
-- **Engineering Suite**: Added "Tolerance Test Kit" for printer calibration, "Sprue Generation" for runners, and real-time "Dimension Lines" in the 3D view.
-- **Stock Icons**: Built-in library of commonly used icons (Arrows, Media keys, etc.), eliminating the need to search for external SVGs.
-- **Enhanced Usability**: Added "Smart F1 Navigation" to jump to specific Wiki sections from tooltips, and an export confirmation dialog to prevent errors.
+### 📝 Update Notes (V67.0)
+**"Visual Mastery & Manufacturing" Update**
+A major update dedicated to mastering intuitive operation in 3D space and manufacturing quality.
+- **Visual Revolution**: Revamped "Floating HUD". Features "Gumball" for intuitive part movement, "View Cube" for viewpoint switching, and "Gallery" to instantly save and restore settings via snapshots.
+- **Engineering (CSK)**: Introduced "Custom Sprue Kit (CSK)". Create kits by Drag & Drop from the gallery, and intuitively set print orientation using the "Dice UI".
+- **Manufacturing Quality**: Implemented automatic non-manifold edge repair via `MeshFixLib` and added support for diverse stem types (Alps / Kailh Choc / Topre).
+- **Full AMS Integration**: Optimized color system for Bambu Lab AMS. Supports color setting import via slicer screen capture and full color synchronization during 3MF export.
+- **System Improvements**: Responsive UI support, unified export button, and Debug Mode accessible via F5 key.
 
 ---
 
 ### 🛠 Technology Stack / 技術スタック
 - **Engine**: [Three.js](https://threejs.org/)
-- **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg)
+- **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg), MeshFixLib(Custom)
 - **Exporter**: STLExporter, OBJExporter, 3MFLoader(Customized)
 
 ### 📄 License / ライセンス
