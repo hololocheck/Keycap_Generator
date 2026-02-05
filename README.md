@@ -76,7 +76,7 @@ A major update dedicated to mastering intuitive operation in 3D space and manufa
 ### 🛠 Technology Stack / 技術スタック
 - **Engine**: [Three.js](https://threejs.org/)
 - **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg), MeshFixLib(Custom)
-- **Exporter**: STLExporter, OBJExporter, 3MFLoader(Customized)
+- **Exporter**: STLExporter, OBJExporter, 3MFExporter(Original)
 
 ### 📄 License / ライセンス
 MIT License.
