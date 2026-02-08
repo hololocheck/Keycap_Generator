@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="E2yuICa6eKYqirbpWGXo9DtwvVG9mlCf_g56Qzpse2M" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keycap Generator V67</title>
+    <title>Keycap Generator V67.1</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 306.06 217.55'%3E%3Cstyle%3E.a%7Bstroke:%23ccc;stroke-miterlimit:10;fill:none%7D.b%7Bfill:aqua;stroke:aqua;stroke-miterlimit:10%7D.c%7Bstroke:aqua;stroke-miterlimit:10;fill:none;stroke-width:4px%7D.d%7Bfill:%23b3b3b3%7D%3C/style%3E%3Cpolygon class='d' points='273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92'/%3E%3Cpolygon class='d' points='273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92'/%3E%3Cpolygon class='d' points='151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26'/%3E%3Cline class='a' x1='35.16' y1='29.06' x2='.61' y2='135.77'/%3E%3Cline class='a' x1='.25' y1='136.62' x2='148.91' y2='216.18'/%3E%3Cline class='a' x1='151.25' y1='80.26' x2='35.16' y2='29.06'/%3E%3Cline class='a' x1='148.91' y1='216.18' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='273.2' y1='41.92' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='305.59' y1='144.63' x2='273.2' y2='41.92'/%3E%3Cpolyline class='a' points='148.91 217.1 149.26 216.93 305.59 144.63'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='273.2' y2='41.92'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='35.16' y2='29.06'/%3E%3Cline class='c' x1='86.1' y1='30.23' x2='119.97' y2='22'/%3E%3Cline class='c' x1='155.68' y1='60.92' x2='86.1' y2='30.23'/%3E%3Cline class='c' x1='224.32' y1='40.72' x2='154.45' y2='60.92'/%3E%3Cline class='c' x1='224.32' y1='41.22' x2='198.07' y2='32.19'/%3E%3Cpath class='b' d='M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z'/%3E%3Cpath class='b' d='M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z'/%3E%3Cpath class='b' d='M134.59,37.59s-10.53-2.15-15.09,0,4.12-3.16,1.67-4.79c-2.44-1.63,6.19,2.8,12.48.1,6.29-2.7-6.94,3.03.94,4.69Z'/%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -1094,6 +1094,342 @@
         body.ui-closed #preset-float-panel { left: 50px !important; top: 195px !important; }
         body.ui-closed #gallery-strip { left: 15px !important; }
         body.ui-closed #hud { max-width: calc(100% - 120px); }
+
+        /* ========================================== */
+        /* V67.1: スマートフォン専用レイアウト          */
+        /* ========================================== */
+        
+        /* モバイルUI要素 - デフォルト非表示 */
+        #mobile-top-bar, #mobile-bottom-nav, #mobile-search-box, #mobile-undoredo-popup { display: none; }
+        
+        @media screen and (max-width: 768px) {
+            /* --- 全体: 3Dプレビューがフルスクリーン --- */
+            body { overflow: hidden; }
+            
+            #canvas-container {
+                position: fixed !important;
+                left: 0 !important; top: 0 !important;
+                width: 100% !important; height: 100% !important;
+                z-index: 1;
+            }
+            
+            /* --- 設定パネル: 下から半分スライドアップ --- */
+            #ui-panel {
+                position: fixed !important;
+                left: 0 !important; bottom: 0 !important; top: auto !important;
+                width: 100% !important; height: 50vh !important;
+                transform: translateY(100%) !important;
+                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                border-right: none !important;
+                border-top: 2px solid var(--accent);
+                box-shadow: 0 -8px 30px rgba(0,0,0,0.7);
+                z-index: 500;
+            }
+            body.mobile-panel-open #ui-panel {
+                transform: translateY(0) !important;
+            }
+            #ui-scroll-area {
+                padding: 8px 12px 20px 12px;
+                -webkit-overflow-scrolling: touch;
+            }
+            #ui-header-area {
+                padding: 6px 12px 4px 12px;
+            }
+            
+            /* ナビゲーション */
+            #nav-bar { padding: 4px; gap: 2px; }
+            .nav-row { gap: 3px; }
+            #section-select { font-size: 0.78rem; }
+            /* PC用の検索ボックスは非表示 */
+            .nav-row:nth-child(2) { display: none !important; }
+            
+            /* コントロール調整 */
+            h3 { font-size: 0.82rem; margin-top: 8px; }
+            .control-group { margin-bottom: 4px; }
+            .control-group label { font-size: 0.7rem; }
+            button { padding: 6px; font-size: 0.72rem; }
+            select, input[type="text"], textarea { font-size: 0.78rem; padding: 4px; }
+            .toggle-knob { width: 28px; height: 14px; }
+            .toggle-knob::after { width: 10px; height: 10px; }
+            .toggle-input:checked + .toggle-knob::after { left: 15px; }
+            
+            /* --- PC用フローティングUI全非表示 --- */
+            #hud { display: none !important; }
+            #top-right-panel { display: none !important; }
+            #view-cube-wrapper { display: none !important; }
+            #btn-toggle-ui { display: none !important; }
+            #btn-help { display: none !important; }
+            #history-controls { display: none !important; }
+            #render-mode-controls { display: none !important; }
+            #gumball-target-controls { display: none !important; }
+            #preset-float-panel { display: none !important; }
+            
+            /* --- XYZ軸ラベル非表示 --- */
+            #axis-labels-container { display: none !important; }
+            
+            /* --- ツールチップ・ヒント非表示 --- */
+            .hint-tooltip { display: none !important; }
+            
+            /* --- ヒントトグル・簡単モードトグル行を非表示 --- */
+            #nav-bar .nav-row:nth-child(3) { display: none !important; }
+            
+            /* --- 設定パネルヘッダー: ロゴ・名前・ソーシャル非表示 --- */
+            .header-row { display: none !important; }
+            /* ナビゲーションだけ残す */
+            #gallery-strip { 
+                bottom: 56px !important; left: 5px !important; right: 5px !important;
+                height: 70px !important; z-index: 400 !important;
+            }
+            .gallery-item { width: 50px !important; height: 50px !important; }
+            #batch-color-btn span, #batch-export-btn span { display: none !important; }
+            #batch-color-btn, #batch-export-btn { width: 40px !important; }
+            
+            /* --- モバイルトップバー --- */
+            #mobile-top-bar {
+                display: flex !important;
+                position: fixed; top: 0; left: 0; right: 0;
+                height: 44px;
+                background: rgba(18, 18, 18, 0.85);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-bottom: 1px solid rgba(0,229,255,0.3);
+                z-index: 300;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 12px;
+            }
+            .mobile-top-left {
+                display: flex; align-items: center; gap: 8px;
+            }
+            .mobile-top-left .mobile-app-name {
+                color: var(--accent); font-size: 0.85rem; font-weight: bold;
+            }
+            .mobile-top-left .mobile-app-ver {
+                color: var(--text-muted); font-size: 0.55rem; opacity: 0.7;
+            }
+            .mobile-top-right {
+                display: flex; align-items: center; gap: 10px;
+            }
+            .mobile-top-btn {
+                width: 32px; height: 32px; background: none; border: none;
+                cursor: pointer; padding: 4px; border-radius: 6px;
+                display: flex; align-items: center; justify-content: center;
+                transition: background 0.2s;
+            }
+            .mobile-top-btn:active { background: rgba(0,229,255,0.15); }
+            .mobile-top-btn svg { width: 22px; height: 22px; }
+
+            /* --- モバイル検索ボックス --- */
+            #mobile-search-box {
+                display: none;
+                position: fixed; top: 44px; left: 0; right: 0;
+                background: rgba(18, 18, 18, 0.95);
+                padding: 8px 12px;
+                z-index: 290;
+                border-bottom: 1px solid #333;
+            }
+            #mobile-search-box.open { display: block !important; }
+            #mobile-search-input {
+                width: 100%; box-sizing: border-box;
+                background: #222; border: 1px solid var(--accent);
+                color: #fff; padding: 8px 12px; font-size: 0.85rem;
+                border-radius: 6px; outline: none;
+            }
+            #mobile-search-input::placeholder { color: #666; }
+            
+            /* --- モバイルボトムナビ --- */
+            #mobile-bottom-nav {
+                display: flex !important;
+                position: fixed; bottom: 0; left: 0; right: 0;
+                height: 56px;
+                background: rgba(18, 18, 18, 0.95);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border-top: 1px solid rgba(0,229,255,0.3);
+                z-index: 600;
+                align-items: center;
+                justify-content: space-around;
+                padding: 0;
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            .mobile-nav-btn {
+                flex: 1; height: 100%;
+                background: none; border: none; cursor: pointer;
+                display: flex; flex-direction: column;
+                align-items: center; justify-content: center;
+                gap: 2px; color: #888;
+                transition: color 0.2s;
+                padding: 4px 0;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .mobile-nav-btn:active { color: var(--accent); }
+            .mobile-nav-btn.active { color: var(--accent); }
+            .mobile-nav-btn svg { width: 24px; height: 24px; }
+            .mobile-nav-btn svg path, .mobile-nav-btn svg rect,
+            .mobile-nav-btn svg text, .mobile-nav-btn svg circle,
+            .mobile-nav-btn svg line, .mobile-nav-btn svg polygon { 
+                fill: currentColor; stroke: none; 
+            }
+            .mobile-nav-btn .nav-label {
+                font-size: 0.55rem; line-height: 1;
+                white-space: nowrap;
+            }
+            
+            /* パネル開いたときのオーバーレイ */
+            #mobile-panel-overlay {
+                display: none;
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5);
+                z-index: 450;
+            }
+            body.mobile-panel-open #mobile-panel-overlay { display: block; }
+            
+            /* --- ポップアップ系 --- */
+            .export-popup-overlay { z-index: 10000 !important; }
+            .export-popup { 
+                min-width: 92vw !important; max-width: 96vw !important; 
+                padding: 12px !important; max-height: 85vh; overflow-y: auto;
+                border-radius: 12px !important; border-width: 1px !important;
+            }
+            .export-popup-preview { height: 120px; }
+            .export-popup-header { padding-bottom: 8px; margin-bottom: 10px; }
+            .export-popup-title { font-size: 0.9rem; }
+            .export-popup-format { font-size: 0.7rem; padding: 3px 8px; }
+            .export-popup-info { grid-template-columns: 1fr !important; gap: 6px !important; margin-bottom: 10px; }
+            .export-info-item { padding: 6px 10px; }
+            .export-info-label { font-size: 0.68rem; }
+            .export-info-value { font-size: 0.78rem; }
+            .export-popup-buttons { gap: 8px; margin-top: 10px; padding-top: 10px; flex-wrap: wrap; justify-content: center; }
+            .export-popup-btn { padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; flex: 1; min-width: 80px; text-align: center; }
+            .export-format-option { padding: 8px !important; }
+            .export-format-option label { font-size: 0.75rem !important; }
+            
+            /* AMS - フルスクリーンモバイル */
+            .ams-popup-overlay { z-index: 10000 !important; }
+            .ams-popup { 
+                min-width: 96vw !important; max-width: 98vw !important; 
+                padding: 10px !important; max-height: 90vh; overflow-y: auto;
+                border-radius: 12px !important;
+            }
+            .ams-popup-header { padding: 8px 0; }
+            .ams-popup-title { font-size: 1rem !important; }
+            .ams-content { flex-direction: column !important; gap: 10px !important; }
+            .ams-palette-section { width: 100% !important; }
+            .ams-palette-grid { max-height: 120px; overflow-y: auto; }
+            .ams-slots-section { flex-direction: column !important; }
+            .ams-type-column { width: 100% !important; }
+            .ams-unit { flex-direction: row !important; flex-wrap: wrap; }
+            .ams-slot { width: 48px; height: 58px; }
+            .ams-slot-color { width: 30px; height: 30px; }
+            .ams-popup-footer { 
+                flex-wrap: wrap; gap: 6px; padding-top: 8px; 
+                justify-content: center; 
+            }
+            .ams-popup-footer .wiki-hint { display: none; }
+            .ams-popup-btn { padding: 6px 12px; font-size: 0.75rem; }
+            
+            /* CSK - フルスクリーンモバイル */
+            .csk-dialog { 
+                width: 98vw !important; height: 90vh !important; 
+                padding: 8px !important; border-radius: 12px !important;
+            }
+            .csk-header { padding: 6px 0 !important; }
+            .csk-title { font-size: 0.9rem !important; }
+            .csk-body { flex-direction: column !important; gap: 8px !important; }
+            .csk-left { 
+                width: 100% !important; min-width: auto !important; 
+                height: 80px !important; 
+            }
+            .csk-gallery { 
+                flex-direction: row !important; flex-wrap: nowrap !important; 
+                overflow-x: auto !important; overflow-y: hidden !important;
+                gap: 6px !important; padding: 4px !important;
+            }
+            .csk-gallery-tile { width: 50px !important; height: 50px !important; flex-shrink: 0; }
+            .csk-right { overflow-y: auto; }
+            .csk-grid-area { max-height: 35vh; overflow-y: auto; }
+            .csk-props { font-size: 0.72rem; }
+            .csk-toolbar { flex-wrap: wrap; gap: 4px; }
+            .csk-toolbar-btn { font-size: 0.65rem !important; padding: 3px 6px !important; }
+            .csk-footer { padding-top: 6px !important; gap: 6px; flex-wrap: wrap; justify-content: center; }
+            .csk-footer .wiki-hint { display: none; }
+            
+            /* --- モバイルでAMS/CSK非表示 --- */
+            #hud-ams { display: none !important; }
+            #btn-ams-settings, #btn-ams-simple { display: none !important; }
+            #btn-custom-sprue-kit { display: none !important; }
+            
+            /* --- セクション非表示 --- */
+            .mobile-hide { display: none !important; }
+            #btn-ams-config { display: none !important; }
+            .ams-select-empty { display: none !important; }
+            
+            /* モバイルカラーパレット */
+            .ams-select-palette { gap: 6px !important; }
+            .ams-select-item { min-width: 38px; }
+            .ams-select-item-color { width: 28px !important; height: 28px !important; }
+            .ams-select-item-num { font-size: 0.55rem !important; }
+            .ams-select-item-material { font-size: 0.5rem !important; }
+            
+            /* --- 戻る/進むポップアップ --- */
+            #mobile-undoredo-popup {
+                display: none;
+                position: fixed; bottom: 56px; left: 0;
+                background: rgba(20, 20, 25, 0.98);
+                backdrop-filter: blur(16px);
+                -webkit-backdrop-filter: blur(16px);
+                border-top: 1px solid rgba(0,229,255,0.4);
+                border-right: 1px solid rgba(0,229,255,0.2);
+                border-radius: 0 12px 0 0;
+                z-index: 550;
+                padding: 8px 6px;
+                flex-direction: row; gap: 6px;
+                transform: translateY(100%);
+                transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            #mobile-undoredo-popup.open {
+                display: flex;
+                transform: translateY(0);
+            }
+            .mobile-ur-btn {
+                width: 48px; height: 44px;
+                background: rgba(255,255,255,0.05);
+                border: 1px solid rgba(255,255,255,0.12);
+                border-radius: 8px; color: #ccc;
+                font-size: 1.3rem; cursor: pointer;
+                display: flex; align-items: center; justify-content: center;
+                transition: background 0.15s, border-color 0.15s;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .mobile-ur-btn:active:not(:disabled) {
+                background: rgba(0,229,255,0.15);
+                border-color: rgba(0,229,255,0.4);
+                color: var(--accent);
+            }
+            .mobile-ur-btn:disabled {
+                opacity: 0.3; color: #555;
+            }
+            
+            /* --- その他のポップアップ --- */
+            .shortcut-card { max-width: 95vw !important; padding: 12px !important; max-height: 75vh; overflow-y: auto; }
+            .debug-panel { max-width: 95vw !important; padding: 10px !important; max-height: 80vh; overflow-y: auto; }
+            #dnd-overlay h1 { font-size: 1.2rem !important; }
+            .social-icon { width: 22px; height: 22px; }
+        }
+        
+        /* 更に小さいスマホ（幅480px以下） */
+        @media screen and (max-width: 480px) {
+            #mobile-top-bar { height: 40px; padding: 0 8px; }
+            .mobile-top-btn { width: 28px; height: 28px; }
+            .mobile-top-btn svg { width: 20px; height: 20px; }
+            .mobile-app-name { font-size: 0.78rem !important; }
+            #mobile-bottom-nav { height: 50px; }
+            .mobile-nav-btn svg { width: 20px; height: 20px; }
+            .mobile-nav-btn .nav-label { font-size: 0.5rem; }
+            #ui-panel { height: 55vh !important; }
+            #gallery-strip { bottom: 50px !important; height: 60px !important; }
+            .gallery-item { width: 40px !important; height: 40px !important; }
+        }
     </style>
     
     <script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
@@ -1256,7 +1592,7 @@
     </div>
     
     <div id="loading">
-        <div>Initializing V67...</div>
+        <div>Initializing V67.1...</div>
         <div id="error-log"></div>
         <div id="batch-progress"></div>
         <button id="force-start-btn">FORCE START</button>
@@ -1766,7 +2102,7 @@
                     <svg id="app-logo" onclick="location.reload()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55">
                          <defs><style>.cls-1{stroke:#ccc;}.cls-1,.cls-2,.cls-3{stroke-miterlimit:10;}.cls-1,.cls-3{fill:none;}.cls-2{fill:aqua;}.cls-2,.cls-3{stroke:aqua;}.cls-3{stroke-width:4px;}.cls-4{fill:#b3b3b3;}</style></defs><g><g><polygon class="cls-4" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon class="cls-4" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon class="cls-4" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/></g><g><line class="cls-1" x1="35.16" y1="29.06" x2=".61" y2="135.77"/><line class="cls-1" x1=".25" y1="136.62" x2="148.91" y2="216.18"/><line class="cls-1" x1="151.25" y1="80.26" x2="35.16" y2="29.06"/><line class="cls-1" x1="148.91" y1="216.18" x2="151.25" y2="80.26"/><line class="cls-1" x1="273.2" y1="41.92" x2="151.25" y2="80.26"/><line class="cls-1" x1="305.59" y1="144.63" x2="273.2" y2="41.92"/><polyline class="cls-1" points="148.91 217.1 149.26 216.93 305.59 144.63"/><line class="cls-1" x1="152.73" y1=".49" x2="273.2" y2="41.92"/><line class="cls-1" x1="152.73" y1=".49" x2="35.16" y2="29.06"/></g></g><g><line class="cls-3" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line class="cls-3" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><line class="cls-3" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/><line class="cls-3" x1="224.32" y1="41.22" x2="198.07" y2="32.19"/><path class="cls-2" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/><path class="cls-2" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/></g>
                     </svg>
-                    <div><h2>Keycap Gen</h2><span class="ver">V67</span></div>
+                    <div><h2>Keycap Gen</h2><span class="ver">V67.1</span></div>
                 </div>
                 <div style="display:flex; align-items:center;">
                     <div class="social-links">
@@ -2664,7 +3000,7 @@ import * as THREE from 'three';
         async function initPyodide() {
             try {
                 console.log('Pyodide: Loading with extended memory...');
-                showToast('メッシュ修復エンジンを初期化中...', false);
+                showProgressToast('メッシュ修復エンジンを初期化中...', 0);
                 
                 // Pyodideをロード（メモリは自動拡張される）
                 pyodide = await loadPyodide({
@@ -2672,6 +3008,7 @@ import * as THREE from 'three';
                 });
                 
                 console.log('Pyodide: Memory initialized');
+                updateProgressToast('パッケージをインストール中...', 30);
                 
                 console.log('Pyodide: Installing packages...');
                 
@@ -2680,6 +3017,7 @@ import * as THREE from 'three';
                 await pyodide.loadPackage('networkx');  // networkxはPyodideに含まれている
                 // scipy, scikit-imageはボクセル修復用だが品質が低下するため使用しない
                 console.log('Pyodide: Core packages loaded');
+                updateProgressToast('trimesh / numpy をインストール中...', 60);
                 await pyodide.runPythonAsync(`
 import micropip
 await micropip.install('trimesh')
@@ -2687,6 +3025,7 @@ await micropip.install('numpy')
                 `);
                 
                 // 修復関数を定義
+                updateProgressToast('修復関数を定義中...', 80);
                 await pyodide.runPythonAsync(`
 import trimesh
 import numpy as np
@@ -3314,11 +3653,11 @@ def voxel_repair_with_pitch(vertices, faces, pitch):
                 
                 trimeshReady = true;
                 console.log('Pyodide + trimesh: Ready!');
-                showToast('メッシュ修復エンジン準備完了', false);
+                hideProgressToast('メッシュ修復エンジン準備完了', false, 2000);
                 return true;
             } catch (e) {
                 console.warn('Pyodide initialization failed:', e);
-                showToast('メッシュ修復エンジンの初期化に失敗', true);
+                hideProgressToast('メッシュ修復エンジンの初期化に失敗', true, 3000);
                 return false;
             }
         }
@@ -11545,8 +11884,9 @@ ${mesh.triangles.join('\n')}
                     e.dataTransfer.setData('application/json', JSON.stringify({ color, material }));
                     e.dataTransfer.setData('text/plain', color);
                     swatch.classList.add('dragging');
+                    isInternalDrag = true;
                 };
-                swatch.ondragend = () => swatch.classList.remove('dragging');
+                swatch.ondragend = () => { swatch.classList.remove('dragging'); isInternalDrag = false; };
                 
                 grid.appendChild(swatch);
             });
@@ -11639,8 +11979,37 @@ ${mesh.triangles.join('\n')}
         }
         
         function setupAMSSlotEvents() {
-            // スロットへのドロップ
+            // スロットへのドロップ & V67.1: スロット間ドラッグ
             document.querySelectorAll('.ams-slot').forEach(slot => {
+                const unitIdx = parseInt(slot.dataset.unit);
+                const slotIdx = parseInt(slot.dataset.slot);
+                const type = slot.dataset.type;
+                
+                // V67.1: 色がセットされているスロットをドラッグ可能にする
+                let slotData = null;
+                if (type === 'ams' && amsConfig.units[unitIdx]) {
+                    slotData = amsConfig.units[unitIdx].slots[slotIdx];
+                } else if (type === 'ht' && amsConfig.htUnits[unitIdx]) {
+                    slotData = amsConfig.htUnits[unitIdx].slots[slotIdx];
+                }
+                
+                if (slotData && slotData.color) {
+                    slot.draggable = true;
+                    slot.style.cursor = 'grab';
+                    slot.ondragstart = (e) => {
+                        e.dataTransfer.setData('application/json', JSON.stringify(slotData));
+                        e.dataTransfer.setData('text/plain', slotData.color);
+                        e.dataTransfer.setData('application/x-ams-slot-source', JSON.stringify({ type, unitIdx, slotIdx }));
+                        e.dataTransfer.effectAllowed = 'move';
+                        slot.style.opacity = '0.5';
+                        isInternalDrag = true;
+                    };
+                    slot.ondragend = () => {
+                        slot.style.opacity = '1';
+                        isInternalDrag = false;
+                    };
+                }
+                
                 slot.ondragover = (e) => {
                     e.preventDefault();
                     slot.classList.add('drag-over');
@@ -11648,31 +12017,44 @@ ${mesh.triangles.join('\n')}
                 slot.ondragleave = () => slot.classList.remove('drag-over');
                 slot.ondrop = (e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     slot.classList.remove('drag-over');
                     
                     // JSONデータを優先的に取得
-                    let slotData = null;
+                    let dropData = null;
                     try {
                         const jsonData = e.dataTransfer.getData('application/json');
                         if (jsonData) {
-                            slotData = JSON.parse(jsonData);
+                            dropData = JSON.parse(jsonData);
                         }
                     } catch (err) {}
                     
                     // JSONがない場合は色のみ
-                    if (!slotData) {
+                    if (!dropData) {
                         const color = e.dataTransfer.getData('text/plain');
-                        slotData = { color, material: amsConfig.currentMaterial || '' };
+                        dropData = { color, material: amsConfig.currentMaterial || '' };
                     }
                     
-                    const unitIdx = parseInt(slot.dataset.unit);
-                    const slotIdx = parseInt(slot.dataset.slot);
-                    const type = slot.dataset.type;
+                    // V67.1: ソーススロット情報を取得（スロット間移動の場合、元スロットをクリア）
+                    try {
+                        const sourceData = e.dataTransfer.getData('application/x-ams-slot-source');
+                        if (sourceData) {
+                            const source = JSON.parse(sourceData);
+                            // 元スロットと先スロットが異なる場合のみクリア
+                            if (source.type !== type || source.unitIdx !== unitIdx || source.slotIdx !== slotIdx) {
+                                if (source.type === 'ams') {
+                                    amsConfig.units[source.unitIdx].slots[source.slotIdx] = null;
+                                } else {
+                                    amsConfig.htUnits[source.unitIdx].slots[source.slotIdx] = null;
+                                }
+                            }
+                        }
+                    } catch (err) {}
                     
                     if (type === 'ams') {
-                        amsConfig.units[unitIdx].slots[slotIdx] = slotData;
+                        amsConfig.units[unitIdx].slots[slotIdx] = dropData;
                     } else {
-                        amsConfig.htUnits[unitIdx].slots[slotIdx] = slotData;
+                        amsConfig.htUnits[unitIdx].slots[slotIdx] = dropData;
                     }
                     renderAMSUnits();
                 };
@@ -11916,6 +12298,9 @@ ${mesh.triangles.join('\n')}
         // ==========================================
         // V67: 📥 ドラッグ＆ドロップ
         // ==========================================
+        // V67.1: AMS/CSK内部ドラッグ中はファイルDnDオーバーレイを抑制
+        let isInternalDrag = false;
+        
         function initDragAndDrop() {
             const overlay = document.getElementById('dnd-overlay');
             if (!overlay) return;
@@ -11924,12 +12309,14 @@ ${mesh.triangles.join('\n')}
             
             window.addEventListener('dragenter', (e) => {
                 e.preventDefault();
+                if (isInternalDrag) return;
                 dragCounter++;
                 overlay.classList.add('active');
             });
 
             window.addEventListener('dragleave', (e) => {
                 e.preventDefault();
+                if (isInternalDrag) return;
                 dragCounter--;
                 if (dragCounter <= 0) {
                     dragCounter = 0;
@@ -11946,6 +12333,7 @@ ${mesh.triangles.join('\n')}
                 dragCounter = 0;
                 overlay.classList.remove('active');
 
+                if (isInternalDrag) return;
                 if (e.dataTransfer.files.length > 0) {
                     const file = e.dataTransfer.files[0];
                     handleDroppedFile(file);
@@ -12526,6 +12914,27 @@ ${mesh.triangles.join('\n')}
             }
             
             document.getElementById('loading').style.display = 'none';
+            
+            // V67.1: モバイル対応 - スマホ幅ならフィラメント情報を閉じた状態にする
+            if (window.innerWidth <= 768) {
+                const statsPanel = document.getElementById('top-right-panel');
+                const toggleStatsBtn = document.getElementById('btn-toggle-stats');
+                if (statsPanel && !statsPanel.classList.contains('stats-collapsed')) {
+                    statsPanel.classList.add('stats-collapsed');
+                    if (toggleStatsBtn) toggleStatsBtn.textContent = '+';
+                }
+                // モバイルではUIパネルを常に表示
+                document.body.classList.remove('ui-closed');
+                // レンダラーサイズを再計算
+                setTimeout(() => {
+                    const w = container.clientWidth;
+                    const h = container.clientHeight;
+                    renderer.setSize(w, h);
+                    camera.aspect = w / h;
+                    camera.updateProjectionMatrix();
+                }, 100);
+            }
+            
             requestUpdate();
             animate();
             
@@ -15220,6 +15629,7 @@ ${buildItems}
                 let cskCols = 6, cskRows = 7, cskMaxSlots = 42;
                 let cskSelectedIdx = -1;
                 let cskDragItem = null;
+                let cskSlotDragSource = -1;  // V67.1: CSKスロット間ドラッグのソースインデックス
                 let cskRunnerExtruder = 1; // ランナーのExtruder番号
                 let cskRunnerColor = '#808080'; // ランナーの色
 
@@ -15470,6 +15880,22 @@ ${buildItems}
                                     updateCSKProps();
                                 }
                             });
+                            
+                            // V67.1: CSKスロット間ドラッグ
+                            slot.draggable = true;
+                            slot.addEventListener('dragstart', (e) => {
+                                cskSlotDragSource = i;
+                                cskDragItem = data.galleryItem;
+                                e.dataTransfer.effectAllowed = 'move';
+                                slot.style.opacity = '0.5';
+                                isInternalDrag = true;
+                            });
+                            slot.addEventListener('dragend', () => {
+                                slot.style.opacity = '1';
+                                cskSlotDragSource = -1;
+                                cskDragItem = null;
+                                isInternalDrag = false;
+                            });
                         } else {
                             const col = i % cskCols + 1;
                             const row = Math.floor(i / cskCols) + 1;
@@ -15481,7 +15907,26 @@ ${buildItems}
                         slot.addEventListener('dragleave', () => { slot.classList.remove('drag-over'); });
                         slot.addEventListener('drop', (e) => {
                             e.preventDefault();
+                            e.stopPropagation();
                             slot.classList.remove('drag-over');
+                            
+                            // V67.1: CSKスロット間ドラッグ（ソースがスロットの場合）
+                            if (cskSlotDragSource >= 0 && cskSlotDragSource !== i) {
+                                const sourceData = cskGridData[cskSlotDragSource];
+                                if (sourceData) {
+                                    cskGridData[i] = { ...sourceData };
+                                    cskGridData[cskSlotDragSource] = null;
+                                    if (cskSelectedIdx === cskSlotDragSource) { cskSelectedIdx = i; }
+                                    cskBatchSelected.delete(cskSlotDragSource);
+                                    cskSlotDragSource = -1;
+                                    cskDragItem = null;
+                                    renderCSKGrid();
+                                    updateCSKProps();
+                                    return;
+                                }
+                            }
+                            
+                            // ギャラリーからのドラッグ
                             if (cskDragItem) {
                                 cskGridData[i] = {
                                     galleryItem: cskDragItem,
@@ -15769,10 +16214,12 @@ ${buildItems}
                                 cskDragItem = item;
                                 e.dataTransfer.effectAllowed = 'copy';
                                 tile.style.opacity = '0.5';
+                                isInternalDrag = true;
                             });
                             tile.addEventListener('dragend', () => {
                                 cskDragItem = null;
                                 tile.style.opacity = '1';
+                                isInternalDrag = false;
                             });
 
                             container.appendChild(tile);
@@ -18772,7 +19219,7 @@ ${triangles.join('\n')}
             <div class="key-row"><span>デバッグ / メンテナンス</span> <span><span class="kbd">F5</span></span></div>
             <div class="key-row"><span>Wiki ヘルプ</span> <span><span class="kbd">F1</span></span></div>
             <div style="text-align:center; margin-top:20px;">
-                <button onclick="document.getElementById('shortcut-overlay').style.display='none'" style="padding:10px 30px; cursor:pointer; background:#00e5ff; border:none; border-radius:4px; font-weight:bold;">閉じる</button>
+                <button onclick="document.getElementById('shortcut-overlay').style.display='none'" style="padding:10px 30px; cursor:pointer; background:#00e5ff; border:none; border-radius:4px; font-weight:bold; color:#000;">閉じる</button>
             </div>
         </div>
     </div>
@@ -18809,6 +19256,329 @@ ${triangles.join('\n')}
             </div>
         </div>
     </div>
+    <!-- V67.1: モバイル専用UI要素 -->
+    <!-- モバイルトップバー -->
+    <div id="mobile-top-bar">
+        <div class="mobile-top-left">
+            <svg class="mobile-app-logo" onclick="location.reload()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55" style="width:28px; height:28px; cursor:pointer;">
+                <polygon fill="#b3b3b3" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon fill="#b3b3b3" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon fill="#b3b3b3" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/><path fill="aqua" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/><path fill="aqua" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/>
+            </svg>
+            <span class="mobile-app-ver">V67.1</span>
+        </div>
+        <div class="mobile-top-right">
+            <select id="mobile-language-select" style="background:#222; border:1px solid #555; color:#80deea; font-size:0.7rem; padding:2px 4px; border-radius:4px; outline:none; cursor:pointer;">
+                <option value="ja">🇯🇵</option>
+                <option value="en">🇺🇸</option>
+            </select>
+            <a href="https://keycapgeneratorwiki.com/" target="_blank" class="mobile-top-btn" title="Wiki">
+                <svg viewBox="0 0 306.06 217.55" xmlns="http://www.w3.org/2000/svg"><polygon fill="#b3b3b3" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon fill="#b3b3b3" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon fill="#b3b3b3" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><path fill="aqua" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/></svg>
+            </a>
+            <a href="https://github.com/hololocheck/Keycap_Generator" target="_blank" class="mobile-top-btn" title="GitHub">
+                <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"><path fill="#80deea" d="M512 0C229.12 0 0 229.12 0 512C0 738.56 146.56 930.56 349.44 997.76C375.04 1002.24 384.64 986.88 384.64 973.44C384.64 961.28 384 920.96 384 878.08C256 901.12 222.72 846.72 212.48 817.92C206.72 803.2 181.76 757.76 159.36 745.6C140.8 735.36 114.56 710.4 158.72 709.12C199.68 707.84 228.48 748.8 238.08 764.16C284.16 840.96 357.76 819.84 387.2 806.4C391.68 773.76 405.12 751.36 419.84 737.92C300.16 724.48 174.08 678.4 174.08 472.96C174.08 414.08 195.2 366.08 229.76 328.32C224 314.88 205.44 259.84 234.88 184.96C234.88 184.96 280.32 170.88 383.36 240.64C426.24 228.48 472.32 222.72 517.76 222.72C563.2 222.72 609.28 228.48 652.8 240.64C755.2 170.24 800 184.96 800 184.96C829.44 259.84 810.88 314.88 805.76 328.32C840.32 366.08 860.8 414.08 860.8 472.96C860.8 679.04 734.08 723.84 613.76 737.92C633.6 753.92 650.88 786.56 650.88 837.12C650.88 908.8 650.24 967.04 650.24 973.44C650.24 987.52 659.84 1002.88 686.08 997.76C888.32 930.56 1033.6 738.56 1033.6 512C1033.6 229.12 804.48 0 512 0Z"/></svg>
+            </a>
+            <button class="mobile-top-btn" id="mobile-search-toggle" title="Search">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="#80deea" stroke-width="2" fill="none"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="#80deea" stroke-width="2" stroke-linecap="round"/></svg>
+            </button>
+        </div>
+    </div>
+    
+    <!-- モバイル検索ボックス -->
+    <div id="mobile-search-box">
+        <input type="text" id="mobile-search-input" placeholder="🔍 Search settings...">
+    </div>
+    
+    <!-- モバイルパネルオーバーレイ -->
+    <div id="mobile-panel-overlay"></div>
+    
+    <!-- モバイル戻る/進むポップアップ -->
+    <div id="mobile-undoredo-popup">
+        <button class="mobile-ur-btn" id="mobile-undo" title="Undo" disabled>↩</button>
+        <button class="mobile-ur-btn" id="mobile-redo" title="Redo" disabled>↪</button>
+    </div>
+    
+    <!-- モバイルボトムナビ -->
+    <div id="mobile-bottom-nav">
+        <button class="mobile-nav-btn" id="mobile-nav-settings" title="Settings">
+            <svg viewBox="0 0 24 24"><path d="M19.14,12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4,2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24,0-.43.17-.47.41l-.36,2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47,0-.59.22L2.74,8.87c-.12.21-.08.47.12.61l2.03,1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03,1.58c-.18.14-.23.41-.12.61l1.92,3.32c.12.22.37.29.59.22l2.39-.96c.5.38,1.03.7,1.62.94l.36,2.54c.05.24.24.41.48.41h3.84c.24,0,.44-.17.47-.41l.36-2.54c.59-.24,1.13-.56,1.62-.94l2.39.96c.22.08.47,0,.59-.22l1.92-3.32c.12-.22.07-.47-.12-.61L19.14,12.94zM12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+            <span class="nav-label" data-i18n="mobile_settings">設定</span>
+        </button>
+        <button class="mobile-nav-btn" id="mobile-nav-undoredo" title="Undo/Redo">
+            <svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8,7.45,9.01,5.6,10.6L2,7v9h9l-3.62-3.62c1.39-1.16,3.16-1.88,5.12-1.88c3.54,0,6.55,2.31,7.6,5.5l2.37-.78C21.08,11.03,17.15,8,12.5,8z"/></svg>
+            <span class="nav-label">履歴</span>
+        </button>
+        <button class="mobile-nav-btn" id="mobile-nav-viewmode" title="View Mode">
+            <svg viewBox="0 0 24 24"><path d="M12,4.5C7,4.5,2.73,7.61,1,12c1.73,4.39,6,7.5,11,7.5s9.27-3.11,11-7.5C21.27,7.61,17,4.5,12,4.5zM12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5s5,2.24,5,5S14.76,17,12,17zM12,9c-1.66,0-3,1.34-3,3s1.34,3,3,3s3-1.34,3-3S13.66,9,12,9z"/></svg>
+            <span class="nav-label" data-i18n="mobile_view">表示</span>
+        </button>
+        <button class="mobile-nav-btn" id="mobile-nav-gumball" title="Gumball">
+            <svg viewBox="0 0 512 512" style="width:24px; height:24px;"><path fill="currentColor" d="M498.849,191.102c-5.468-11.229-13.762-22.675-26.922-28.034c-6.497-2.524-14.035-2.944-20.679-0.61c-4.347,1.431-8.129,4.165-11.073,7.51c-0.155-0.246-0.246-0.528-0.41-0.784c-4.083-6.89-9.469-12.914-15.566-17.799c-12.166-9.824-26.092-16.806-40.684-20.988c-7.272-2.206-14.664-3.801-22.101-5.186c-7.427-1.504-15.146-2.115-22.337-2.962c-14.764-1.558-29.492-2.679-44.256-3.5c-59.084-3.125-117.921-1.23-176.003-7.254c-14.527-1.44-29-3.245-43.4-5.505l-10.882-1.75c-4.064-0.583-8.011-0.874-12.094-0.848c-8.102,0.055-16.395,1.431-24.178,4.703c-7.755,3.254-15.028,8.466-20.25,15.584c-5.268,7.064-8.248,16.068-8.002,25.027c0.173,8.967,3.418,17.525,8.193,24.507c4.775,7.044,10.973,12.668,17.598,17.233c13.352,9.096,28.38,14.072,43.29,17.372c14.983,3.253,30.139,4.529,45.176,4.72c11.274,0.137,22.484-0.319,33.638-1.22c-0.355,0.282-0.729,0.528-1.075,0.82c-6.234,5.303-11.392,12.358-14.1,20.423c-2.706,8.075-2.98,16.87-1.321,25.236c1.623,8.385,5.386,16.396,10.809,22.994c5.104,6.27,11.629,11.155,18.647,14.7c-0.583,0.966-1.084,1.968-1.495,2.989c-1.276,3.427-1.613,6.963-1.358,10.326c0.556,6.743,3.19,12.722,6.261,18.162c6.362,10.854,15.767,19.294,26.256,25.264c4.138,2.36,8.466,4.247,12.878,5.878c-1.231,1.968-2.214,4.137-2.616,6.361c-1.084,5.222-0.246,10.544,1.65,15.119c3.928,9.26,11.428,15.767,19.33,20.223c16.158,8.831,34.194,10.134,51.236,7.738c15.84-2.616,31.515-8.849,43.454-20.669c13.106,0.3,26.339-0.292,39.517-1.75c13.27-1.595,26.54-3.983,39.517-8.02c12.878-4.129,25.746-9.56,36.764-18.3c2.589-2.069,5.077-4.32,7.391-6.744c3.163,4.274,7.264,8.12,12.568,10.518c6.28,2.998,14.263,3.262,20.98,0.683c6.753-2.579,12.094-7.263,16.322-12.294c4.247-5.085,7.373-10.754,10.008-16.477c10.143-23.176,12.157-47.847,12.467-71.633C511.7,238.866,509.667,214.196,498.849,191.102z"/></svg>
+            <span class="nav-label">ガムボール</span>
+        </button>
+        <button class="mobile-nav-btn" id="mobile-nav-export" title="Export">
+            <svg viewBox="0 0 24 24"><path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.89,2,1.99,2H18c1.1,0,2-0.9,2-2V8L14,2zM18,20H6V4h7v5h5V20zM8,15.01l1.41,1.41L11,14.84V19h2v-4.16l1.59,1.59L16,15.01L12.01,11L8,15.01z"/></svg>
+            <span class="nav-label" data-i18n="mobile_export">出力</span>
+        </button>
+    </div>
+    
+    <!-- V67.1: モバイルUI制御スクリプト -->
+    <script>
+    (function() {
+        function isMobile() { return window.innerWidth <= 768; }
+        if (!isMobile()) return;
+        
+        const panelOverlay = document.getElementById('mobile-panel-overlay');
+        const settingsBtn = document.getElementById('mobile-nav-settings');
+        const undoredoBtn = document.getElementById('mobile-nav-undoredo');
+        const viewModeBtn = document.getElementById('mobile-nav-viewmode');
+        const gumballBtn = document.getElementById('mobile-nav-gumball');
+        const exportBtn = document.getElementById('mobile-nav-export');
+        const searchToggle = document.getElementById('mobile-search-toggle');
+        const searchBox = document.getElementById('mobile-search-box');
+        const mobileSearchInput = document.getElementById('mobile-search-input');
+        const pcSearchBox = document.getElementById('search-box');
+        
+        // 戻る/進むポップアップ
+        const urPopup = document.getElementById('mobile-undoredo-popup');
+        const mobileUndo = document.getElementById('mobile-undo');
+        const mobileRedo = document.getElementById('mobile-redo');
+        const pcUndo = document.getElementById('btn-undo');
+        const pcRedo = document.getElementById('btn-redo');
+        
+        // ヒント無効化
+        const hintToggle = document.getElementById('enable-hints');
+        if (hintToggle) {
+            hintToggle.checked = false;
+            hintToggle.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        
+        // ================================================
+        // モバイル用セクション非表示
+        // 表示: sec-import, 直感操作, sec-svg, sec-color（AMS設定ボタン除外）
+        // 非表示: sec-basic, sec-structure, sec-shape, sec-texture, sec-stem,
+        //         sec-utility, sec-text, sec-preset, sec-export, sprue-kit, sec-batch
+        // ================================================
+        const normalContent = document.getElementById('normal-mode-content');
+        if (normalContent) {
+            const showSections = new Set(['sec-basic', 'sec-structure', 'sec-shape', 'sec-text', 'sec-svg', 'sec-color', 'sec-preset']);
+            let currentSection = '';
+            
+            for (const child of normalContent.children) {
+                // H3ヘッダーでセクション切替
+                if (child.tagName === 'H3' && child.id) {
+                    currentSection = child.id;
+                    if (!showSections.has(currentSection)) {
+                        child.classList.add('mobile-hide');
+                        continue;
+                    }
+                    continue; // 表示セクションのH3は残す
+                }
+                
+                // 直感操作パネル → モバイルでは非表示
+                if (child.id === 'v67-placement-panel') {
+                    child.classList.add('mobile-hide');
+                    continue;
+                }
+                // Import 3Dパネル → モバイルでは非表示
+                if (child.classList?.contains('v60-import-panel')) {
+                    child.classList.add('mobile-hide');
+                    continue;
+                }
+                
+                // sec-color内の特定要素を非表示
+                if (currentSection === 'sec-color') {
+                    // AMS設定ボタン
+                    if (child.id === 'btn-ams-config') {
+                        child.classList.add('mobile-hide');
+                        continue;
+                    }
+                    // AMS JSON読み込みボタンの親div
+                    if (child.querySelector?.('#btn-ams-import-json')) {
+                        child.classList.add('mobile-hide');
+                        continue;
+                    }
+                    // AMS登録ヒント文を非表示
+                    child.querySelectorAll?.('p[data-i18n="ams_register_hint"], p[data-i18n="simple_ams_select"]')
+                        .forEach(p => p.style.display = 'none');
+                    continue; // 色パレット自体は表示
+                }
+                
+                // section-sep → モバイルではすべて非表示（表示セクションは自然に並ぶ）
+                if (child.classList?.contains('section-sep')) {
+                    child.classList.add('mobile-hide');
+                    continue;
+                }
+                
+                // 非表示セクションの子要素はすべて隠す
+                if (!showSections.has(currentSection)) {
+                    child.classList.add('mobile-hide');
+                }
+            }
+        }
+        
+        // ================================================
+        // モバイル用デフォルト8色パレット（AMS不要）
+        // ================================================
+        setTimeout(() => {
+            if (typeof amsConfig !== 'undefined') {
+                const defaults = [
+                    { color: '#FFFFFF', material: 'PLA', name: 'White' },
+                    { color: '#1A1A1A', material: 'PLA', name: 'Black' },
+                    { color: '#E53935', material: 'PLA', name: 'Red' },
+                    { color: '#1E88E5', material: 'PLA', name: 'Blue' },
+                    { color: '#43A047', material: 'PLA', name: 'Green' },
+                    { color: '#FDD835', material: 'PLA', name: 'Yellow' },
+                    { color: '#FB8C00', material: 'PLA', name: 'Orange' },
+                    { color: '#757575', material: 'PLA', name: 'Gray' }
+                ];
+                const hasData = amsConfig.units.some(u => u.slots.some(s => s && s.color));
+                if (!hasData) {
+                    amsConfig.units = [{ slots: defaults }];
+                    if (typeof updateSettingsTabPalette === 'function') updateSettingsTabPalette();
+                }
+            }
+            // セクションジャンプ選択も絞り込み
+            const secSelect = document.getElementById('section-select');
+            if (secSelect) {
+                const keepSecs = new Set(['', 'sec-basic', 'sec-structure', 'sec-shape', 'sec-text', 'sec-svg', 'sec-color', 'sec-preset']);
+                Array.from(secSelect.options).forEach(opt => {
+                    if (!keepSecs.has(opt.value)) opt.style.display = 'none';
+                });
+            }
+        }, 500);
+        
+        // 言語同期
+        const mobileLangSelect = document.getElementById('mobile-language-select');
+        const pcLangSelect = document.getElementById('language-select');
+        if (mobileLangSelect && pcLangSelect) {
+            mobileLangSelect.value = pcLangSelect.value;
+            mobileLangSelect.addEventListener('change', () => {
+                pcLangSelect.value = mobileLangSelect.value;
+                pcLangSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+            pcLangSelect.addEventListener('change', () => {
+                mobileLangSelect.value = pcLangSelect.value;
+            });
+        }
+        
+        // --- 設定パネル ---
+        function closePanel() {
+            document.body.classList.remove('mobile-panel-open');
+            settingsBtn.classList.remove('active');
+            setTimeout(() => window.dispatchEvent(new Event('resize')), 350);
+        }
+        settingsBtn.addEventListener('click', () => {
+            closeUndoRedo();
+            document.body.classList.toggle('mobile-panel-open');
+            settingsBtn.classList.toggle('active', document.body.classList.contains('mobile-panel-open'));
+            setTimeout(() => window.dispatchEvent(new Event('resize')), 350);
+        });
+        panelOverlay.addEventListener('click', closePanel);
+        
+        // --- 戻る/進むポップアップ ---
+        function syncUndoRedoState() {
+            if (pcUndo) mobileUndo.disabled = pcUndo.disabled;
+            if (pcRedo) mobileRedo.disabled = pcRedo.disabled;
+        }
+        function openUndoRedo() {
+            syncUndoRedoState();
+            urPopup.style.display = 'flex';
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => urPopup.classList.add('open'));
+            });
+            undoredoBtn.classList.add('active');
+        }
+        function closeUndoRedo() {
+            urPopup.classList.remove('open');
+            undoredoBtn.classList.remove('active');
+            setTimeout(() => {
+                if (!urPopup.classList.contains('open')) urPopup.style.display = 'none';
+            }, 300);
+        }
+        
+        undoredoBtn.addEventListener('click', () => {
+            if (urPopup.classList.contains('open')) {
+                closeUndoRedo();
+            } else {
+                closePanel();
+                openUndoRedo();
+            }
+        });
+        
+        mobileUndo.addEventListener('click', () => {
+            if (pcUndo && !pcUndo.disabled) pcUndo.click();
+            setTimeout(syncUndoRedoState, 50);
+        });
+        mobileRedo.addEventListener('click', () => {
+            if (pcRedo && !pcRedo.disabled) pcRedo.click();
+            setTimeout(syncUndoRedoState, 50);
+        });
+        
+        // PC側のundo/redoボタンのdisabled変化を監視
+        if (pcUndo) {
+            new MutationObserver(syncUndoRedoState)
+                .observe(pcUndo, { attributes: true, attributeFilter: ['disabled'] });
+        }
+        if (pcRedo) {
+            new MutationObserver(syncUndoRedoState)
+                .observe(pcRedo, { attributes: true, attributeFilter: ['disabled'] });
+        }
+        
+        // 画面タップでポップアップを閉じる
+        document.addEventListener('click', (e) => {
+            if (urPopup.classList.contains('open') &&
+                !e.target.closest('#mobile-undoredo-popup') &&
+                !e.target.closest('#mobile-nav-undoredo')) {
+                closeUndoRedo();
+            }
+        });
+        
+        // --- 表示モード ---
+        viewModeBtn.addEventListener('click', () => {
+            document.getElementById('hud-view-mode')?.click();
+            viewModeBtn.classList.toggle('active');
+        });
+        
+        // --- ガムボール ---
+        gumballBtn.addEventListener('click', () => {
+            document.getElementById('hud-gumball-toggle')?.click();
+            gumballBtn.classList.toggle('active');
+        });
+        
+        // --- エクスポート ---
+        exportBtn.addEventListener('click', () => {
+            closePanel();
+            closeUndoRedo();
+            document.getElementById('btn-export-single')?.click();
+        });
+        
+        // --- 検索 ---
+        searchToggle.addEventListener('click', () => {
+            searchBox.classList.toggle('open');
+            if (searchBox.classList.contains('open')) mobileSearchInput.focus();
+        });
+        mobileSearchInput.addEventListener('input', () => {
+            if (pcSearchBox) {
+                pcSearchBox.value = mobileSearchInput.value;
+                pcSearchBox.dispatchEvent(new Event('input', { bubbles: true }));
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#mobile-search-box') && 
+                !e.target.closest('#mobile-search-toggle') &&
+                searchBox.classList.contains('open')) {
+                searchBox.classList.remove('open');
+            }
+        });
+        
+        // 画面回転
+        window.addEventListener('resize', () => {
+            if (!isMobile()) {
+                document.body.classList.remove('mobile-panel-open');
+                closeUndoRedo();
+            }
+        });
+    })();
+    </script>
 
 </body>
 </html>
