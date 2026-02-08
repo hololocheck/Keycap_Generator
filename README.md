@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-67.0-orange.svg)
+![Version](https://img.shields.io/badge/version-67.1-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
@@ -30,14 +30,23 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V67.0)
-**"Visual Mastery & Manufacturing" Update**
-3D空間での直感操作と、製造品質を極めるための大型アップデートです。
-- **ビジュアル・操作革命**: 「フローティングHUD」を一新。「ガムボール」による直感的なパーツ移動、「ビューキューブ」による視点切り替え、設定を瞬時に保存・復元できる「ギャラリー機能」を搭載。
-- **エンジニアリング (CSK)**: 従来のランナー生成を進化させた「Custom Sprue Kit (CSK)」を実装。ギャラリーからD&Dで配置し、サイコロ型UI（Dice UI）で印刷向きを直感的に指定してキット化できます。
-- **製造品質の向上**: 独自ライブラリ `MeshFixLib` による非多様体エッジの自動修復機能、および多種ステム（Alps / Kailh Choc / Topre）の生成に対応。
-- **AMS完全連携**: Bambu Lab AMSに最適化されたカラーシステムを採用。スライサー画面のキャプチャによる色設定の取り込みや、3MFエクスポート時のカラー同期を実現しました。
-- **システム改善**: レスポンシブUI対応、エクスポートボタンの統合、F5キーによるデバッグモードの実装。
+### 📝 アップデート情報 (V67.1)
+**"Mobile & Interaction" Update**
+
+v67.0で実装された大規模機能を、より快適に利用するための改善アップデートです。
+
+- **モバイル最適化**: スマートフォンからのアクセス時に、画面サイズに合わせてUIレイアウトが自動的に最適化されるようになりました。
+- **操作性の向上**:
+    - **スロット間ドラッグ**: AMSの色設定やCSKグリッド間で、アイテムをドラッグ＆ドロップして移動・入れ替えが可能になりました。
+    - **UI視認性**: ショートカットパネルの「閉じる」ボタンの文字色を黒（#000）に変更し、視認性を改善しました。
+    - **ドロップ制御**: 内部ドラッグ操作時に、外部ファイル読み込み用のオーバーレイが表示されないよう修正しました。
+- **システム可視化**: メッシュ修復エンジンのロード状況を、詳細な4段階のプログレスバーで表示するように変更しました。
+
+> **V67.0 ("Visual Mastery & Manufacturing") のハイライト:**
+> * **ビジュアル革命**: フローティングHUD、ガムボール操作、ギャラリー機能の実装。
+> * **エンジニアリング (CSK)**: ランナー枠付きキット生成機能と、ダイスUIによる直感的な向き指定。
+> * **AMS完全連携**: スライサー同期と画面キャプチャによる色設定取り込み。
+> * **製造品質**: 非多様体エッジの自動修復機能 (MeshFixLib) と多様なステム生成。
 
 ---
 
@@ -62,14 +71,23 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V67.0)
-**"Visual Mastery & Manufacturing" Update**
-A major update dedicated to mastering intuitive operation in 3D space and manufacturing quality.
-- **Visual Revolution**: Revamped "Floating HUD". Features "Gumball" for intuitive part movement, "View Cube" for viewpoint switching, and "Gallery" to instantly save and restore settings via snapshots.
-- **Engineering (CSK)**: Introduced "Custom Sprue Kit (CSK)". Create kits by Drag & Drop from the gallery, and intuitively set print orientation using the "Dice UI".
-- **Manufacturing Quality**: Implemented automatic non-manifold edge repair via `MeshFixLib` and added support for diverse stem types (Alps / Kailh Choc / Topre).
-- **Full AMS Integration**: Optimized color system for Bambu Lab AMS. Supports color setting import via slicer screen capture and full color synchronization during 3MF export.
-- **System Improvements**: Responsive UI support, unified export button, and Debug Mode accessible via F5 key.
+### 📝 Update Notes (V67.1)
+**"Mobile & Interaction" Update**
+
+An improvement update focusing on usability and smoother interaction based on v67.0 features.
+
+- **Mobile Optimization**: Automatically optimized UI layout for smartphone access.
+- **Interaction Improvements**:
+    - **Drag & Drop**: Enabled item movement between AMS color slots and CSK grids via drag-and-drop.
+    - **UI Visibility**: Changed the text color of the "Close" button to black (#000) for better contrast.
+    - **Drop Control**: Suppressed the external file import overlay during internal drag operations.
+- **System Visualization**: Replaced the loading indicator for the Mesh Repair Engine with a detailed 4-stage progress bar.
+
+> **V67.0 ("Visual Mastery & Manufacturing") Highlights:**
+> * **Visual Revolution**: Floating HUD, Gumball operation, and Gallery features.
+> * **Engineering (CSK)**: Custom Sprue Kit generation with intuitive "Dice UI" for orientation.
+> * **Full AMS Integration**: Slicer synchronization and color setting import via screen capture.
+> * **Manufacturing Quality**: Automatic non-manifold edge repair (MeshFixLib) and diverse stem generation.
 
 ---
 
