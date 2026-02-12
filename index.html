@@ -413,8 +413,9 @@
         /* F1 Wiki Help Hint */
         .wiki-hint {
             color: #666; font-size: 0.65rem; display: flex; align-items: center; gap: 4px;
-            white-space: nowrap; flex-shrink: 0;
+            white-space: nowrap; flex-shrink: 0; cursor: pointer;
         }
+        .wiki-hint:hover { color: #00e5ff; }
         .wiki-hint .kbd { 
             background: #333; padding: 2px 6px; border-radius: 3px; 
             border-bottom: 2px solid #222; font-family: monospace; font-size: 0.6rem; color: #888;
@@ -470,6 +471,8 @@
         .export-popup-btn.confirm:hover { background: #80deea; transform: scale(1.02); }
         .export-format-option:has(input:checked) { border-color: #4fc3f7 !important; }
         .export-format-option:hover { background: rgba(79,195,247,0.15) !important; }
+
+
 
         /* === V68 フォントマネージャー === */
         #fm-overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0); display:flex; justify-content:center; align-items:center; z-index:10000; transition:background 0.3s ease; }
@@ -1600,7 +1603,7 @@
             </div>
 
             <div class="fm-footer">
-                <span class="wiki-hint" data-help-url-ja="https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=%F0%9F%94%A4%20%E3%83%95%E3%82%A9%E3%83%B3%E3%83%88%E3%83%9E%E3%83%8D%E3%83%BC%E3%82%B8%E3%83%A3%E3%83%BC%20(Font%20Manager)" data-help-url-en="https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=%F0%9F%94%A4%20Font%20Manager"><span class="kbd">F1</span> <span data-i18n="wiki_hint">Wikiで詳しく見る</span></span>
+                <span class="wiki-hint" data-help-url-ja="https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#fontmanager" data-help-url-en="https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#fontmanager"><span class="kbd">F1</span> <span data-i18n="wiki_hint">Wikiで詳しく見る</span></span>
                 <button class="fm-btn close" id="fm-btn-close" data-i18n="fm_close">閉じる</button>
                 <span style="flex:1;"></span>
  <button class="fm-btn-use" id="fm-btn-use-font" data-i18n="fm_use_save">使用 ＆ 保存</button>
@@ -1640,6 +1643,7 @@
                 </div>
             </div>
             <div class="sm-footer">
+                <span class="wiki-hint" data-help-url-ja="https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#svgmanager" data-help-url-en="https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#svgmanager"><span class="kbd">F1</span> <span data-i18n="wiki_hint">Wikiで詳しく見る</span></span>
                 <button class="fm-btn close" id="sm-btn-close" data-i18n="sm_close">閉じる</button>
                 <span style="flex:1;"></span>
                 <button class="sm-btn-use" id="sm-btn-use-svg" data-i18n="sm_apply_save">適用 ＆ 保存</button>
@@ -1839,7 +1843,7 @@
         <button class="hud-btn" id="hud-font-manager" title="Font Manager" data-hint="hint_font_manager" style="background:none; border:none; width:28px; height:28px; cursor:pointer; transition: transform 0.2s, filter 0.2s; padding:2px;">
             <svg viewBox="1247 142 240 244" style="width:100%; height:100%;"><path fill="#aaa" d="M1420.7,284.1c-5-6.7-8.3-12.7-10.3-17.1h20.6C1429,271.4,1425.8,277.3,1420.7,284.1L1420.7,284.1z M1448.6,251.6h-20.1v-7.2c0-4.2-3.4-7.7-7.7-7.7c-4.2,0-7.7,3.4-7.7,7.7v7.2h-20.1c-4.2,0-7.7,3.4-7.7,7.7c0,4.2,3.4,7.7,7.7,7.7h1c2,5.7,6.6,16.5,16.6,29c-4.2,4.2-9.1,8.5-14.9,12.7c-3.4,2.5-4.2,7.3-1.7,10.8c1.5,2.1,3.8,3.1,6.2,3.1c1.6,0,3.2-0.5,4.5-1.5c6.2-4.5,11.5-9.2,16.1-13.7c4.6,4.6,9.9,9.2,16.1,13.7c1.4,1,3,1.5,4.5,1.5c2.4,0,4.7-1.1,6.2-3.1c2.5-3.4,1.8-8.2-1.7-10.8c-5.8-4.2-10.7-8.5-14.9-12.7c9.9-12.5,14.6-23.4,16.6-29h1c4.2,0,7.7-3.4,7.7-7.7C1456.3,255,1452.8,251.6,1448.6,251.6L1448.6,251.6z M1467.5,353.6c0,7.3-5.9,13.2-13.2,13.2h-94.1c-0.9,0-1.8-0.3-2.7-0.5l25.1-33.5c0.4-0.5,0.5-1.1,0.8-1.6c0.2-0.3,0.4-0.6,0.5-1c0.3-1,0.4-2.1,0.2-3.1v0L1365.1,198h89.1c7.3,0,13.2,5.9,13.2,13.2V353.6z M1361,335.9l-14.1,18.8l-2.1-18.8H1361z M1264.8,307.3V173.2c0-7.3,5.9-13.2,13.2-13.2h54.6c6.5,0,12.2,4.9,13.1,11.3l21.8,149.3H1278C1270.7,320.5,1264.8,314.6,1264.8,307.3L1264.8,307.3z M1454.3,182.6h-91.4l-2-13.6c-2-13.9-14.2-24.5-28.3-24.5H1278c-15.8,0-28.6,12.8-28.6,28.6v134.1c0,15.8,12.8,28.6,28.6,28.6h51.4l2.3,20.9c1.6,14.5,13.8,25.4,28.4,25.4h94.1c15.8,0,28.6-12.8,28.6-28.6V211.2C1482.9,195.5,1470,182.6,1454.3,182.6L1454.3,182.6z M1301.7,245.9l5.5-28.5c0.5-2.3,4.4-2.3,4.8,0l5.5,28.5H1301.7z M1309.6,200c-8.5,0-15.9,6.1-17.5,14.5l-11.7,60.8c-0.8,4.2,1.9,8.2,6.1,9c4.1,0.8,8.2-1.9,9-6.1l3.3-16.9h21.8l3.3,16.9c0.7,3.7,3.9,6.2,7.5,6.2c0.5,0,1,0,1.5-0.1c4.2-0.8,6.9-4.9,6.1-9l-11.7-60.8C1325.5,206.1,1318.1,200,1309.6,200L1309.6,200z"/></svg>
         </button>
-        <button class="hud-btn" id="hud-svg-manager" title="SVG Manager" style="background:none; border:none; width:28px; height:28px; cursor:pointer; transition: transform 0.2s, filter 0.2s; padding:2px;">
+        <button class="hud-btn" id="hud-svg-manager" title="SVG Manager" data-hint="hint_svg_manager" style="background:none; border:none; width:28px; height:28px; cursor:pointer; transition: transform 0.2s, filter 0.2s; padding:2px;">
             <svg viewBox="0 0 512 512" style="width:100%; height:100%;"><path fill="#aaa" d="M378.409,0H208.294h-13.176l-9.314,9.315L57.017,138.101l-9.314,9.315v13.176v265.513c0,47.36,38.528,85.896,85.895,85.896h244.811c47.361,0,85.888-38.535,85.888-85.896V85.896C464.297,38.528,425.77,0,378.409,0z M432.493,426.104c0,29.877-24.214,54.091-54.084,54.091H133.598c-29.877,0-54.091-24.214-54.091-54.091V160.592h83.717c24.884,0,45.07-20.179,45.07-45.071V31.804h170.114c29.87,0,54.084,24.214,54.084,54.091V426.104z"/><path fill="#aaa" d="M180.296,296.668l-4.846-.67c-10.63-1.487-14.265-4.978-14.265-10.104c0-5.78,4.309-9.817,12.383-9.817c5.653,0,11.305,1.62,15.745,3.764c1.886.942,3.903,1.487,5.789,1.487c4.845,0,8.612-3.63,8.612-8.616c0-3.226-1.481-5.921-4.71-7.939c-5.384-3.372-15.476-6.06-25.572-6.06c-19.781,0-32.436,11.171-32.436,27.998c0,16.15,10.232,24.898,28.938,27.454l4.846.67c10.903,1.48,14.129,4.846,14.129,10.229c0,6.326-5.247,10.766-14.939,10.766c-6.727,0-12.111-1.745-19.645-5.921c-1.616-.942-3.634-1.62-5.788-1.62c-5.115,0-8.885,3.91-8.885,8.756c0,3.226,1.616,6.326,4.713,8.344c6.054,3.764,15.878,7.8,28.798,7.8c23.823,0,35.934-12.24,35.934-28.795C209.097,307.84,199.273,299.356,180.296,296.668z"/><path fill="#aaa" d="M281.108,259.382c-4.577,0-7.939,2.43-9.556,7.674l-16.69,54.51h-.402l-17.634-54.51c-1.745-5.244-4.978-7.674-9.551-7.674c-5.653,0-9.692,4.176-9.692,9.287c0,1.347.269,2.834.67,4.175l23.286,68.104c2.96,8.477,6.727,11.57,12.652,11.57c5.785,0,9.555-3.093,12.516-11.57l23.282-68.104c.406-1.341.674-2.828.674-4.175C290.664,263.558,286.76,259.382,281.108,259.382z"/><path fill="#aaa" d="M364.556,300.836h-18.841c-5.114,0-8.344,3.1-8.344,7.806c0,4.713,3.23,7.814,8.344,7.814h6.193c.538,0,.803.258.803.803c0,3.505-.265,6.598-1.075,9.014c-1.882,5.796-7.67,9.426-14.669,9.426c-7.943,0-12.921-3.903-14.939-10.096c-1.075-3.365-1.48-7.8-1.48-19.648c0-11.842.405-16.15,1.48-19.516c2.018-6.325,6.867-10.228,14.67-10.228c5.924,0,10.362,1.885,13.859,6.724c2.695,3.777,5.387,4.852,8.749,4.852c4.981,0,9.021-3.638,9.021-8.888c0-2.151-.674-4.035-1.752-5.921c-4.842-8.204-15.071-14.264-29.877-14.264c-16.287,0-28.935,7.408-33.644,22.204c-2.022,6.466-2.559,11.576-2.559,25.038c0,13.454.538,18.573,2.559,25.031c4.709,14.802,17.357,22.204,33.644,22.204c16.286,0,28.668-8.204,33.374-22.881c1.617-5.111,2.29-12.645,2.29-20.716v-.95C372.362,303.664,369.538,300.836,364.556,300.836z"/></svg>
         </button>
         <div style="width:1px; height:20px; background:#555; margin:0 4px;"></div>
@@ -5085,6 +5089,8 @@ result
                 hint_snapshot: "現在の3Dビューを画像として保存します。",
                 hint_gallery_open: "保存したプリセットのギャラリーを開きます。",
                 hint_gallery_save: "現在の設定をギャラリーに保存します。",
+                hint_font_manager: "カスタムフォント(.ttf/.otf/.woff)の管理ダイアログを開きます。",
+                hint_svg_manager: "カスタムSVGの管理ダイアログを開きます。",
                 hint_gumball: "テキストやSVG、インポートしたモデルの位置をドラッグで調整できます。",
                 hint_toggle_text: "3Dビュー上の文字の表示/非表示を切り替えます。",
                 hint_toggle_svg: "3Dビュー上のSVGの表示/非表示を切り替えます。",
@@ -5463,6 +5469,8 @@ result
                 hint_snapshot: "Save the current 3D view as an image.",
                 hint_gallery_open: "Open the gallery of saved presets.",
                 hint_gallery_save: "Save the current settings to the gallery.",
+                hint_font_manager: "Open the custom font management dialog (.ttf/.otf/.woff).",
+                hint_svg_manager: "Open the custom SVG management dialog.",
                 hint_gumball: "Drag to adjust the position of text, SVG, or imported models.",
                 hint_toggle_text: "Toggle text visibility on the 3D view.",
                 hint_toggle_svg: "Toggle SVG visibility on the 3D view.",
@@ -12857,8 +12865,14 @@ ${mesh.triangles.join('\n')}
             }
 
             window.addEventListener('keydown', (e) =>{
-                // 入力フォーム内では無効化
-                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+                // 入力フォーム内では無効化（ただしF1ヘルプは除外）
+                if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') {
+                    if (e.key === 'F1') {
+                        e.preventDefault();
+                        openWikiHelp();
+                    }
+                    return;
+                }
 
                 if (e.ctrlKey || e.metaKey) {
                     if (e.key === 'z') { // Undo
@@ -12935,17 +12949,13 @@ ${mesh.triangles.join('\n')}
                 return el && el.style.display !== 'none' && el.style.display !== '';
             };
             
-            // aタグクリックでURLを開く（Text Fragment対応）
+            // URLを新規タブで開く（Text Fragment対応）
             const openUrl = (url) =>{
-                const a = document.createElement('a');
-                a.href = url;
-                a.target = '_blank';
-                a.rel = 'noopener';
-                a.click();
+                window.open(url, '_blank', 'noopener');
             };
             
             // 表示中のダイアログからdata-help-url属性を探す
-            const dialogIds = ['export-popup-overlay', 'csk-overlay', 'batch-color-overlay', 'batch-export-overlay', 'ams-popup-overlay', 'debug-panel-overlay'];
+            const dialogIds = ['fm-overlay', 'sm-overlay', 'export-popup-overlay', 'csk-overlay', 'batch-color-overlay', 'batch-export-overlay', 'ams-popup-overlay', 'debug-panel-overlay'];
             for (const id of dialogIds) {
                 if (isVisible(id)) {
                     const dialog = document.getElementById(id);
@@ -12968,6 +12978,18 @@ ${mesh.triangles.join('\n')}
                 : 'https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9';
             openUrl(wikiBaseUrl);
         }
+
+        // wiki-hintクリックハンドラー（F1キーを押さなくても直接クリックで遷移可能）
+        document.addEventListener('click', function(e) {
+            const hint = e.target.closest('.wiki-hint[data-help-url-ja]');
+            if (!hint) return;
+            const url = currentLang === 'en'
+                ? hint.getAttribute('data-help-url-en')
+                : hint.getAttribute('data-help-url-ja');
+            if (url) {
+                window.open(url, '_blank', 'noopener');
+            }
+        });
 
         // ===== F5 デバッグ / メンテナンスパネル =====
         function toggleDebugPanel() {
@@ -16250,7 +16272,7 @@ ${buildItems}
                 tooltip.classList.remove('show-video');
                 clearTimeout(videoDelayTimeout);
                 
-                const noVideoHints = ['hint_export_stl', 'hint_export_3mf', 'hint_export_parts', 'hint_batch_run', 'hint_url_share', 'hint_quick_save', 'hint_export_json', 'hint_conform', 'hint_simple_mode', 'hint_snapshot', 'hint_gallery_open', 'hint_gallery_save', 'hint_toggle_text', 'hint_toggle_svg'];
+                const noVideoHints = ['hint_export_stl', 'hint_export_3mf', 'hint_export_parts', 'hint_batch_run', 'hint_url_share', 'hint_quick_save', 'hint_export_json', 'hint_conform', 'hint_simple_mode', 'hint_snapshot', 'hint_gallery_open', 'hint_gallery_save', 'hint_toggle_text', 'hint_toggle_svg', 'hint_font_manager', 'hint_svg_manager'];
                 const showVideoForHint = !noVideoHints.includes(hintKey);
                 
                 const videoArea = tooltip.querySelector('.hint-video-area');
@@ -16379,6 +16401,16 @@ ${buildItems}
                             ja: 'https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=%F0%9F%93%82%20%E3%82%AE%E3%83%A3%E3%83%A9%E3%83%AA%E3%83%BC%E6%A9%9F%E8%83%BD%20(Gallery)%20(v67.0%20New)',
                             en: 'https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=%F0%9F%93%82%20Gallery%20Features%20(v67.0%20New)'
                         },
+                        // Font Manager (V68)
+                        hint_font_manager: {
+                            ja: 'https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#fontmanager',
+                            en: 'https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#fontmanager'
+                        },
+                        // SVG Manager (V68)
+                        hint_svg_manager: {
+                            ja: 'https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#svgmanager',
+                            en: 'https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#svgmanager'
+                        },
                         // Stem settings
                         hint_stem_type: {
                             ja: 'https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=%C2%B6-,5.%20%E3%82%B9%E3%83%86%E3%83%A0%E8%A8%AD%E5%AE%9A%20(Stem),-%E8%BB%B8%E3%82%BF%E3%82%A4%E3%83%97%3A',
@@ -16399,7 +16431,9 @@ ${buildItems}
                         a.href = url;
                         a.target = '_blank';
                         a.rel = 'noopener';
+                        document.body.appendChild(a);
                         a.click();
+                        document.body.removeChild(a);
                         return;
                     }
                     
