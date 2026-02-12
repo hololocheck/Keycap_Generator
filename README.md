@@ -1,8 +1,18 @@
 # Keycap Generator
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-68.0-orange.svg)
+<p align="center">
+  <img src="keycapgeneratorIcon.svg" width="120" alt="Keycap Generator">
+</p>
+
+<p align="center">
+  <strong>Browser-based 3D Keycap Generator</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/Three.js-r160-00e5ff.svg" alt="Three.js">
+  <img src="https://img.shields.io/badge/version-68.0-orange.svg" alt="Version">
+</p>
 
 [日本語](#japanese) | [English](#english)
 
@@ -43,6 +53,7 @@
 - **環境バックアップ**: Quick Save/Loadを廃止し、全パラメータ・ギャラリー・カスタムSVG・フォント・AMS設定を1ファイルで一括バックアップ・復元可能に。
 - **HUD拡張**: 配置モード、生成モード、寸法線、FM/SM等のボタンを追加。アクティブ状態でシアンに変色するビジュアルフィードバックを実装。
 - **エクスポート改善**: 全エクスポート処理を単一プログレスバー（%表示）に統一。
+- **Keycap Slicer Bridge**: エクスポートダイアログから Bambu Studio / OrcaSlicer にモデルを直接転送可能に。ローカル常駐アプリ（Windows）がスライサーを自動検出し、ワンクリックで3Dモデルを送信。詳細は [Keycap Slicer Bridge](https://github.com/sireai/Keycap_Slicer_Bridge) を参照。
 - **UIテーマ統一**: 全セクションをシアン (#00e5ff) テーマに完全統一。絵文字除去、トグルスイッチ統一。
 
 > **V67.0 ("Visual Mastery & Manufacturing") のハイライト:**
@@ -87,6 +98,7 @@ A major update for complete freedom over keycap typography. A newly developed 3D
 - **Environment Backup**: Replaces Quick Save/Load. Back up and restore all parameters, gallery, custom SVGs, fonts, and AMS settings in a single file.
 - **HUD Enhancements**: Added Placement mode, Generation mode, Dimension, FM/SM buttons. Active toggle buttons now turn cyan for visual feedback.
 - **Export Improvements**: All export operations unified to a single progress bar with percentage display.
+- **Keycap Slicer Bridge**: Send models directly to Bambu Studio / OrcaSlicer from the export dialog. A lightweight local app (Windows) auto-detects installed slicers and transfers 3D models in one click. See [Keycap Slicer Bridge](https://github.com/sireai/Keycap_Slicer_Bridge) for details.
 - **UI Theme Unification**: Complete cyan (#00e5ff) theme across all sections. Emoji removed, toggle switches unified.
 
 > **V67.0 ("Visual Mastery & Manufacturing") Highlights:**
@@ -102,6 +114,7 @@ A major update for complete freedom over keycap typography. A newly developed 3D
 - **Font Engine**: FontEngine3D (Custom) — TTF/OTF/CFF/CFF2/WOFF
 - **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg), MeshFixLib (Custom)
 - **Exporter**: STLExporter, OBJExporter, 3MFExporter (Original)
+- **Slicer Bridge**: [Keycap Slicer Bridge](https://github.com/sireai/Keycap_Slicer_Bridge) — Bambu Studio / OrcaSlicer direct transfer
 
 ### 📄 License / ライセンス
 MIT License.
