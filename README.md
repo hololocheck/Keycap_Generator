@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Three.js](https://img.shields.io/badge/Three.js-r160-00e5ff.svg)
-![Version](https://img.shields.io/badge/version-67.1-orange.svg)
+![Version](https://img.shields.io/badge/version-68.0-orange.svg)
 
 [日本語](#japanese) | [English](#english)
 
@@ -30,17 +30,20 @@
 - **3Dプリント最適化**: ステムのクリアランス調整、補強リブ、Lego Stud対応。
 - **コスト・重量計算**: フィラメントに応じた概算重量とコストをリアルタイム算出。
 
-### 📝 アップデート情報 (V67.1)
-**"Mobile & Interaction" Update**
+### 📝 アップデート情報 (V68.0)
+**"Typography & Workflow" Update**
 
-v67.0で実装された大規模機能を、より快適に利用するための改善アップデートです。
+キーキャップ上の「文字」を自由自在にデザインするための大型アップデートです。独自開発の3Dフォントエンジンにより、PCにある.ttf/.otfフォントをそのまま読み込めるようになりました。
 
-- **モバイル最適化**: スマートフォンからのアクセス時に、画面サイズに合わせてUIレイアウトが自動的に最適化されるようになりました。
-- **操作性の向上**:
-    - **スロット間ドラッグ**: AMSの色設定やCSKグリッド間で、アイテムをドラッグ＆ドロップして移動・入れ替えが可能になりました。
-    - **UI視認性**: ショートカットパネルの「閉じる」ボタンの文字色を黒（#000）に変更し、視認性を改善しました。
-    - **ドロップ制御**: 内部ドラッグ操作時に、外部ファイル読み込み用のオーバーレイが表示されないよう修正しました。
-- **システム可視化**: メッシュ修復エンジンのロード状況を、詳細な4段階のプログレスバーで表示するように変更しました。
+- **3Dフォントエンジン**: 独自開発の **FontEngine3D** により、.ttf / .otf / .woff フォントをJSON変換なしに直接読み込み可能に。ハイブリッドレンダリング方式でカスタムフォントの曲線品質が大幅に改善されました。
+- **ターゲット別フォント**: メイン文字・サブ文字・サイド印字にそれぞれ異なるフォントを設定可能に。
+- **フォントマネージャー**: カスタムフォントの読み込み・管理・永続化（IndexedDB）を行う専用ダイアログを新設。3Dタイルプレビュー、検索、一括削除に対応。
+- **SVGマネージャー**: カスタムSVGのインポート・永続化・ストックアイコンライブラリとの統合を行う管理ダイアログを新設。
+- **文字設定パネル改修**: ターゲット切替プルダウンを導入。共有スライダー方式により、サブ文字・サイド印字の個別スライダーを廃止しUIを簡素化。
+- **環境バックアップ**: Quick Save/Loadを廃止し、全パラメータ・ギャラリー・カスタムSVG・フォント・AMS設定を1ファイルで一括バックアップ・復元可能に。
+- **HUD拡張**: 配置モード、生成モード、寸法線、FM/SM等のボタンを追加。アクティブ状態でシアンに変色するビジュアルフィードバックを実装。
+- **エクスポート改善**: 全エクスポート処理を単一プログレスバー（%表示）に統一。
+- **UIテーマ統一**: 全セクションをシアン (#00e5ff) テーマに完全統一。絵文字除去、トグルスイッチ統一。
 
 > **V67.0 ("Visual Mastery & Manufacturing") のハイライト:**
 > * **ビジュアル革命**: フローティングHUD、ガムボール操作、ギャラリー機能の実装。
@@ -71,17 +74,20 @@ Built entirely with client-side JavaScript, this tool requires no downloads or e
 - **3D Model Remixing**: Import STL files for Union or Subtraction (Engraving) operations.
 - **3D Print Optimization**: Stem clearance adjustment, reinforcement ribs, and Lego Stud support.
 
-### 📝 Update Notes (V67.1)
-**"Mobile & Interaction" Update**
+### 📝 Update Notes (V68.0)
+**"Typography & Workflow" Update**
 
-An improvement update focusing on usability and smoother interaction based on v67.0 features.
+A major update for complete freedom over keycap typography. A newly developed 3D font engine lets you load .ttf/.otf fonts directly from your PC without any conversion.
 
-- **Mobile Optimization**: Automatically optimized UI layout for smartphone access.
-- **Interaction Improvements**:
-    - **Drag & Drop**: Enabled item movement between AMS color slots and CSK grids via drag-and-drop.
-    - **UI Visibility**: Changed the text color of the "Close" button to black (#000) for better contrast.
-    - **Drop Control**: Suppressed the external file import overlay during internal drag operations.
-- **System Visualization**: Replaced the loading indicator for the Mesh Repair Engine with a detailed 4-stage progress bar.
+- **3D Font Engine**: Custom-built **FontEngine3D** loads .ttf / .otf / .woff fonts directly — no JSON conversion. Hybrid rendering pipeline dramatically improves curve quality for custom fonts.
+- **Per-Target Fonts**: Set a different font for each text target — Main Text, Sub Text, and Side Print.
+- **Font Manager**: New dialog for importing, managing, and persisting custom fonts (IndexedDB). Features 3D tile preview, search, and bulk delete.
+- **SVG Manager**: New dialog for importing, persisting, and integrating custom SVGs with the stock icon library.
+- **Text Settings Redesign**: Target switching dropdown introduced. Shared slider system eliminates separate Sub Text / Side Print sliders for a cleaner UI.
+- **Environment Backup**: Replaces Quick Save/Load. Back up and restore all parameters, gallery, custom SVGs, fonts, and AMS settings in a single file.
+- **HUD Enhancements**: Added Placement mode, Generation mode, Dimension, FM/SM buttons. Active toggle buttons now turn cyan for visual feedback.
+- **Export Improvements**: All export operations unified to a single progress bar with percentage display.
+- **UI Theme Unification**: Complete cyan (#00e5ff) theme across all sections. Emoji removed, toggle switches unified.
 
 > **V67.0 ("Visual Mastery & Manufacturing") Highlights:**
 > * **Visual Revolution**: Floating HUD, Gumball operation, and Gallery features.
@@ -93,8 +99,9 @@ An improvement update focusing on usability and smoother interaction based on v6
 
 ### 🛠 Technology Stack / 技術スタック
 - **Engine**: [Three.js](https://threejs.org/)
-- **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg), MeshFixLib(Custom)
-- **Exporter**: STLExporter, OBJExporter, 3MFExporter(Original)
+- **Font Engine**: FontEngine3D (Custom) — TTF/OTF/CFF/CFF2/WOFF
+- **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg), MeshFixLib (Custom)
+- **Exporter**: STLExporter, OBJExporter, 3MFExporter (Original)
 
 ### 📄 License / ライセンス
 MIT License.
