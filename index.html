@@ -461,16 +461,45 @@
             padding-top: 15px; border-top: 1px solid #333; align-items: center;
             flex-wrap: nowrap;
         }
+        .export-popup-buttons .wiki-hint { min-width:0; overflow:hidden; text-overflow:ellipsis; flex-shrink:1; }
         .export-popup-btn {
             padding: 10px 24px; border-radius: 8px; font-size: 0.9rem; cursor: pointer;
-            transition: all 0.2s; border: none;
+            transition: all 0.2s; border: none; line-height: 1.2; white-space: nowrap;
         }
         .export-popup-btn.cancel { background: #444; color: #fff; }
         .export-popup-btn.cancel:hover { background: #555; }
         .export-popup-btn.confirm { background: #4fc3f7; color: #000; font-weight: bold; }
         .export-popup-btn.confirm:hover { background: #80deea; transform: scale(1.02); }
+        .export-popup-btn.confirm.slicer-bambu { background: rgb(0, 160, 61); color: #fff; }
+        .export-popup-btn.confirm.slicer-bambu:hover { background: rgb(30, 190, 91); }
+        .export-popup-btn.confirm.slicer-orca { background: rgb(38, 166, 154); color: #fff; }
+        .export-popup-btn.confirm.slicer-orca:hover { background: rgb(68, 196, 184); }
         .export-format-option:has(input:checked) { border-color: #4fc3f7 !important; }
+
+        /* === Slicer Bridge Panel === */
+        .export-split-wrap { display:flex; align-items:stretch; gap:0; flex-shrink:0; }
+        .export-split-wrap .export-popup-btn.confirm { border-radius:8px 0 0 8px; }
+        .export-split-wrap .export-split-toggle { background:#4fc3f7; color:#000; border:none; border-left:1px solid rgba(0,0,0,0.2); border-radius:0 8px 8px 0; padding:0 8px; cursor:pointer; font-size:0.6rem; transition:0.15s; display:flex; align-items:center; }
+        .export-split-wrap .export-split-toggle:hover { background:#80deea; }
+        .export-split-wrap .export-split-toggle.slicer-bambu { background:rgb(0,160,61); color:#fff; }
+        .export-split-wrap .export-split-toggle.slicer-bambu:hover { background:rgb(30,190,91); }
+        .export-split-wrap .export-split-toggle.slicer-orca { background:rgb(38,166,154); color:#fff; }
+        .export-split-wrap .export-split-toggle.slicer-orca:hover { background:rgb(68,196,184); }
+        .export-split-dropdown { position:absolute; bottom:calc(100% + 6px); right:0; background:#1a1a2e; border:1px solid #4fc3f7; border-radius:10px; min-width:240px; box-shadow:0 -4px 20px rgba(0,0,0,0.6); overflow:hidden; z-index:10001; display:none; }
+        .export-split-dropdown.show { display:block; }
+        .export-split-item { display:flex; align-items:center; gap:10px; padding:10px 14px; cursor:pointer; color:#ddd; font-size:0.78rem; transition:0.15s; border:none; background:none; width:100%; text-align:left; white-space:nowrap; }
+        .export-split-item:hover { background:rgba(79,195,247,0.12); }
+        .export-split-item .split-label { font-weight:bold; }
+        .export-split-item .split-sub { color:#888; font-size:0.65rem; }
+        .export-split-separator { border-top:1px solid #333; margin:0; }
+        .export-bridge-status { font-size:0.7rem; color:#4caf50; display:flex; align-items:center; gap:5px; white-space:nowrap; flex-shrink:0; }
+        .export-bridge-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+        .export-bridge-dot.ok { background:#4caf50; box-shadow:0 0 4px rgba(76,175,80,0.6); }
+        .export-bridge-dot.off { background:#f44336; }
         .export-format-option:hover { background: rgba(79,195,247,0.15) !important; }
+
+
+
 
 
 
@@ -1407,7 +1436,7 @@
             .export-info-label { font-size: 0.68rem; }
             .export-info-value { font-size: 0.78rem; }
             .export-popup-buttons { gap: 8px; margin-top: 10px; padding-top: 10px; flex-wrap: wrap; justify-content: center; }
-            .export-popup-btn { padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; flex: 1; min-width: 80px; text-align: center; }
+            .export-popup-btn { padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; min-width: 80px; text-align: center; white-space: nowrap; }
             .export-format-option { padding: 8px !important; }
             .export-format-option label { font-size: 0.75rem !important; }
             
@@ -1699,12 +1728,18 @@
             </div>
             
             <div class="export-popup-info" id="export-popup-info"></div>
-            <div class="export-popup-buttons">
+            <div class="export-popup-buttons" id="export-main-buttons" style="position:relative;">
                 <span class="wiki-hint" data-help-url-ja="https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=1.%20%E9%80%9A%E5%B8%B8%E3%82%A8%E3%82%AF%E3%82%B9%E3%83%9D%E3%83%BC%E3%83%88%20(Standard%20Export)" data-help-url-en="https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=%C2%B6-,1.%20Standard%20Export,-Preview%3A%203D"><span class="kbd">F1</span> <span data-i18n="wiki_hint">Wikiで詳しく見る</span></span>
+                <span id="export-bridge-indicator" class="export-bridge-status" style="display:none;"></span>
                 <span style="flex:1;"></span>
                 <button class="export-popup-btn cancel" id="export-popup-cancel" data-i18n="popup_cancel">キャンセル</button>
-                <button class="export-popup-btn confirm" id="export-popup-confirm" data-i18n="popup_export">エクスポート</button>
+                <div class="export-split-wrap" id="export-split-wrap">
+                    <button class="export-popup-btn confirm" id="export-popup-confirm" data-i18n="popup_export">エクスポート</button>
+                    <button class="export-split-toggle" id="export-split-toggle" style="display:none;">▲</button>
+                </div>
+                <div class="export-split-dropdown" id="export-split-dropdown"></div>
             </div>
+
         </div>
     </div>
     
@@ -5249,6 +5284,16 @@ result
  gallery_ctx_export: "エクスポート",
  gallery_ctx_delete: "削除",
                 // CSK（カスタムスプルーキット）
+ // Slicer Bridge
+                slicer_bridge_title: "スライサーで開く",
+                slicer_bridge_note: "Keycap Slicer Bridge 経由でモデルをスライサーに直接送信します。",
+                slicer_bridge_none: "ブリッジがスライサーを検出できませんでした。",
+                slicer_bridge_ok: "{name} にモデルを送信しました",
+                slicer_bridge_err: "ブリッジ接続に失敗しました",
+                slicer_bridge_sending: "{name} に送信中...",
+                slicer_open_label: "{name} で開く",
+                slicer_download_desc: "ファイルをダウンロード",
+                slicer_connected: "接続済み",
  csk_title: "カスタムスプルーキット",
  csk_gallery: "ギャラリー",
                 csk_printer: "機種",
@@ -5628,6 +5673,16 @@ result
  gallery_ctx_load: "Load",
  gallery_ctx_export: "Export",
  gallery_ctx_delete: "Delete",
+                // Slicer Bridge
+                slicer_bridge_title: "Open in Slicer",
+                slicer_bridge_note: "Sends the model directly to the slicer via Keycap Slicer Bridge.",
+                slicer_bridge_none: "No slicer detected by bridge.",
+                slicer_bridge_ok: "Model sent to {name}",
+                slicer_bridge_err: "Bridge connection failed",
+                slicer_bridge_sending: "Sending to {name}...",
+                slicer_open_label: "Open in {name}",
+                slicer_download_desc: "Download file",
+                slicer_connected: "Connected",
                 // CSK（カスタムスプルーキット）
  csk_title: "Custom Sprue Kit",
  csk_gallery: "Gallery",
@@ -8363,7 +8418,7 @@ ${componentsXml}      </components>
                                 const bodyMark = document.createElement('div');
                                 bodyMark.className = 'color-changed-mark';
                                 bodyMark.style.cssText = 'position:absolute; top:2px; right:2px; width:12px; height:12px; background:#00e5ff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; color:#000; font-weight:bold; box-shadow:0 1px 3px rgba(0,0,0,0.5);';
- bodyMark.textContent = '';
+ bodyMark.textContent = '✓';
                                 bodyMark.title = '本体色設定済み';
                                 div.appendChild(bodyMark);
                             }
@@ -8373,7 +8428,7 @@ ${componentsXml}      </components>
                                 const textMark = document.createElement('div');
                                 textMark.className = 'color-changed-mark';
                                 textMark.style.cssText = 'position:absolute; top:16px; right:2px; width:12px; height:12px; background:#ff9800; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; color:#000; font-weight:bold; box-shadow:0 1px 3px rgba(0,0,0,0.5);';
- textMark.textContent = '';
+ textMark.textContent = '✓';
                                 textMark.title = '文字色設定済み';
                                 div.appendChild(textMark);
                             }
@@ -8829,7 +8884,7 @@ ${componentsXml}      </components>
                                     const bodyMark = document.createElement('div');
                                     bodyMark.className = 'color-changed-mark';
                                     bodyMark.style.cssText = 'position:absolute; top:2px; right:2px; width:12px; height:12px; background:#00e5ff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; color:#000; font-weight:bold; box-shadow:0 1px 3px rgba(0,0,0,0.5);';
- bodyMark.textContent = '';
+ bodyMark.textContent = '✓';
                                     bodyMark.title = '本体色設定済み';
                                     div.appendChild(bodyMark);
                                 }
@@ -8839,7 +8894,7 @@ ${componentsXml}      </components>
                                     const textMark = document.createElement('div');
                                     textMark.className = 'color-changed-mark';
                                     textMark.style.cssText = 'position:absolute; top:16px; right:2px; width:12px; height:12px; background:#ff9800; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:8px; color:#000; font-weight:bold; box-shadow:0 1px 3px rgba(0,0,0,0.5);';
- textMark.textContent = '';
+ textMark.textContent = '✓';
                                     textMark.title = '文字色設定済み';
                                     div.appendChild(textMark);
                                 }
@@ -14546,7 +14601,199 @@ ${mesh.triangles.join('\n')}
             const suffix = state.text ? `_[${state.text.replace(/\n/g,'_')}]` : '';
             return base + suffix;
         };
+        // === Slicer Bridge v3 (Export Dialog Integrated) ===
+        window.SLICER_BRIDGE_URL = 'http://127.0.0.1:19876';
+        window._slicerBridgeStatus = null; // null=unchecked, object=available, false=unavailable
+
+        async function checkSlicerBridge() {
+            console.log('[SlicerBridge] Checking bridge...');
+            try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 3000);
+                const res = await fetch(window.SLICER_BRIDGE_URL + '/health', { signal: controller.signal });
+                clearTimeout(timeout);
+                if (res.ok) {
+                    window._slicerBridgeStatus = await res.json();
+                    console.log('[SlicerBridge] Connected:', window._slicerBridgeStatus);
+                } else {
+                    console.warn('[SlicerBridge] Health check failed:', res.status);
+                    window._slicerBridgeStatus = false;
+                }
+            } catch (e) {
+                console.warn('[SlicerBridge] Not available:', e.message);
+                window._slicerBridgeStatus = false;
+            }
+        }
+        if (!/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) && window.innerWidth >= 768) {
+            setTimeout(checkSlicerBridge, 2000);
+        }
+
+        function getSlicerBridgeInfo() {
+            const s = window._slicerBridgeStatus;
+            if (!s || s === false) return { connected: false, bambu: false, orca: false };
+            const slicers = s.slicers || {};
+            return {
+                connected: true,
+                bambu: !!(slicers.bambu && slicers.bambu.available),
+                orca: !!(slicers.orca && slicers.orca.available),
+            };
+        }
+
+        function setupExportSplitButton() {
+            const toggle = document.getElementById('export-split-toggle');
+            const dropdown = document.getElementById('export-split-dropdown');
+            const confirmBtn = document.getElementById('export-popup-confirm');
+            const indicator = document.getElementById('export-bridge-indicator');
+            if (!toggle || !dropdown || !confirmBtn) return;
+
+            // モバイルでは通常エクスポートのみ
+            const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
+            if (isMobile) {
+                toggle.style.display = 'none';
+                dropdown.innerHTML = '';
+                confirmBtn.textContent = (translations[currentLang] || {}).popup_export || 'エクスポート';
+                confirmBtn.dataset.slicerTarget = '';
+                confirmBtn.classList.remove('slicer-bambu', 'slicer-orca');
+                if (indicator) indicator.style.display = 'none';
+                return;
+            }
+
+            const bridge = getSlicerBridgeInfo();
+            const t = translations[currentLang];
+            const hasSlicer = bridge.connected && (bridge.bambu || bridge.orca);
+            const openLabel = (name) => (t.slicer_open_label || '{name} で開く').replace('{name}', name);
+
+            // Helper to update button color class
+            function setSlicerColor(target) {
+                confirmBtn.classList.remove('slicer-bambu', 'slicer-orca');
+                toggle.classList.remove('slicer-bambu', 'slicer-orca');
+                if (target === 'bambu') {
+                    confirmBtn.classList.add('slicer-bambu');
+                    toggle.classList.add('slicer-bambu');
+                } else if (target === 'orca') {
+                    confirmBtn.classList.add('slicer-orca');
+                    toggle.classList.add('slicer-orca');
+                }
+            }
+
+            // Reset
+            dropdown.innerHTML = '';
+            dropdown.classList.remove('show');
+            setSlicerColor('');
+
+            // Bridge status indicator in dialog
+            if (indicator) {
+                if (bridge.connected) {
+                    indicator.innerHTML = `<span class="export-bridge-dot ok"></span> Slicer Bridge ${t.slicer_connected || '接続済み'}`;
+                    indicator.style.display = 'flex';
+                } else {
+                    indicator.style.display = 'none';
+                }
+            }
+
+            if (!hasSlicer) {
+                toggle.style.display = 'none';
+                confirmBtn.textContent = t.popup_export || 'エクスポート';
+                confirmBtn.dataset.slicerTarget = '';
+                return;
+            }
+
+            // Determine primary slicer (Bambu Studio preferred)
+            const primarySlicer = bridge.bambu ? 'bambu' : 'orca';
+            const primaryName = primarySlicer === 'bambu' ? 'Bambu Studio' : 'OrcaSlicer';
+
+            // Set primary button
+            confirmBtn.textContent = openLabel(primaryName);
+            confirmBtn.dataset.slicerTarget = primarySlicer;
+            setSlicerColor(primarySlicer);
+            toggle.style.display = 'flex';
+
+            // Build dropdown items
+            let items = '';
+
+            // Download option
+            items += `<button class="export-split-item" data-target="download">
+                <span><span class="split-label">${t.popup_export || 'エクスポート'}</span><br><span class="split-sub">${t.slicer_download_desc || 'ファイルをダウンロード'}</span></span>
+            </button>`;
+
+            items += '<div class="export-split-separator"></div>';
+
+            // Bambu Studio option
+            if (bridge.bambu) {
+                items += `<button class="export-split-item" data-target="bambu">
+                    <span><span class="split-label">${openLabel('Bambu Studio')}</span></span>
+                </button>`;
+            }
+
+            // OrcaSlicer option
+            if (bridge.orca) {
+                items += `<button class="export-split-item" data-target="orca">
+                    <span><span class="split-label">${openLabel('OrcaSlicer')}</span></span>
+                </button>`;
+            }
+
+            dropdown.innerHTML = items;
+
+            // Toggle dropdown
+            toggle.onclick = (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            };
+
+            // Dropdown item click - update primary button
+            dropdown.querySelectorAll('.export-split-item').forEach(item => {
+                item.onclick = (e) => {
+                    e.stopPropagation();
+                    const target = item.dataset.target;
+                    if (target === 'download') {
+                        confirmBtn.textContent = t.popup_export || 'エクスポート';
+                        confirmBtn.dataset.slicerTarget = '';
+                        setSlicerColor('');
+                    } else {
+                        const nm = target === 'bambu' ? 'Bambu Studio' : 'OrcaSlicer';
+                        confirmBtn.textContent = openLabel(nm);
+                        confirmBtn.dataset.slicerTarget = target;
+                        setSlicerColor(target);
+                    }
+                    dropdown.classList.remove('show');
+                };
+            });
+
+            // Close dropdown on outside click
+            document.addEventListener('click', function _closeDD(e) {
+                if (!dropdown.contains(e.target) && e.target !== toggle) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        }
+
+        async function sendBlobToSlicer(blob, fileName, slicerType) {
+            const t = translations[currentLang];
+            const slicerName = slicerType === 'bambu' ? 'Bambu Studio' : 'OrcaSlicer';
+            try {
+                showProgressToast((t.slicer_bridge_sending || '{name} に送信中...').replace('{name}', slicerName), 80);
+                const formData = new FormData();
+                formData.append('file', blob, fileName);
+                formData.append('slicer', slicerType);
+                const res = await fetch(window.SLICER_BRIDGE_URL + '/open', { method: 'POST', body: formData });
+                const data = await res.json();
+                if (data.success) {
+                    hideProgressToast((t.slicer_bridge_ok || '{name} にモデルを送信しました').replace('{name}', slicerName));
+                } else {
+                    hideProgressToast(data.message || data.error || 'Error', true);
+                }
+            } catch (e) {
+                hideProgressToast(t.slicer_bridge_err || 'Bridge connection failed', true);
+            }
+        }
+
         const saveBlob = (blob, name) =>{
+            // If slicer target is pending, capture blob for slicer send (no download)
+            if (window._slicerExportPending) {
+                window._slicerExportBlob = blob;
+                window._slicerExportName = name;
+                return;
+            }
             if (typeof saveAs !== 'undefined') {
                 saveAs(blob, name);
             } else {
@@ -14722,7 +14969,7 @@ ${mesh.triangles.join('\n')}
                             const cskMark = document.createElement('div');
                             cskMark.className = 'color-changed-mark';
                             cskMark.style.cssText = 'position:absolute; top:8px; right:8px; width:24px; height:24px; background:#4caf50; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; color:#fff; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.5); z-index:10;';
- cskMark.textContent = '';
+ cskMark.textContent = '✓';
                             cskMark.title = 'CSKで色設定済み';
                             previewEl.appendChild(cskMark);
                             warningEl.style.display = 'none';
@@ -14772,7 +15019,7 @@ ${mesh.triangles.join('\n')}
                         const bodyMark = document.createElement('div');
                         bodyMark.className = 'color-changed-mark';
                         bodyMark.style.cssText = 'position:absolute; top:8px; right:8px; width:20px; height:20px; background:#00e5ff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; color:#000; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.5); z-index:10;';
- bodyMark.textContent = '';
+ bodyMark.textContent = '✓';
                         bodyMark.title = '本体色設定済み';
                         previewEl.appendChild(bodyMark);
                     }
@@ -14782,7 +15029,7 @@ ${mesh.triangles.join('\n')}
                         const textMark = document.createElement('div');
                         textMark.className = 'color-changed-mark';
                         textMark.style.cssText = 'position:absolute; top:32px; right:8px; width:20px; height:20px; background:#ff9800; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; color:#000; font-weight:bold; box-shadow:0 2px 4px rgba(0,0,0,0.5); z-index:10;';
- textMark.textContent = '';
+ textMark.textContent = '✓';
                         textMark.title = '文字色設定済み';
                         previewEl.appendChild(textMark);
                     }
@@ -15343,10 +15590,16 @@ ${mesh.triangles.join('\n')}
                     popup.classList.add('show');
                 });
                 
+                // Setup slicer bridge split button
+                setupExportSplitButton();
+                
                 // Cleanup function
                 const cleanup = () =>{
                     overlay.style.background = 'rgba(0,0,0,0)';
                     popup.classList.remove('show');
+                    // Close dropdown
+                    const dd = document.getElementById('export-split-dropdown');
+                    if (dd) dd.classList.remove('show');
                     setTimeout(() =>{
                         overlay.style.display = 'none';
                     }, 300);
@@ -15370,10 +15623,14 @@ ${mesh.triangles.join('\n')}
                             selectedFormat = selected.value.toUpperCase();
                         }
                     }
+                    const slicerTarget = confirmBtn.dataset.slicerTarget || '';
                     cleanup();
-                    resolve({ confirmed: true, format: selectedFormat });
+                    resolve({ confirmed: true, format: selectedFormat, slicerTarget: slicerTarget });
                 };
                 
+                // === Slicer Bridge ボタン ===
+                
+
                 cancelBtn.onclick = () =>{
                     cleanup();
                     resolve({ confirmed: false });
@@ -15395,12 +15652,29 @@ ${mesh.triangles.join('\n')}
             const result = await showExportPopup({ type: 'single', format: '3MF', showFormatSelector: true });
             if (result.confirmed) {
                 const format = result.format.toUpperCase();
+                const slicerTarget = result.slicerTarget || '';
+                
+                // If slicer target selected, set flag to capture blob instead of downloading
+                if (slicerTarget) {
+                    window._slicerExportPending = true;
+                    window._slicerExportBlob = null;
+                    window._slicerExportName = '';
+                }
+                
                 if (format === 'STL') {
-                    exportSTL('.stl');
+                    await exportSTL('.stl');
                 } else if (format === '3MF') {
-                    export3MF();
+                    await export3MF();
                 } else if (format === 'OBJ') {
-                    exportOBJ();
+                    await exportOBJ();
+                }
+                
+                // Send to slicer after export completed
+                window._slicerExportPending = false;
+                if (slicerTarget && window._slicerExportBlob) {
+                    await sendBlobToSlicer(window._slicerExportBlob, window._slicerExportName, slicerTarget);
+                    window._slicerExportBlob = null;
+                    window._slicerExportName = '';
                 }
             }
         });
