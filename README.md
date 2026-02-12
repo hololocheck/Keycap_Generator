@@ -53,7 +53,7 @@
 - **環境バックアップ**: Quick Save/Loadを廃止し、全パラメータ・ギャラリー・カスタムSVG・フォント・AMS設定を1ファイルで一括バックアップ・復元可能に。
 - **HUD拡張**: 配置モード、生成モード、寸法線、FM/SM等のボタンを追加。アクティブ状態でシアンに変色するビジュアルフィードバックを実装。
 - **エクスポート改善**: 全エクスポート処理を単一プログレスバー（%表示）に統一。
-- **Keycap Slicer Bridge**: エクスポートダイアログから Bambu Studio / OrcaSlicer にモデルを直接転送可能に。ローカル常駐アプリ（Windows）がスライサーを自動検出し、ワンクリックで3Dモデルを送信。詳細は [Keycap Slicer Bridge](https://github.com/sireai/Keycap_Slicer_Bridge) を参照。
+- **Keycap Slicer Bridge**: エクスポートダイアログから Bambu Studio / OrcaSlicer にモデルを直接転送可能に。ローカル常駐アプリ（Windows）がスライサーを自動検出し、ワンクリックで3Dモデルを送信。詳細は [Keycap Slicer Bridge](https://github.com/hololocheck/Keycap-Slicer-Bridge) を参照。
 - **UIテーマ統一**: 全セクションをシアン (#00e5ff) テーマに完全統一。絵文字除去、トグルスイッチ統一。
 
 > **V67.0 ("Visual Mastery & Manufacturing") のハイライト:**
@@ -114,7 +114,7 @@ A major update for complete freedom over keycap typography. A newly developed 3D
 - **Font Engine**: FontEngine3D (Custom) — TTF/OTF/CFF/CFF2/WOFF
 - **Geometry Logic**: [three-bvh-csg](https://github.com/gkjohnson/three-bvh-csg), MeshFixLib (Custom)
 - **Exporter**: STLExporter, OBJExporter, 3MFExporter (Original)
-- **Slicer Bridge**: [Keycap Slicer Bridge](https://github.com/sireai/Keycap_Slicer_Bridge) — Bambu Studio / OrcaSlicer direct transfer
+- **Slicer Bridge**: [Keycap Slicer Bridge](https://github.com/hololocheck/Keycap-Slicer-Bridge) — Bambu Studio / OrcaSlicer direct transfer
 
 ### 📄 License / ライセンス
 MIT License.
