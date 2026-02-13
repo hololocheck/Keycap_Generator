@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="E2yuICa6eKYqirbpWGXo9DtwvVG9mlCf_g56Qzpse2M" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Keycap Generator V68</title>
+    <title>Keycap Generator V68.1</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 306.06 217.55'%3E%3Cstyle%3E.a%7Bstroke:%23ccc;stroke-miterlimit:10;fill:none%7D.b%7Bfill:aqua;stroke:aqua;stroke-miterlimit:10%7D.c%7Bstroke:aqua;stroke-miterlimit:10;fill:none;stroke-width:4px%7D.d%7Bfill:%23b3b3b3%7D%3C/style%3E%3Cpolygon class='d' points='273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92'/%3E%3Cpolygon class='d' points='273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92'/%3E%3Cpolygon class='d' points='151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26'/%3E%3Cline class='a' x1='35.16' y1='29.06' x2='.61' y2='135.77'/%3E%3Cline class='a' x1='.25' y1='136.62' x2='148.91' y2='216.18'/%3E%3Cline class='a' x1='151.25' y1='80.26' x2='35.16' y2='29.06'/%3E%3Cline class='a' x1='148.91' y1='216.18' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='273.2' y1='41.92' x2='151.25' y2='80.26'/%3E%3Cline class='a' x1='305.59' y1='144.63' x2='273.2' y2='41.92'/%3E%3Cpolyline class='a' points='148.91 217.1 149.26 216.93 305.59 144.63'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='273.2' y2='41.92'/%3E%3Cline class='a' x1='152.73' y1='.49' x2='35.16' y2='29.06'/%3E%3Cline class='c' x1='86.1' y1='30.23' x2='119.97' y2='22'/%3E%3Cline class='c' x1='155.68' y1='60.92' x2='86.1' y2='30.23'/%3E%3Cline class='c' x1='224.32' y1='40.72' x2='154.45' y2='60.92'/%3E%3Cline class='c' x1='224.32' y1='41.22' x2='198.07' y2='32.19'/%3E%3Cpath class='b' d='M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z'/%3E%3Cpath class='b' d='M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z'/%3E%3Cpath class='b' d='M134.59,37.59s-10.53-2.15-15.09,0,4.12-3.16,1.67-4.79c-2.44-1.63,6.19,2.8,12.48.1,6.29-2.7-6.94,3.03.94,4.69Z'/%3E%3C/svg%3E">
     <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -496,6 +496,22 @@
         .export-bridge-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
         .export-bridge-dot.ok { background:#4caf50; box-shadow:0 0 4px rgba(76,175,80,0.6); }
         .export-bridge-dot.off { background:#f44336; }
+
+        /* === AMS Sync Split Button === */
+        #ams-sync-split-wrap { display:flex; align-items:stretch; gap:0; position:relative; }
+        .ams-sync-btn { background:#333 !important; border:1px solid #888 !important; color:#ccc !important; border-radius:6px 0 0 6px !important; margin-right:0 !important; }
+        .ams-sync-btn.slicer-bambu { background:rgb(0,130,50) !important; border-color:rgb(0,160,61) !important; color:#fff !important; }
+        .ams-sync-btn.slicer-bambu:hover { background:rgb(0,160,61) !important; }
+        .ams-sync-btn.slicer-orca { background:rgb(28,136,126) !important; border-color:rgb(38,166,154) !important; color:#fff !important; }
+        .ams-sync-btn.slicer-orca:hover { background:rgb(38,166,154) !important; }
+        .ams-sync-split-toggle { background:#555; color:#fff; border:1px solid #888; border-left:1px solid rgba(255,255,255,0.15); border-radius:0 6px 6px 0; padding:0 7px; cursor:pointer; font-size:0.55rem; transition:0.15s; display:flex; align-items:center; }
+        .ams-sync-split-toggle:hover { background:#666; }
+        .ams-sync-split-toggle.slicer-bambu { background:rgb(0,160,61); color:#fff; border-color:rgb(0,160,61); }
+        .ams-sync-split-toggle.slicer-bambu:hover { background:rgb(30,190,91); }
+        .ams-sync-split-toggle.slicer-orca { background:rgb(38,166,154); color:#fff; border-color:rgb(38,166,154); }
+        .ams-sync-split-toggle.slicer-orca:hover { background:rgb(68,196,184); }
+        #ams-sync-split-dropdown { position:absolute; bottom:calc(100% + 6px); left:0; background:#1a1a2e; border:1px solid #555; border-radius:10px; min-width:220px; box-shadow:0 -4px 20px rgba(0,0,0,0.6); overflow:hidden; z-index:10001; display:none; }
+        #ams-sync-split-dropdown.show { display:block; }
         .export-format-option:hover { background: rgba(79,195,247,0.15) !important; }
 
 
@@ -1231,11 +1247,48 @@
         body.ui-closed #hud { max-width: calc(100% - 120px); }
 
         /* ========================================== */
+        /* ========================================== */
+        /* V68: HUD Bridge ステータス & モバイル生成モード */
+        /* ========================================== */
+        #hud-bridge-status {
+            display: flex; align-items: center; gap: 3px; font-size: 0.55rem; color: #666;
+            padding: 0 2px; white-space: nowrap; cursor: pointer;
+        }
+        #hud-bridge-status .hbs-dot {
+            width: 6px; height: 6px; border-radius: 50%; background: #555; flex-shrink: 0;
+            transition: background 0.3s;
+        }
+        #hud-bridge-status.connected .hbs-dot { background: #4caf50; box-shadow: 0 0 5px #4caf50; }
+        #hud-bridge-status.connected { color: #8bc34a; cursor: default; }
+        /* Bridge接続時のエクスポートボタン緑化 */
+        #hud-export-wrapper.bridge-active .hud-btn svg path,
+        #hud-export-wrapper.bridge-active .hud-btn svg rect { fill: #4caf50 !important; }
+
+        #mobile-genmode-popup {
+            display: none; position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+            background: rgba(25,25,25,0.98); border: 1px solid #ff9800; border-radius: 10px;
+            padding: 14px 18px; z-index: 310; min-width: 220px;
+            box-shadow: 0 6px 24px rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+            opacity: 0; transition: opacity 0.2s, transform 0.2s;
+            transform: translateX(-50%) translateY(10px);
+        }
+        #mobile-genmode-popup.open {
+            display: block; opacity: 1; transform: translateX(-50%) translateY(0);
+        }
+        #mobile-genmode-popup label {
+            display: block; color: #ff9800; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px;
+        }
+        #mobile-genmode-popup select {
+            width: 100%; background: #111; border: 1px solid #ff9800; color: #fff;
+            padding: 8px 10px; border-radius: 5px; font-size: 0.85rem; margin-bottom: 10px; cursor: pointer;
+        }
+        #mobile-genmode-popup select:last-child { margin-bottom: 0; }
+
         /* V67.1: スマートフォン専用レイアウト          */
         /* ========================================== */
         
         /* モバイルUI要素 - デフォルト非表示 */
-        #mobile-top-bar, #mobile-bottom-nav, #mobile-search-box, #mobile-undoredo-popup { display: none; }
+        #mobile-top-bar, #mobile-bottom-nav, #mobile-search-box, #mobile-undoredo-popup, #mobile-genmode-popup { display: none; }
         
         @media screen and (max-width: 768px) {
             /* --- 全体: 3Dプレビューがフルスクリーン --- */
@@ -1437,6 +1490,11 @@
             .export-info-value { font-size: 0.78rem; }
             .export-popup-buttons { gap: 8px; margin-top: 10px; padding-top: 10px; flex-wrap: wrap; justify-content: center; }
             .export-popup-btn { padding: 8px 16px; font-size: 0.8rem; border-radius: 6px; min-width: 80px; text-align: center; white-space: nowrap; }
+            /* Mobile: split-wrap should not cut the button */
+            .export-split-wrap { flex-shrink:0; }
+            .export-split-wrap .export-popup-btn.confirm { border-radius:6px !important; }
+            .export-split-wrap .export-split-toggle { display:none !important; }
+            .export-split-dropdown { display:none !important; }
             .export-format-option { padding: 8px !important; }
             .export-format-option label { font-size: 0.75rem !important; }
             
@@ -1831,7 +1889,7 @@
     </div>
     
     <div id="loading">
-        <div>Initializing V68...</div>
+        <div>Initializing V68.1...</div>
         <div id="error-log"></div>
         <div id="batch-progress"></div>
         <button id="force-start-btn">FORCE START</button>
@@ -1882,7 +1940,12 @@
             <svg viewBox="0 0 512 512" style="width:100%; height:100%;"><path fill="#aaa" d="M378.409,0H208.294h-13.176l-9.314,9.315L57.017,138.101l-9.314,9.315v13.176v265.513c0,47.36,38.528,85.896,85.895,85.896h244.811c47.361,0,85.888-38.535,85.888-85.896V85.896C464.297,38.528,425.77,0,378.409,0z M432.493,426.104c0,29.877-24.214,54.091-54.084,54.091H133.598c-29.877,0-54.091-24.214-54.091-54.091V160.592h83.717c24.884,0,45.07-20.179,45.07-45.071V31.804h170.114c29.87,0,54.084,24.214,54.084,54.091V426.104z"/><path fill="#aaa" d="M180.296,296.668l-4.846-.67c-10.63-1.487-14.265-4.978-14.265-10.104c0-5.78,4.309-9.817,12.383-9.817c5.653,0,11.305,1.62,15.745,3.764c1.886.942,3.903,1.487,5.789,1.487c4.845,0,8.612-3.63,8.612-8.616c0-3.226-1.481-5.921-4.71-7.939c-5.384-3.372-15.476-6.06-25.572-6.06c-19.781,0-32.436,11.171-32.436,27.998c0,16.15,10.232,24.898,28.938,27.454l4.846.67c10.903,1.48,14.129,4.846,14.129,10.229c0,6.326-5.247,10.766-14.939,10.766c-6.727,0-12.111-1.745-19.645-5.921c-1.616-.942-3.634-1.62-5.788-1.62c-5.115,0-8.885,3.91-8.885,8.756c0,3.226,1.616,6.326,4.713,8.344c6.054,3.764,15.878,7.8,28.798,7.8c23.823,0,35.934-12.24,35.934-28.795C209.097,307.84,199.273,299.356,180.296,296.668z"/><path fill="#aaa" d="M281.108,259.382c-4.577,0-7.939,2.43-9.556,7.674l-16.69,54.51h-.402l-17.634-54.51c-1.745-5.244-4.978-7.674-9.551-7.674c-5.653,0-9.692,4.176-9.692,9.287c0,1.347.269,2.834.67,4.175l23.286,68.104c2.96,8.477,6.727,11.57,12.652,11.57c5.785,0,9.555-3.093,12.516-11.57l23.282-68.104c.406-1.341.674-2.828.674-4.175C290.664,263.558,286.76,259.382,281.108,259.382z"/><path fill="#aaa" d="M364.556,300.836h-18.841c-5.114,0-8.344,3.1-8.344,7.806c0,4.713,3.23,7.814,8.344,7.814h6.193c.538,0,.803.258.803.803c0,3.505-.265,6.598-1.075,9.014c-1.882,5.796-7.67,9.426-14.669,9.426c-7.943,0-12.921-3.903-14.939-10.096c-1.075-3.365-1.48-7.8-1.48-19.648c0-11.842.405-16.15,1.48-19.516c2.018-6.325,6.867-10.228,14.67-10.228c5.924,0,10.362,1.885,13.859,6.724c2.695,3.777,5.387,4.852,8.749,4.852c4.981,0,9.021-3.638,9.021-8.888c0-2.151-.674-4.035-1.752-5.921c-4.842-8.204-15.071-14.264-29.877-14.264c-16.287,0-28.935,7.408-33.644,22.204c-2.022,6.466-2.559,11.576-2.559,25.038c0,13.454.538,18.573,2.559,25.031c4.709,14.802,17.357,22.204,33.644,22.204c16.286,0,28.668-8.204,33.374-22.881c1.617-5.111,2.29-12.645,2.29-20.716v-.95C372.362,303.664,369.538,300.836,364.556,300.836z"/></svg>
         </button>
         <div style="width:1px; height:20px; background:#555; margin:0 4px;"></div>
-        <!-- エクスポートボタン（ドロップダウン付き） -->
+        <!-- Slicer Bridge ステータス -->
+        <div id="hud-bridge-status" title="Click to check Slicer Bridge">
+            <span class="hbs-dot"></span>
+            <span class="hbs-label">Bridge</span>
+        </div>
+        <!-- エクスポートボタン -->
         <div id="hud-export-wrapper" style="position:relative;">
             <button class="hud-btn" id="hud-export" title="Export" data-hint="hint_export" style="background:none; border:none; width:28px; height:28px; cursor:pointer; transition: transform 0.2s, filter 0.2s; padding:2px;">
                 <svg viewBox="0 0 512 512" style="width:100%; height:100%;"><rect x="141.818" y="394.181" fill="#aaa" width="228.365" height="21.82"/><rect x="141.818" y="305.688" fill="#aaa" width="228.365" height="21.82"/><rect x="141.818" y="217.203" fill="#aaa" width="228.365" height="21.827"/><rect x="262.546" y="128.725" fill="#aaa" width="107.636" height="21.82"/><path fill="#aaa" d="M411.626,0H222.758c-13.559,0-26.564,5.39-36.152,14.969L68.794,132.788c-9.59,9.587-14.976,22.596-14.976,36.156v296.5c0,25.67,20.889,46.556,46.56,46.556h311.247c25.667,0,46.556-20.886,46.556-46.556V46.542C458.182,20.878,437.292,0,411.626,0z M206.252,32.349v104.652c0,11.313-4.405,15.722-15.718,15.722H85.877L206.252,32.349z M432.002,465.444c0,11.237-9.146,20.372-20.376,20.372H100.378c-11.237,0-20.38-9.135-20.38-20.372V175.998h124.554c13.77,0,24.978-11.207,24.978-24.985V26.184h182.096c11.23,0,20.376,9.127,20.376,20.358V465.444z"/></svg>
@@ -2113,10 +2176,12 @@
             
             <div class="ams-popup-footer">
                 <span class="wiki-hint" style="margin-right:10px;" data-help-url-ja="https://keycapgeneratorwiki.com/ja/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=%E8%89%B2%E8%A8%AD%E5%AE%9A%E3%81%A7%E3%81%99%E3%80%82-,AMS%E3%82%B9%E3%83%AD%E3%83%83%E3%83%88%E8%A8%AD%E5%AE%9A%3A,-AMS%3A%20%E6%9C%80%E5%A4%A7" data-help-url-en="https://keycapgeneratorwiki.com/en/%E6%A9%9F%E8%83%BD%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9#:~:text=Automatic%20Material%20System).-,AMS%20Slot%20Settings%3A,-Supports%20up%20to"><span class="kbd">F1</span> <span data-i18n="wiki_hint">Wikiで詳しく見る</span></span>
- <button class="ams-popup-btn" id="ams-screenshot-import" style="background:#333; border-color:#ff9800; color:#ff9800; margin-right:5px;" data-i18n="ams_capture_btn" title="Capture slicer screen to auto-detect colors">画面から取込</button>
- <button class="ams-popup-btn" id="ams-export-json" style="background:#333; border-color:#4caf50; color:#4caf50; margin-right:5px;" data-i18n="ams_export_json">JSON書出し</button>
-                <input type="file" id="ams-import-json-input" accept=".json" style="display:none;">
-                <button class="ams-popup-btn" id="btn-ams-import-json" style="background:#333; border-color:#ff9800; color:#ff9800; margin-right:auto;" data-i18n="btn_ams_import">JSON読込</button>
+ <div class="export-split-wrap" id="ams-sync-split-wrap" style="margin-right:5px; position:relative;">
+   <button class="ams-popup-btn ams-sync-btn" id="ams-slicer-sync" data-i18n="ams_slicer_sync" title="Sync project filaments from slicer">スライサー同期</button>
+   <button class="ams-sync-split-toggle" id="ams-sync-split-toggle" style="display:none;">▲</button>
+   <div class="export-split-dropdown" id="ams-sync-split-dropdown"></div>
+ </div>
+ <button class="ams-popup-btn" id="ams-screenshot-import" style="background:#333; border-color:#ff9800; color:#ff9800; margin-right:auto;" data-i18n="ams_capture_btn" title="Capture slicer screen to auto-detect colors">画面から取込</button>
                 <button class="ams-popup-btn cancel" id="ams-popup-cancel" data-i18n="popup_cancel">キャンセル</button>
                 <button class="ams-popup-btn confirm" id="ams-popup-confirm" data-i18n="btn_apply">適用</button>
             </div>
@@ -2373,7 +2438,7 @@
                     <svg id="app-logo" onclick="location.reload()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55">
                          <defs><style>.cls-1{stroke:#ccc;}.cls-1,.cls-2,.cls-3{stroke-miterlimit:10;}.cls-1,.cls-3{fill:none;}.cls-2{fill:aqua;}.cls-2,.cls-3{stroke:aqua;}.cls-3{stroke-width:4px;}.cls-4{fill:#b3b3b3;}</style></defs><g><g><polygon class="cls-4" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon class="cls-4" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon class="cls-4" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/></g><g><line class="cls-1" x1="35.16" y1="29.06" x2=".61" y2="135.77"/><line class="cls-1" x1=".25" y1="136.62" x2="148.91" y2="216.18"/><line class="cls-1" x1="151.25" y1="80.26" x2="35.16" y2="29.06"/><line class="cls-1" x1="148.91" y1="216.18" x2="151.25" y2="80.26"/><line class="cls-1" x1="273.2" y1="41.92" x2="151.25" y2="80.26"/><line class="cls-1" x1="305.59" y1="144.63" x2="273.2" y2="41.92"/><polyline class="cls-1" points="148.91 217.1 149.26 216.93 305.59 144.63"/><line class="cls-1" x1="152.73" y1=".49" x2="273.2" y2="41.92"/><line class="cls-1" x1="152.73" y1=".49" x2="35.16" y2="29.06"/></g></g><g><line class="cls-3" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line class="cls-3" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><line class="cls-3" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/><line class="cls-3" x1="224.32" y1="41.22" x2="198.07" y2="32.19"/><path class="cls-2" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/><path class="cls-2" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/></g>
                     </svg>
-                    <div><h2>Keycap Gen</h2><span class="ver">V68</span></div>
+                    <div><h2>Keycap Gen</h2><span class="ver">V68.1</span></div>
                 </div>
                 <div style="display:flex; align-items:center;">
                     <div class="social-links">
@@ -5243,6 +5308,7 @@ result
                 ams_color_palette: "カラーパレット（ドラッグ）",
                 ams_add_custom: "カスタム色を追加",
  ams_capture_btn: "画面から取込",
+ ams_slicer_sync: "スライサー同期",
  ams_export_json: "JSON書出し",
                 btn_add: "追加",
                 btn_apply: "適用",
@@ -5361,6 +5427,8 @@ result
                 mobile_settings: "設定",
                 mobile_history: "履歴",
                 mobile_view: "表示",
+                mobile_genmode: "生成モード",
+                mobile_genmode_target: "対象",
                 mobile_gumball: "ガムボール",
                 mobile_export: "出力"
             },
@@ -5633,6 +5701,7 @@ result
                 ams_color_palette: "Color Palette (Drag)",
                 ams_add_custom: "Add Custom Color",
  ams_capture_btn: "Capture from Screen",
+ ams_slicer_sync: "Slicer Sync",
  ams_export_json: "Export JSON",
                 btn_add: "Add",
                 btn_apply: "Apply",
@@ -5751,6 +5820,8 @@ result
                 mobile_settings: "Settings",
                 mobile_history: "History",
                 mobile_view: "View",
+                mobile_genmode: "Gen Mode",
+                mobile_genmode_target: "Target",
                 mobile_gumball: "Gumball",
                 mobile_export: "Export"
             }
@@ -11563,6 +11634,8 @@ ${mesh.triangles.join('\n')}
                 setTimeout(() =>popup.classList.add('show'), 10);
                 renderAMSPalette();
                 renderAMSUnits();
+                // Refresh sync split button based on current bridge state
+                if (typeof _setupSyncSplitButton === 'function') _setupSyncSplitButton();
             };
             
             // 通常モードのボタン
@@ -11671,28 +11744,6 @@ ${mesh.triangles.join('\n')}
                     renderAMSPalette();
                 }
             };
-            
-            // JSON書き出しボタン
-            const exportBtn = document.getElementById('ams-export-json');
-            if (exportBtn) {
-                exportBtn.onclick = () =>{
-                    exportAMSConfigAsJSON();
-                };
-            }
-            
-            // JSON読み込みボタン
-            const importBtn = document.getElementById('btn-ams-import-json');
-            const importInput = document.getElementById('ams-import-json-input');
-            if (importBtn && importInput) {
-                importBtn.onclick = () =>importInput.click();
-                importInput.onchange = (e) =>{
-                    const file = e.target.files[0];
-                    if (file) {
-                        importAMSConfigFromJSON(file);
-                        importInput.value = '';
-                    }
-                };
-            }
             
             // HUDのAMSボタン
             const hudAmsBtn = document.getElementById('hud-ams');
@@ -12777,6 +12828,215 @@ ${mesh.triangles.join('\n')}
             reader.readAsText(file);
         }
 
+
+        // ==========================================
+        // V2.3: 🔄 Slicer Project Filament Sync
+        // ==========================================
+        function initSlicerSyncButton() {
+            const syncBtn = document.getElementById('ams-slicer-sync');
+            const toggle = document.getElementById('ams-sync-split-toggle');
+            const dropdown = document.getElementById('ams-sync-split-dropdown');
+            if (!syncBtn || !toggle || !dropdown) return;
+
+            // Setup split button based on bridge state
+            _setupSyncSplitButton();
+
+            // Main button click → sync with current slicer
+            syncBtn.addEventListener('click', () => {
+                const slicer = syncBtn.dataset.slicerTarget || 'bambu';
+                _doSlicerSyncDirect(slicer);
+            });
+
+            // Toggle dropdown
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                dropdown.classList.toggle('show');
+            });
+
+            // Close dropdown on outside click
+            document.addEventListener('click', (e) => {
+                if (!dropdown.contains(e.target) && e.target !== toggle) {
+                    dropdown.classList.remove('show');
+                }
+            });
+        }
+
+        function _setupSyncSplitButton() {
+            const syncBtn = document.getElementById('ams-slicer-sync');
+            const toggle = document.getElementById('ams-sync-split-toggle');
+            const dropdown = document.getElementById('ams-sync-split-dropdown');
+            if (!syncBtn || !toggle || !dropdown) return;
+
+            const bridge = getSlicerBridgeInfo();
+            const t = translations[currentLang] || {};
+            const hasSlicer = bridge.connected && (bridge.bambu || bridge.orca);
+
+            function setSlicerColor(target) {
+                syncBtn.classList.remove('slicer-bambu', 'slicer-orca');
+                toggle.classList.remove('slicer-bambu', 'slicer-orca');
+                if (target === 'bambu') {
+                    syncBtn.classList.add('slicer-bambu');
+                    toggle.classList.add('slicer-bambu');
+                } else if (target === 'orca') {
+                    syncBtn.classList.add('slicer-orca');
+                    toggle.classList.add('slicer-orca');
+                }
+            }
+
+            dropdown.innerHTML = '';
+            dropdown.classList.remove('show');
+            setSlicerColor('');
+
+            if (!hasSlicer) {
+                toggle.style.display = 'none';
+                syncBtn.textContent = t.ams_slicer_sync || 'スライサー同期';
+                syncBtn.dataset.slicerTarget = 'bambu';
+                return;
+            }
+
+            const primarySlicer = bridge.bambu ? 'bambu' : 'orca';
+            const primaryName = primarySlicer === 'bambu' ? 'Bambu Studio' : 'OrcaSlicer';
+            const bothAvailable = bridge.bambu && bridge.orca;
+
+            syncBtn.textContent = primaryName + (currentLang === 'ja' ? ' から同期' : ' Sync');
+            syncBtn.dataset.slicerTarget = primarySlicer;
+            setSlicerColor(primarySlicer);
+
+            if (bothAvailable) {
+                toggle.style.display = 'flex';
+                let items = '';
+                items += `<button class="export-split-item" data-target="bambu">
+                    <span><span class="split-label">Bambu Studio</span></span>
+                </button>`;
+                items += `<button class="export-split-item" data-target="orca">
+                    <span><span class="split-label">OrcaSlicer</span></span>
+                </button>`;
+                dropdown.innerHTML = items;
+
+                dropdown.querySelectorAll('.export-split-item').forEach(item => {
+                    item.onclick = (e) => {
+                        e.stopPropagation();
+                        const target = item.dataset.target;
+                        const nm = target === 'bambu' ? 'Bambu Studio' : 'OrcaSlicer';
+                        syncBtn.textContent = nm + (currentLang === 'ja' ? ' から同期' : ' Sync');
+                        syncBtn.dataset.slicerTarget = target;
+                        setSlicerColor(target);
+                        dropdown.classList.remove('show');
+                    };
+                });
+            } else {
+                toggle.style.display = 'none';
+            }
+        }
+
+        async function _doSlicerSyncDirect(slicer) {
+            const isJa = currentLang === 'ja';
+            const syncBtn = document.getElementById('ams-slicer-sync');
+            const origText = syncBtn ? syncBtn.textContent : '';
+            const url = (window.SLICER_BRIDGE_URL || 'http://127.0.0.1:19876');
+
+            if (syncBtn) { syncBtn.disabled = true; syncBtn.textContent = isJa ? 'スキャン中...' : 'Scanning...'; }
+            try {
+                let ok = false;
+                try { const c=new AbortController(); const t=setTimeout(()=>c.abort(),3000); const r=await fetch(url+'/health',{signal:c.signal}); ok=r.ok; clearTimeout(t); } catch(e) {}
+                if (!ok) {
+                    showToast(isJa ? 'Bridge に接続できません。ブリッジを起動してください。' : 'Cannot connect to bridge.', 'error');
+                    if (syncBtn) { syncBtn.disabled=false; syncBtn.textContent=origText; }
+                    return;
+                }
+                const c2=new AbortController(); const t2=setTimeout(()=>c2.abort(),15000);
+                const r2=await fetch(url+'/project-filaments?slicer='+slicer,{signal:c2.signal}); clearTimeout(t2);
+                const data=await r2.json();
+                console.log('[SlicerSync]',data);
+                if (!data.filaments||data.filaments.length===0) {
+                    showToast(isJa ? 'フィラメントが見つかりません' : 'No filaments found', 'error');
+                    if (syncBtn) { syncBtn.disabled=false; syncBtn.textContent=origText; }
+                    return;
+                }
+                _showProjectFilaments(data, slicer);
+            } catch(e) {
+                console.error('[SlicerSync]',e);
+                showToast('Error: '+e.message, 'error');
+            }
+            if (syncBtn) { syncBtn.disabled=false; syncBtn.textContent=origText; }
+        }
+
+        function _showProjectFilaments(data, slicerType) {
+            const isJa=currentLang==='ja'; const fils=data.filaments; const src=data.source||'';
+            const isBambu = slicerType === 'bambu';
+            const accentColor = isBambu ? 'rgb(0,160,61)' : 'rgb(38,166,154)';
+            const accentBg = isBambu ? 'rgb(0,130,50)' : 'rgb(28,136,126)';
+            const slicerName = isBambu ? 'Bambu Studio' : 'OrcaSlicer';
+
+            let old = document.getElementById('slicer-sync-overlay');
+            if (old) old.remove();
+            const ov = document.createElement('div');
+            ov.id = 'slicer-sync-overlay';
+            ov.style.cssText = 'position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.75);z-index:100000;display:flex;align-items:center;justify-content:center;';
+            const pop = document.createElement('div');
+            pop.style.cssText = 'background:#1a1a2e;border:1px solid #444;border-radius:12px;padding:24px;max-width:620px;width:90vw;color:#fff;box-shadow:0 8px 32px rgba(0,0,0,0.6);';
+            pop.innerHTML='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'
+              +'<h3 style="color:'+accentColor+';margin:0;font-size:1.05rem;">'+(isJa?'プロジェクトフィラメント':'Project Filaments')+' <span style="font-size:0.72rem;opacity:0.7;">'+slicerName+'</span></h3>'
+              +'<span style="color:#888;font-size:0.65rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+src.split(/[/\\]/).pop()+'</span></div>'
+              +'<div id="ss-grid" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;"></div>'
+              +'<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;">'
+              +'<button id="ss-apply-all" style="padding:8px 16px;background:'+accentBg+';border:1px solid '+accentColor+';color:#fff;border-radius:6px;cursor:pointer;font-size:0.82rem;font-weight:bold;">'+(isJa?'全スロット適用':'Apply All')+'</button>'
+              +'<button id="ss-close2" style="padding:8px 14px;background:#444;border:none;color:#fff;border-radius:6px;cursor:pointer;font-size:0.82rem;">'+(isJa?'閉じる':'Close')+'</button></div>';
+            ov.appendChild(pop);
+            document.body.appendChild(ov);
+            const grid=document.getElementById('ss-grid');
+            fils.forEach(f=>{
+                const it=document.createElement('div');
+                it.style.cssText='display:flex;align-items:center;gap:8px;padding:6px 10px;background:#2a2a3e;border:1px solid #444;border-radius:6px;cursor:pointer;transition:border-color .15s;min-width:180px;flex:1;';
+                it.title=(isJa?'クリックで追加':'Click to add');
+                it.innerHTML='<span style="width:22px;height:22px;border-radius:50%;background:'+f.color+';border:2px solid #666;flex-shrink:0;"></span>'
+                    +'<span style="font-size:0.78rem;color:#ddd;">#'+f.slot+' '+f.name+'</span>'
+                    +'<span style="font-size:0.62rem;color:#888;margin-left:auto;">'+f.color+'</span>';
+                it.onclick=()=>_ssAddOne(f);
+                it.onmouseenter=()=>{it.style.borderColor=accentColor;}; it.onmouseleave=()=>{it.style.borderColor='#444';};
+                grid.appendChild(it);
+            });
+            document.getElementById('ss-close2').onclick=()=>ov.remove();
+            ov.onclick=(e)=>{if(e.target===ov)ov.remove();};
+            document.getElementById('ss-apply-all').onclick=()=>{_ssApplyAll(fils);ov.remove();};
+        }
+
+        function _ssAddOne(f) {
+            const s={color:f.color,material:f.type||'PLA',name:f.name||'',vendor:f.vendor||''};
+            for(let u=0;u<amsConfig.units.length;u++) for(let i=0;i<amsConfig.units[u].slots.length;i++) if(!amsConfig.units[u].slots[i]){amsConfig.units[u].slots[i]=s;renderAMSUnits();showToast((f.name||f.color)+' → AMS'+(u+1)+' #'+(i+1));return;}
+            for(let u=0;u<amsConfig.htUnits.length;u++) for(let i=0;i<amsConfig.htUnits[u].slots.length;i++) if(!amsConfig.htUnits[u].slots[i]){amsConfig.htUnits[u].slots[i]=s;renderAMSUnits();showToast((f.name||f.color)+' → HT'+(u+1));return;}
+            if(amsConfig.units.length<4){amsConfig.units.push({slots:[s,null,null,null]});renderAMSUnits();showToast((f.name||f.color)+' → AMS'+amsConfig.units.length+' #1');return;}
+            showToast(currentLang==='ja'?'全スロット使用中':'All slots full','error');
+        }
+
+        function _ssApplyAll(filaments) {
+            amsConfig.units=[];amsConfig.htUnits=[];
+            const maxAMS = 16; // 4 units × 4 slots
+            const maxHT = 8;   // 8 HT units × 1 slot
+            const total = Math.min(filaments.length, maxAMS + maxHT); // up to 24
+
+            // Fill AMS units first (up to 16)
+            const amsCount = Math.min(filaments.length, maxAMS);
+            const nd=Math.max(1,Math.min(4,Math.ceil(amsCount/4)));
+            let idx=0;
+            for(let u=0;u<nd;u++){const unit={slots:[null,null,null,null]};for(let s=0;s<4&&idx<amsCount;s++,idx++){const f=filaments[idx];unit.slots[s]={color:f.color,material:f.type||'PLA',name:f.name||'',vendor:f.vendor||''};}amsConfig.units.push(unit);}
+            if(!amsConfig.units.length)amsConfig.units=[{slots:[null,null,null,null]}];
+
+            // Overflow to AMS HT (slots 17-24)
+            if(filaments.length > maxAMS) {
+                for(let h=maxAMS; h<total; h++){
+                    const f=filaments[h];
+                    amsConfig.htUnits.push({slots:[{color:f.color,material:f.type||'PLA',name:f.name||'',vendor:f.vendor||''}]});
+                }
+            }
+
+            renderAMSUnits();updateSettingsTabPalette();
+            const n=Math.min(filaments.length, maxAMS + maxHT);
+            const isJa=currentLang==='ja';
+            const htNote = (filaments.length > maxAMS) ? (isJa ? ' (AMS HT: '+(n-amsCount)+'色)' : ' (AMS HT: '+(n-amsCount)+')') : '';
+            showToast(isJa?'プロジェクトから '+n+' スロットを同期'+htNote:'Synced '+n+' slots from project'+htNote);
+        }
+
         // ==========================================
         // V67: 📥 ドラッグ＆ドロップ
         // ==========================================
@@ -13495,6 +13755,7 @@ ${mesh.triangles.join('\n')}
             // V67: 新機能の初期化
             initFilamentUI();
             initAMSConfig();
+            initSlicerSyncButton();
             initDragAndDrop();
             initShortcuts();
         }
@@ -14381,7 +14642,7 @@ ${mesh.triangles.join('\n')}
                 } catch(e) {
                     previewEl.innerHTML = content.replace(/<\?xml[^?]*\?>/g, '').replace(/<!--[\s\S]*?-->/g, '').trim();
                     svg = previewEl.querySelector('svg');
-                    if (svg) { svg.removeAttribute('width'); svg.removeAttribute('height'); svg.removeAttribute('style'); }
+                    try { if (svg) { svg.removeAttribute('width'); svg.removeAttribute('height'); svg.removeAttribute('style'); } } catch(e2) {}
                 }
                 showSvgInfo(entry);
             }
@@ -14606,7 +14867,6 @@ ${mesh.triangles.join('\n')}
         window._slicerBridgeStatus = null; // null=unchecked, object=available, false=unavailable
 
         async function checkSlicerBridge() {
-            console.log('[SlicerBridge] Checking bridge...');
             try {
                 const controller = new AbortController();
                 const timeout = setTimeout(() => controller.abort(), 3000);
@@ -14616,11 +14876,9 @@ ${mesh.triangles.join('\n')}
                     window._slicerBridgeStatus = await res.json();
                     console.log('[SlicerBridge] Connected:', window._slicerBridgeStatus);
                 } else {
-                    console.warn('[SlicerBridge] Health check failed:', res.status);
                     window._slicerBridgeStatus = false;
                 }
             } catch (e) {
-                console.warn('[SlicerBridge] Not available:', e.message);
                 window._slicerBridgeStatus = false;
             }
         }
@@ -20917,6 +21175,50 @@ ${objectXml}${assemblyXml}  </resources>
                 document.getElementById('btn-export-single')?.click();
             });
 
+            // === HUD Bridge Status Sync ===
+            // window._slicerBridgeStatus (set by checkSlicerBridge) を監視し、
+            // HUDのインジケータとエクスポートボタンの見た目を同期する
+            (function initHudBridgeSync() {
+                const hudBridgeEl = document.getElementById('hud-bridge-status');
+                const hudBridgeLabel = hudBridgeEl?.querySelector('.hbs-label');
+                const hudExportWrap = document.getElementById('hud-export-wrapper');
+                if (!hudBridgeEl) return;
+                
+                const isMobileDevice = () => /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 768;
+                
+                function syncHudBridge() {
+                    const s = window._slicerBridgeStatus;
+                    const connected = s && s !== false;
+                    
+                    if (connected) {
+                        hudBridgeEl.classList.add('connected');
+                        hudBridgeEl.title = 'Slicer Bridge: Connected';
+                        if (hudBridgeLabel) hudBridgeLabel.textContent = 'Bridge ✓';
+                    } else {
+                        hudBridgeEl.classList.remove('connected');
+                        hudBridgeEl.title = 'Slicer Bridge: Not connected (click to retry)';
+                        if (hudBridgeLabel) hudBridgeLabel.textContent = 'Bridge';
+                    }
+                    
+                    // PC + 接続時のみエクスポートボタンを緑化
+                    if (hudExportWrap) {
+                        hudExportWrap.classList.toggle('bridge-active', connected && !isMobileDevice());
+                    }
+                }
+                
+                // クリックで再チェック
+                hudBridgeEl.addEventListener('click', () => {
+                    if (typeof checkSlicerBridge === 'function') {
+                        hudBridgeLabel.textContent = '...';
+                        checkSlicerBridge().then(() => syncHudBridge());
+                    }
+                });
+                
+                // 定期同期（checkSlicerBridgeの結果を反映）
+                setInterval(syncHudBridge, 3000);
+                setTimeout(syncHudBridge, 3000);
+            })();
+
             // 配置モードボタン（HUD）
             document.getElementById('hud-place-mode')?.addEventListener('click', (e) =>{
                 isPlaceMode = !isPlaceMode;
@@ -21237,7 +21539,7 @@ ${triangles.join('\n')}
             <svg class="mobile-app-logo" onclick="location.reload()" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 306.06 217.55" style="width:28px; height:28px; cursor:pointer;">
                 <polygon fill="#b3b3b3" points="273.2 41.92 305.59 144.63 149.26 216.93 148.91 216.18 151.25 80.26 273.2 41.92"/><polygon fill="#b3b3b3" points="273.2 41.92 151.25 80.26 35.16 29.06 152.73 .49 273.2 41.92"/><polygon fill="#b3b3b3" points="151.25 80.26 148.91 216.18 .25 136.62 .61 135.77 35.16 29.06 151.25 80.26"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="86.1" y1="30.23" x2="119.97" y2="22"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="155.68" y1="60.92" x2="86.1" y2="30.23"/><line fill="none" stroke="aqua" stroke-width="4" stroke-miterlimit="10" x1="224.32" y1="40.72" x2="154.45" y2="60.92"/><path fill="aqua" d="M167.62,24.24s-20.08-4.1-28.79,0c-8.7,4.1,7.85-6.02,3.19-9.13s11.8,5.35,23.8.19c12-5.15-13.25,5.77,1.79,8.94Z"/><path fill="aqua" d="M169.51,46.26s-18.64-3.8-26.72,0c-8.08,3.8,7.29-5.59,2.96-8.48-4.32-2.88,10.96,4.96,22.1.18,11.14-4.78-12.3,5.36,1.66,8.3Z"/>
             </svg>
-            <span class="mobile-app-ver">V67.1</span>
+            <span class="mobile-app-ver">V68.1</span>
         </div>
         <div class="mobile-top-right">
             <select id="mobile-language-select" style="background:#222; border:1px solid #555; color:#80deea; font-size:0.7rem; padding:2px 4px; border-radius:4px; outline:none; cursor:pointer;">
@@ -21270,6 +21572,24 @@ ${triangles.join('\n')}
         <button class="mobile-ur-btn" id="mobile-redo" title="Redo" disabled>↪</button>
     </div>
     
+    <!-- V68: モバイル生成モードポップアップ -->
+    <div id="mobile-genmode-popup">
+        <label data-i18n="mobile_genmode_target">対象</label>
+        <select id="mobile-genmode-target">
+            <option value="text" data-i18n="gumball_main_text">メイン文字</option>
+            <option value="text2" data-i18n="gumball_sub_text">サブ文字</option>
+            <option value="side" data-i18n="gumball_side_print">サイド印字</option>
+            <option value="svg">SVG</option>
+        </select>
+        <label data-i18n="lbl_text_mode">生成モード</label>
+        <select id="mobile-genmode-mode">
+            <option value="emboss" data-i18n="opt_mode_emboss">Emboss (浮き出し)</option>
+            <option value="engrave" data-i18n="opt_mode_engrave">Engrave (刻印)</option>
+            <option value="doubleshot" data-i18n="opt_mode_doubleshot">Double-Shot (埋め込み)</option>
+            <option value="lithophane" data-i18n="opt_mode_lithophane">Lithophane (透過)</option>
+        </select>
+    </div>
+    
     <!-- モバイルボトムナビ -->
     <div id="mobile-bottom-nav">
         <button class="mobile-nav-btn" id="mobile-nav-settings" title="Settings">
@@ -21280,9 +21600,9 @@ ${triangles.join('\n')}
             <svg viewBox="0 0 24 24"><path d="M12.5,8C9.85,8,7.45,9.01,5.6,10.6L2,7v9h9l-3.62-3.62c1.39-1.16,3.16-1.88,5.12-1.88c3.54,0,6.55,2.31,7.6,5.5l2.37-.78C21.08,11.03,17.15,8,12.5,8z"/></svg>
             <span class="nav-label" data-i18n="mobile_history">履歴</span>
         </button>
-        <button class="mobile-nav-btn" id="mobile-nav-viewmode" title="View Mode">
-            <svg viewBox="0 0 24 24"><path d="M12,4.5C7,4.5,2.73,7.61,1,12c1.73,4.39,6,7.5,11,7.5s9.27-3.11,11-7.5C21.27,7.61,17,4.5,12,4.5zM12,17c-2.76,0-5-2.24-5-5s2.24-5,5-5s5,2.24,5,5S14.76,17,12,17zM12,9c-1.66,0-3,1.34-3,3s1.34,3,3,3s3-1.34,3-3S13.66,9,12,9z"/></svg>
-            <span class="nav-label" data-i18n="mobile_view">表示</span>
+        <button class="mobile-nav-btn" id="mobile-nav-genmode" title="Generation Mode">
+            <svg viewBox="0 0 24 24"><path d="M12,2 L15.09,8.26 L22,9.27 L17,14.14 L18.18,21.02 L12,17.77 L5.82,21.02 L7,14.14 L2,9.27 L8.91,8.26 Z" fill="currentColor"/></svg>
+            <span class="nav-label" data-i18n="mobile_genmode">生成モード</span>
         </button>
         <button class="mobile-nav-btn" id="mobile-nav-gumball" title="Gumball">
             <svg viewBox="0 0 512 512" style="width:24px; height:24px;"><path fill="currentColor" d="M498.849,191.102c-5.468-11.229-13.762-22.675-26.922-28.034c-6.497-2.524-14.035-2.944-20.679-0.61c-4.347,1.431-8.129,4.165-11.073,7.51c-0.155-0.246-0.246-0.528-0.41-0.784c-4.083-6.89-9.469-12.914-15.566-17.799c-12.166-9.824-26.092-16.806-40.684-20.988c-7.272-2.206-14.664-3.801-22.101-5.186c-7.427-1.504-15.146-2.115-22.337-2.962c-14.764-1.558-29.492-2.679-44.256-3.5c-59.084-3.125-117.921-1.23-176.003-7.254c-14.527-1.44-29-3.245-43.4-5.505l-10.882-1.75c-4.064-0.583-8.011-0.874-12.094-0.848c-8.102,0.055-16.395,1.431-24.178,4.703c-7.755,3.254-15.028,8.466-20.25,15.584c-5.268,7.064-8.248,16.068-8.002,25.027c0.173,8.967,3.418,17.525,8.193,24.507c4.775,7.044,10.973,12.668,17.598,17.233c13.352,9.096,28.38,14.072,43.29,17.372c14.983,3.253,30.139,4.529,45.176,4.72c11.274,0.137,22.484-0.319,33.638-1.22c-0.355,0.282-0.729,0.528-1.075,0.82c-6.234,5.303-11.392,12.358-14.1,20.423c-2.706,8.075-2.98,16.87-1.321,25.236c1.623,8.385,5.386,16.396,10.809,22.994c5.104,6.27,11.629,11.155,18.647,14.7c-0.583,0.966-1.084,1.968-1.495,2.989c-1.276,3.427-1.613,6.963-1.358,10.326c0.556,6.743,3.19,12.722,6.261,18.162c6.362,10.854,15.767,19.294,26.256,25.264c4.138,2.36,8.466,4.247,12.878,5.878c-1.231,1.968-2.214,4.137-2.616,6.361c-1.084,5.222-0.246,10.544,1.65,15.119c3.928,9.26,11.428,15.767,19.33,20.223c16.158,8.831,34.194,10.134,51.236,7.738c15.84-2.616,31.515-8.849,43.454-20.669c13.106,0.3,26.339-0.292,39.517-1.75c13.27-1.595,26.54-3.983,39.517-8.02c12.878-4.129,25.746-9.56,36.764-18.3c2.589-2.069,5.077-4.32,7.391-6.744c3.163,4.274,7.264,8.12,12.568,10.518c6.28,2.998,14.263,3.262,20.98,0.683c6.753-2.579,12.094-7.263,16.322-12.294c4.247-5.085,7.373-10.754,10.008-16.477c10.143-23.176,12.157-47.847,12.467-71.633C511.7,238.866,509.667,214.196,498.849,191.102z"/></svg>
@@ -21303,7 +21623,7 @@ ${triangles.join('\n')}
         const panelOverlay = document.getElementById('mobile-panel-overlay');
         const settingsBtn = document.getElementById('mobile-nav-settings');
         const undoredoBtn = document.getElementById('mobile-nav-undoredo');
-        const viewModeBtn = document.getElementById('mobile-nav-viewmode');
+        const genModeBtn = document.getElementById('mobile-nav-genmode');
         const gumballBtn = document.getElementById('mobile-nav-gumball');
         const exportBtn = document.getElementById('mobile-nav-export');
         const searchToggle = document.getElementById('mobile-search-toggle');
@@ -21483,10 +21803,38 @@ ${triangles.join('\n')}
             }
         });
         
-        // --- 表示モード ---
-        viewModeBtn.addEventListener('click', () =>{
-            document.getElementById('hud-view-mode')?.click();
-            viewModeBtn.classList.toggle('active');
+        // --- 生成モード ---
+        const gmPopup = document.getElementById('mobile-genmode-popup');
+        const gmTargetSel = document.getElementById('mobile-genmode-target');
+        const gmModeSel = document.getElementById('mobile-genmode-mode');
+        const modeSelectMap = { text:'text-mode', text2:'text2-mode', side:'side-mode', svg:'svg-mode' };
+        
+        function syncGenModeFromPC() {
+            const pcSel = document.getElementById(modeSelectMap[gmTargetSel.value]);
+            if (pcSel) gmModeSel.value = pcSel.value;
+        }
+        function closeGenMode() {
+            gmPopup.classList.remove('open');
+            genModeBtn.classList.remove('active');
+            setTimeout(() =>{ if (!gmPopup.classList.contains('open')) gmPopup.style.display = 'none'; }, 250);
+        }
+        genModeBtn.addEventListener('click', () =>{
+            if (gmPopup.classList.contains('open')) { closeGenMode(); return; }
+            closePanel(); closeUndoRedo();
+            syncGenModeFromPC();
+            gmPopup.style.display = 'block';
+            requestAnimationFrame(() =>requestAnimationFrame(() =>gmPopup.classList.add('open')));
+            genModeBtn.classList.add('active');
+        });
+        gmTargetSel.addEventListener('change', syncGenModeFromPC);
+        gmModeSel.addEventListener('change', () =>{
+            const pcSel = document.getElementById(modeSelectMap[gmTargetSel.value]);
+            if (pcSel) { pcSel.value = gmModeSel.value; pcSel.dispatchEvent(new Event('change', { bubbles: true })); }
+        });
+        document.addEventListener('click', (e) =>{
+            if (gmPopup.classList.contains('open') &&
+                !e.target.closest('#mobile-genmode-popup') &&
+                !e.target.closest('#mobile-nav-genmode')) { closeGenMode(); }
         });
         
         // --- ガムボール ---
